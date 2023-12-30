@@ -25,7 +25,7 @@ namespace HomeWork_4
 
             Console.WriteLine("Displey Even char array with Upper: ");
 
-            int jumperToEven = 0;
+            int jumperToEven = 0; // jumper to switch even number
 
             char[] charEvenArray = CreateAndChangeArrayFromIntToChar(lengthArray, jumperToEven);
 
