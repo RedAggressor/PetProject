@@ -37,7 +37,7 @@ namespace HomeWork_4
 
             Console.WriteLine("Displey Odd char array with Upper: ");
 
-            int jumperToOdd = 1;
+            int jumperToOdd = 1; // jumper to switch odd number
 
             char[] charOddArray = CreateAndChangeArrayFromIntToChar(lengthArray, jumperToOdd);
 
