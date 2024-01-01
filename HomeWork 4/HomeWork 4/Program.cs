@@ -6,6 +6,10 @@ namespace HomeWork_4
     {
         static void Main(string[] args)
         {
+            // This is comentariy
+
+            //atara
+
             int lengthArray;
             do
             {
