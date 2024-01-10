@@ -9,6 +9,7 @@ namespace LoggerAplication
         static void Main(string[] args)
         {
             Starter.Run();
+            //
         }
     }
 
