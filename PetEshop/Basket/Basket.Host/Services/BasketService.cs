@@ -7,26 +7,39 @@ namespace Basket.Host.Services;
 public class BasketService : IBasketService
 {
     private readonly ICacheService _cacheService;
-
+    private const string _key = "basket";
     public BasketService(ICacheService cacheService)
     {
         _cacheService = cacheService;
     }
 
-    public async Task TestAdd(string userId, string data)
+    public async Task<TestGetResponse<ItemRequest>> GetItems(string userId)
     {
-        await _cacheService.AddOrUpdateAsync(userId, data);
+        string key = $"{_key}{userId}";
+        var result = await _cacheService.GetAsync<ICollection<ItemRequest>>(key);
+        return new TestGetResponse<ItemRequest>() { Data = result };
     }
 
-    public async Task<TestGetResponse> TestGet(string userId)
+    public async Task UpdateItems(string userId, ICollection<ItemRequest> data)
     {
-        var result = await _cacheService.GetAsync<string>(userId);
-        return new TestGetResponse() { Data = result };
+        string key = $"{_key}{userId}";
+        await _cacheService.AddOrUpdateAsync(key, data);   
     }
 
-    public async Task AddItems(string userId, ICollection<ItemRequest> data)
+    public async Task DeleteItem(string userId, int idItem)
     {
-        await _cacheService.AddOrUpdateAsync(userId, data);   }
+        string key = $"{_key}{userId}";
+        var result = await _cacheService.GetAsync<ICollection<ItemRequest>>(key);
+        var corection = -1; // becose intex start 0, item start 1;
+        result.ToList().RemoveAt(idItem - corection);
+        await _cacheService.AddOrUpdateAsync(key, result);
+    }
 
-    
+    public async Task AddItem(string userId, ICollection<ItemRequest> data)
+    {
+        string key = $"{_key}{userId}";
+        var result = await _cacheService.GetAsync<ICollection<ItemRequest>>(key);
+        result.ToList().AddRange(data);
+        await _cacheService.AddOrUpdateAsync(key, result);
+    }
 }

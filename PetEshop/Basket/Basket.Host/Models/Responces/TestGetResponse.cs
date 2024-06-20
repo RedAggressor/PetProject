@@ -1,7 +1,7 @@
 ﻿namespace Basket.Host.Models.Responces
 {
-    public class TestGetResponse
+    public class TestGetResponse<T>
     {
-        public string Data { get; set; } = null!;
+        public ICollection<T>? Data { get; set; } 
     }
 }

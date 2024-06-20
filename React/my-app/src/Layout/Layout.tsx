@@ -7,7 +7,7 @@ interface LayoutProps {
     children: ReactNode;
 }
 
-const Layout: FC = () => {
+const Layout: FC<LayoutProps> = ({children}) => {
     return (
         <>
             <CssBaseline/>
@@ -22,7 +22,7 @@ const Layout: FC = () => {
                     }}
                 >                    
                     <Navbar />      
-                               
+                    {children}      
                     <Footer />                           
                 </Box>
         </>

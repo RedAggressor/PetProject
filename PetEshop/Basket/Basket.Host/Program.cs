@@ -56,7 +56,7 @@ builder.Services.Configure<RedisConfig>(
 builder.Services.AddAuthorization(configuration);
 
 builder.Services.AddTransient<IJsonSerializer, JsonSerializer>();
-builder.Services.AddTransient<IRedisCacheConnectionService, RedisCacheConnectionService>();
+builder.Services.AddSingleton<IRedisCacheConnectionService, RedisCacheConnectionService>();
 builder.Services.AddTransient<ICacheService, CacheService>();
 builder.Services.AddTransient<IBasketService, BasketService>();
 builder.Services.AddTransient<IOrderRepository, OrderRepository>();

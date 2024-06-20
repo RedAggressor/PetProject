@@ -4,8 +4,9 @@ using Basket.Host.Models.Responces;
 namespace Basket.Host.Services.Abstractions;
 
 public interface IBasketService
-{
-    Task TestAdd(string userId, string data);
-    Task<TestGetResponse> TestGet(string userId);
-    Task AddItems(string userId, ICollection<ItemRequest> data);    
+{    
+    Task<TestGetResponse<ItemRequest>> GetItems(string userId);
+    Task UpdateItems(string userId, ICollection<ItemRequest> data);
+    Task DeleteItem(string userId, int idItem);
+    Task AddItem(string userId, ICollection<ItemRequest> data);
 }

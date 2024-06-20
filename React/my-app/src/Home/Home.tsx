@@ -3,32 +3,25 @@ import { FC, ReactElement, useState } from "react";
 import {observer} from "mobx-react-lite";
 import HomeStore from "./HomeStore";
 import ItemCard from "./card/itemCard";
+import BasketStore from "../components/basket/BasketStore";
 
 const store = new HomeStore();
-
-const Home: FC<any> = (): ReactElement => { 
-    
-    const handClick = () => {
-        alert(store.brands.length)
-    }
+const Home: FC<any> = (): ReactElement => {        
 
     return (  
-    <Container>
-        <Typography>
-            Somesthing
-        </Typography>
+    <Container>        
+        <Box sx={{ width: '100%', typography: 'body1' }}> 
             <Grid container spacing={3} justifyContent='center' my={4}>                
                     <>
-                    { Array.isArray(store.brands) && store.brands?.map((item) => (
+                    { Array.isArray(store.items) && store.items?.map((item) => (
                         <Grid key={item.id} item lg={2} md={3} xs={6}>
                             <ItemCard {...item}/>
                         </Grid>
-                    ))}
-
-                    <button onClick={handClick}>click</button>
+                    ))}                    
                     </>                
-            </Grid>            
-        </Container>
+            </Grid>
+        </Box>            
+    </Container>
     );
 };
 

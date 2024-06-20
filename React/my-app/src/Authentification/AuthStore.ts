@@ -1,15 +1,30 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable} from "mobx";
+import * as authApi from "../api/moduls/authApi"
 
 class AuthStore{
-    token ='';
-    name='';
-    constructor(){
+    token='';
+    email='';
+           
+    constructor() {
         makeAutoObservable(this);
     }
 
-    async login(name:string, password:string){
-        //const responce = await // конект
-        //this.token = responce.token;
-        //this.name = responce.normalize;
+    async login(email: string, password: string) {
+        const respon = await authApi.login({ email, password });
+        this.token = respon.token;
+        this.email = email;       
+    }
+
+    logOut() {
+        this.token = '';
+        this.email='';
+    }
+
+    async registartion(email: string, password: string){
+        const respon = await authApi.registration({email, password});
+       this.token = respon.token;
+       this.email = email;        
     }
 }
+
+export default AuthStore;

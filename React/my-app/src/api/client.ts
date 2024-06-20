@@ -14,7 +14,7 @@ const apiClient = async ({ path, method, data }: apiClientProps) => {
     headers: { 'Content-Type': 'application/json' },
     body: !!data ? JSON.stringify(data) : undefined
   }
-  return await fetch(`${baseUrl}${path}`, requestOptions).then((responce) => handleResponse(responce))
+  return await fetch(`${path}`, requestOptions).then((responce) => handleResponse(responce))
 }
 
 interface apiClientProps {

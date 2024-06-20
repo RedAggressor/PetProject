@@ -1,12 +1,10 @@
 import { makeAutoObservable, runInAction, } from "mobx";
 import * as apiClient from "../api/moduls/items"
-import {IBrandsResponce} from "../api/responce/BrandsResponce"
-import { IItemResponce } from "../api/responce/ItemsResponce";
-import { IErrorResponce } from "../api/responce/IErrorResponce";
+import { ICatalogItemResponse } from "../api/responce/ICatalogItemResponse";
 
 class HomeStore {
     
-    brands: IItemResponce[] = [];    
+    items: ICatalogItemResponse[] = [];    
    
     constructor() {
         makeAutoObservable(this);
@@ -16,7 +14,7 @@ class HomeStore {
     prefetchData = async () => {
         try {
             const respon = await apiClient.getItems();            
-            this.brands = respon
+            this.items = respon
                            
         }
         catch (error) {

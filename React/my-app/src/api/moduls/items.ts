@@ -1,11 +1,11 @@
 import apiClient from "../client"
 
-export const getBrands = () => apiClient({
-    path:`GetListBrand`,
-    method:'POST'
+export const getItemById = (id: string) => apiClient({
+    path:`http://localhost:5000/api/v1/CatalogBff/GetById?id=${id}`,
+    method:'POST',    
 })
 
 export const getItems = () => apiClient ({
-    path:'GetListItem',
+    path:'http://localhost:5000/api/v1/CatalogBff/GetListItem',
     method:'POST'
 })

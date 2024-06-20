@@ -23,30 +23,38 @@ public class BasketBffController : ControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType((int)HttpStatusCode.OK)]
-    public async Task<IActionResult> TestAdd(TestAddRequest data)
+    [ProducesResponseType(typeof(TestGetResponse<ItemRequest>), (int)HttpStatusCode.OK)]
+    public async Task<IActionResult> GetItem()
     {
         var basketId = User.Claims.FirstOrDefault(x => x.Type == "sub")?.Value;
-        await _basketService.TestAdd(basketId!, data.Data);
-        return Ok();
-    }
-
-    [HttpPost]
-    [ProducesResponseType(typeof(TestGetResponse), (int)HttpStatusCode.OK)]
-    public async Task<IActionResult> TestGet()
-    {
-        var basketId = User.Claims.FirstOrDefault(x => x.Type == "sub")?.Value;
-        var response = await _basketService.TestGet(basketId!);
+        var response = await _basketService.GetItems(basketId!);
         return Ok(response);
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(AddResponce<int>), (int)HttpStatusCode.OK)]
-    public async Task<IActionResult> AddItems(ICollection<ItemRequest> items)
+    [ProducesResponseType((int)HttpStatusCode.OK)] // responce model will be different
+    public async Task<IActionResult> UpdateItems(ICollection<ItemRequest> items)
     {
         var basketId = User.Claims.FirstOrDefault(x => x.Type == "sub")?.Value;
-        await _basketService.AddItems(basketId, items);
+        await _basketService.UpdateItems(basketId, items);
         return Ok();
     }
 
+    [HttpPost]
+    [ProducesResponseType((int)HttpStatusCode.OK)] // responce model will be different
+    public async Task<IActionResult> DeleteItems(int idItem)
+    {
+        var basketId = User.Claims.FirstOrDefault(x => x.Type == "sub")?.Value;
+        await _basketService.DeleteItem(basketId, idItem);
+        return Ok();
+    }
+
+    [HttpPost]
+    [ProducesResponseType((int)HttpStatusCode.OK)] // responce model will be different
+    public async Task<IActionResult> AddItems(ICollection<ItemRequest> items)
+    {
+        var basketId = User.Claims.FirstOrDefault(x => x.Type == "sub")?.Value;
+        await _basketService.AddItem(basketId, items);
+        return Ok();
+    }
 }
