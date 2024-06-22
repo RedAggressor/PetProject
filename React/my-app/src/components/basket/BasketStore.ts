@@ -6,20 +6,17 @@ class BasketStore {
     amount = 0;
     items: IItemForBasket [] = [];
     price = 0;
-    error = '';
+    error = '';    
     
     constructor()
     {
-        makeAutoObservable(this);
-        runInAction(this.prefetchData)
+        makeAutoObservable(this);        
     }
 
     prefetchData = async () => {
         try{
-            const responce =  await apiBasket.getItems();
-            this.items = responce.data;
-            this.amount = this.items.length;
-            this.price = this.items.map(item => item.price).reduce((acc, curr) => acc + curr, 0);
+            const responce = await apiBasket.getItems();
+            this.items = responce.data;            
         }
         catch (error) {
             if(error instanceof Error)
@@ -27,14 +24,40 @@ class BasketStore {
         }
     }
 
-    putInBasket = async (it: IItemForBasket[]) => {
-        try{            
-            const responce = await apiBasket.addItems(it);
-            console.log(responce);
+    async addItem(item: IItemForBasket) {
+        try{
+            this.items.push(item)
+            this.setAmount();
+            this.setPrice();
+            const items: IItemForBasket [] = this.items;
+            await apiBasket.addItems(items);
+            await this.prefetchData();                               
+        }
+        catch (error){
+            console.log(error);
+        }
+    }
+
+    removeItem = async (id: number) => {
+        try {
+            this.items.splice(id, 1);
+            this.setAmount();
+            this.setPrice();
+            const items: IItemForBasket [] = this.items;
+            await apiBasket.addItems(items);
+            await this.prefetchData();
         }
         catch (error){
             console.log(error)
         }
+    }
+
+    setAmount(){
+        this.amount = this.items.length;
+    }
+
+    setPrice(){
+        this.price = this.items.map(item => item.price).reduce((acc, curr) => acc + curr, 0);
     }
 }
 

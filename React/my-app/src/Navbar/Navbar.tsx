@@ -1,14 +1,26 @@
 import {FC, ReactElement, useContext, useEffect, useState} from "react";
 import { Box, Link, Container, IconButton, Menu, MenuItem,
-  Toolbar, Typography, } from "@mui/material";
+  Toolbar, Typography,
+  ListItemIcon, } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { routes } from "../routes";
 import { NavLink, useNavigate } from "react-router-dom";
 import { AppStoreContext } from "../App";
 import {observer} from "mobx-react-lite";
 import Acount from "../components/account";
+import BasketElement from "../components/basket/basketElement";
+import { basketContext } from "../components/basket/Basket";
 
 const Navbar: FC = (): ReactElement => {
+
+  const basketStore = useContext(basketContext);
+  const [amount, setAmount] = useState(basketStore.basket.amount);
+
+  useEffect(()=>{
+     setAmount(basketStore.basket.amount)},
+  [basketStore.basket.amount]);
+
+
 
   const appStore = useContext(AppStoreContext);
 
@@ -22,7 +34,9 @@ const Navbar: FC = (): ReactElement => {
     setAnchorElNav(null);
   };
   
+  
   const navigate = useNavigate();
+  const HandlClick = async () => {navigate('/Basket')};
 
   const DisplayAuthnEl = (pin:boolean) => {
     routes?.map((item)=> {
@@ -134,7 +148,15 @@ const Navbar: FC = (): ReactElement => {
             }}
           >
             {!!appStore.authStore.token && <span>{<Acount/>}</span> }
-          </Typography>          
+          </Typography>
+          <Box>
+            <MenuItem onClick={HandlClick}>
+              <ListItemIcon>
+                <BasketElement count={amount}/>
+              </ListItemIcon>
+              Basket
+            </MenuItem>
+            </Box>       
         </Toolbar>
       </Container>      
     </Box>

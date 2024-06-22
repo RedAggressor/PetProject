@@ -17,14 +17,13 @@ public class CatalogItemRepository : ICatalogItemRepository
         _logger = logger;
     }
 
-    public async Task<PaginatedItems<CatalogItem>> GetByPageAsync(int pageIndex, int pageSize, int? brandFilter, int? typeFilter)
+    public async Task<PaginatedItems<CatalogItem>> GetByPageAsync(int pageIndex, int pageSize, int typeFilter)
     {
         IQueryable<CatalogItem> query = _dbContext.CatalogItems;
-               
 
-        if (typeFilter.HasValue)
+        if (typeFilter > 0)
         {
-            query = query.Where(w => w.CatalogTypeId == typeFilter.Value);
+            query = query.Where(w => w.CatalogTypeId == typeFilter);
         }
 
         var totalItems = await query.LongCountAsync();

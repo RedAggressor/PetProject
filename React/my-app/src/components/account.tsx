@@ -18,13 +18,7 @@ import { basketContext } from "./basket/Basket";
 
 const Acount: FC<any> = (amount:number): ReactElement => {
 
-  const basketStore = useContext(basketContext);
-  const navigate = useNavigate();
-  const HandlClick = async () => {navigate('/Basket'); await basketStore.basket.prefetchData()};
-  
   const appStore = useContext(AppStoreContext);
-  
-
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const open = Boolean(anchorEl);
@@ -87,13 +81,7 @@ const Acount: FC<any> = (amount:number): ReactElement => {
             }}
             transformOrigin={{ horizontal: 'right', vertical: 'top' }}
             anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-          >               
-            <MenuItem onClick={HandlClick}>
-              <ListItemIcon>
-                <BasketElement/>
-              </ListItemIcon>
-              Basket
-            </MenuItem>
+          >         
             <MenuItem onClick={() => {handleClose();}}>
               <ListItemIcon>                
                 <Mail />

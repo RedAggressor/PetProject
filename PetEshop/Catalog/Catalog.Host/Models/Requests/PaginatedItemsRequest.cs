@@ -1,11 +1,10 @@
 namespace Catalog.Host.Models.Requests;
 
-public class PaginatedItemsRequest<T>
-    where T : notnull
+public class PaginatedItemsRequest
 {
     public int PageIndex { get; set; }
 
     public int PageSize { get; set; }
 
-    public Dictionary<T, int>? Filters { get; set; }
+    public int FilterTypeId { get; set; }
 }

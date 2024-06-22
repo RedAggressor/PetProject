@@ -20,26 +20,9 @@ public class BasketService : IBasketService
         return new TestGetResponse<ItemRequest>() { Data = result };
     }
 
-    public async Task UpdateItems(string userId, ICollection<ItemRequest> data)
+    public async Task AddItems(string userId, ICollection<ItemRequest> data)
     {
         string key = $"{_key}{userId}";
         await _cacheService.AddOrUpdateAsync(key, data);   
-    }
-
-    public async Task DeleteItem(string userId, int idItem)
-    {
-        string key = $"{_key}{userId}";
-        var result = await _cacheService.GetAsync<ICollection<ItemRequest>>(key);
-        var corection = -1; // becose intex start 0, item start 1;
-        result.ToList().RemoveAt(idItem - corection);
-        await _cacheService.AddOrUpdateAsync(key, result);
-    }
-
-    public async Task AddItem(string userId, ICollection<ItemRequest> data)
-    {
-        string key = $"{_key}{userId}";
-        var result = await _cacheService.GetAsync<ICollection<ItemRequest>>(key);
-        result.ToList().AddRange(data);
-        await _cacheService.AddOrUpdateAsync(key, result);
     }
 }

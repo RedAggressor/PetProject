@@ -15,6 +15,7 @@ import { observer } from "mobx-react";
 import BasketStore from "../components/basket/BasketStore";
 
 const Items: FC<any> = (): ReactElement => {
+
     const [item, setItem] = useState<IItemForBasket | null>(null);
     const [isLoading, setisLoading] = useState<boolean>(false)
     const {id} = useParams();    
@@ -40,13 +41,10 @@ const Items: FC<any> = (): ReactElement => {
         }
     }, [id])
 
-    const items: IItemForBasket[] = [];
-    if(item){
-        items.push(item);
-    }
-    
-
-    const put = async()=> await basketStore.putInBasket(items);
+    const addItemToBasket = async () => {
+            if(item)
+            await basketStore.addItem(item);
+        };
 
     return (
         <Container>
@@ -71,12 +69,13 @@ const Items: FC<any> = (): ReactElement => {
                                 {item?.price}
                             </Typography>
                         </CardContent>
+                        <button onClick={addItemToBasket}>Add to basket</button> 
                     </Card>
+                   
                     </>
                 )}
             </Grid>
-
-            <button onClick={put}>click</button>
+                 
         </Container>
     );
 }

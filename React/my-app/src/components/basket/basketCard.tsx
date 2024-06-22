@@ -1,8 +1,11 @@
-import { FC, ReactElement } from "react";
+import { FC, ReactElement, useContext } from "react";
 import { Card, CardActionArea, CardContent, CardMedia, Typography } from "@mui/material";
 import { IItemForBasket } from "../../api/responce/IItemForBasket";
+import { basketContext } from "./Basket";
 
-const BasketCard: FC<IItemForBasket> = (props) : ReactElement => {
+const BasketCard: FC< {item : IItemForBasket} & { index: number }> = ({ item, index }) => {
+
+    const basketStore = useContext(basketContext);
 
     return (
         <Card sx={{maxWidth: 250}}>
@@ -10,24 +13,27 @@ const BasketCard: FC<IItemForBasket> = (props) : ReactElement => {
             <CardMedia
                     component='img'
                     height='250'
-                    image={props.pictureUrl}
-                    alt={props.name}
+                    image={item.pictureUrl}
+                    alt={item.name}
                 />               
                 <CardContent>
                     <Typography noWrap gutterBottom variant="h6" component='div'>
-                        itemId: {props.id} 
+                        itemId: {item.id} 
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                        Price:{props.price}
+                        Price:{item.price}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                        {props.description} typeId:{props.catalogTypeId}
+                        {item.description} typeId:{item.catalogTypeId}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                        {props.name} {props.availableStock}
+                        {item.name} {item.availableStock}
                     </Typography>
-                </CardContent>                
-            </CardActionArea>            
+                </CardContent>
+                               
+            </CardActionArea>
+            <button onClick={() => basketStore.basket.removeItem(index)}>Delete from Basket</button>
+            <button onClick={() => basketStore.basket.addItem(item)}>Add to Basket</button>
         </Card>
     );
 }

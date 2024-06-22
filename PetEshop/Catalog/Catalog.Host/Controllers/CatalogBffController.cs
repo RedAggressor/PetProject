@@ -33,7 +33,7 @@ public class CatalogBffController : ControllerBase
     [HttpPost]
     [AllowAnonymous]
     [ProducesResponseType(typeof(PaginatedItemsResponse<CatalogItemDto>), (int)HttpStatusCode.OK)]
-    public async Task<IActionResult> Items(PaginatedItemsRequest<CatalogTypeFilter> request)
+    public async Task<IActionResult> Items(PaginatedItemsRequest request)
     {
         if (request is null)
         {
@@ -46,7 +46,7 @@ public class CatalogBffController : ControllerBase
 
             return Ok(responce);
         }
-        var result = await _catalogService.GetByPageAsync(request.PageSize, request.PageIndex, request.Filters);
+        var result = await _catalogService.GetByPageAsync(request.PageSize, request.PageIndex, request.FilterTypeId);
         return Ok(result);
     }
 

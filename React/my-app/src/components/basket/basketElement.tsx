@@ -1,10 +1,8 @@
-import * as React from 'react';
 import Badge, { BadgeProps } from '@mui/material/Badge';
 import { styled } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import BasketStore from './BasketStore';
-import { useContext } from 'react';
+import { FC, ReactElement, useContext, useEffect, useState } from 'react';
 import { basketContext } from './Basket';
 
 const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
@@ -16,15 +14,17 @@ const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
     },
   }));
 
-  export default function BasketElement() {
+  const BasketElement= ({count}:any) => {
 
-    const storeBasket = useContext(basketContext);
     
+
     return (
       <IconButton aria-label="cart">        
-        <StyledBadge badgeContent={storeBasket.basket.amount} color="secondary">
+        <StyledBadge badgeContent={count} color="secondary">
           <ShoppingCartIcon />
         </StyledBadge>
       </IconButton>
     );
   }
+
+  export default BasketElement;

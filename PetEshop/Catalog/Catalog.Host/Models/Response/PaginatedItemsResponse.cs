@@ -9,8 +9,5 @@ public class PaginatedItemsResponse<T> : BaseResponce
 
     public long Count { get; init; }
 
-    public ICollection<T>? Data { get; init; }
-      
-    public override ResponceCode GetResponce() => Data is null ? ResponceCode.Failed : ResponceCode.Seccusfull;
-    
+    public ICollection<T>? Data { get; init; }     
 }

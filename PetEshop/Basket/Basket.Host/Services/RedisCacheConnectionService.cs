@@ -12,10 +12,18 @@ namespace Basket.Host.Services
         public RedisCacheConnectionService(
             IOptions<RedisConfig> config)
         {
+            //var redisConfigurationOptions = new ConfigurationOptions
+            //{
+             //   EndPoints = { "localhost:6380" },
+             //   ConnectTimeout = 5000,                 
+           // };
+
             var redisConfigurationOptions = ConfigurationOptions.Parse(config.Value.Host);
-            _connectionLazy =
-                new Lazy<ConnectionMultiplexer>(()
-                    => ConnectionMultiplexer.Connect(redisConfigurationOptions));
+           
+
+           _connectionLazy =
+            new Lazy<ConnectionMultiplexer>(()
+               => ConnectionMultiplexer.Connect(redisConfigurationOptions));
         }
 
         public IConnectionMultiplexer Connection => _connectionLazy.Value;

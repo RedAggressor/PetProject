@@ -22,7 +22,7 @@ builder.AddConfiguration();
 var identityUrl = configuration.GetValue<string>("IdentityUrl");
 var callBackUrl = configuration.GetValue<string>("CallBackUrl");
 var redirectUrl = configuration.GetValue<string>("RedirectUri");
-var sessionCookieLifetime = configuration.GetValue("SessionCookieLifetimeMinutes", 60);
+var sessionCookieLifetime = configuration.GetValue("SessionCookieLifetimeMinutes", 360);
 
 builder.Services.AddAuthentication(options =>
     {

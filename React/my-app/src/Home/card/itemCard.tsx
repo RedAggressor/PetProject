@@ -5,10 +5,11 @@ import { useNavigate } from "react-router-dom";
 import { ICatalogItemResponse } from "../../api/responce/ICatalogItemResponse";
 import BasketStore from "../../components/basket/BasketStore";
 import { basketContext } from "../../components/basket/Basket";
+import { IItemByPageResponce } from "../../api/responce/itembyPageResponce";
 
 
 
-const ItemCard: FC<ICatalogItemResponse> = (props) : ReactElement => {
+const ItemCard: FC< ICatalogItemResponse > = (props) : ReactElement => {
 
     const basketStore = useContext(basketContext);
 
@@ -21,9 +22,9 @@ const ItemCard: FC<ICatalogItemResponse> = (props) : ReactElement => {
         catalogTypeId: props.catalogType.id,
         availableStock: props.availableStock
     };
-    const puInItem = async () => {        
-        await  basketStore.basket.putInBasket([item]);
-        await basketStore.basket.prefetchData();
+
+    const puInItem = async () => {  
+        await basketStore.basket.addItem(item);       
     };
 
     const navigate = useNavigate();
