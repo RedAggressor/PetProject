@@ -6,7 +6,8 @@ import ItemCard from "./card/itemCard";
 import TabList from "@mui/lab/TabList";
 import TabContext from "@mui/lab/TabContext";
 import TabPanel from "@mui/lab/TabPanel";
-import { useParams } from "react-router-dom";
+import authStore from "../Authentification/authStore";
+
 
 const store = new HomeStore();
 
@@ -17,7 +18,7 @@ const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);};    
 
     return ( 
-        <Container>
+        <Container>            
             <Box sx={{ width: '100%', typography: 'body1' }}>
                 <TabContext value={value} >
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>

@@ -31,7 +31,7 @@ public class CatalogBffController : ControllerBase
     }
 
     [HttpPost]
-    [AllowAnonymous]
+    //[AllowAnonymous]
     [ProducesResponseType(typeof(PaginatedItemsResponse<CatalogItemDto>), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> Items(PaginatedItemsRequest request)
     {
@@ -85,7 +85,7 @@ public class CatalogBffController : ControllerBase
     }
 
     [HttpPost]
-    [AllowAnonymous]
+    //[AllowAnonymous]
     [ProducesResponseType(typeof(ListResponse<CatalogTypeDto>), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> GetListType()
     {
@@ -94,7 +94,7 @@ public class CatalogBffController : ControllerBase
     }
 
     [HttpPost]
-    [AllowAnonymous]
+    //[AllowAnonymous]
     [ProducesResponseType(typeof(ListResponse<CatalogItemDto>), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> GetListItem()
     {

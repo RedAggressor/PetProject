@@ -3,9 +3,7 @@ import { FC, ReactElement, useContext } from "react";
 import { IItemForBasket } from "../../api/responce/IItemForBasket";
 import { useNavigate } from "react-router-dom";
 import { ICatalogItemResponse } from "../../api/responce/ICatalogItemResponse";
-import BasketStore from "../../components/basket/BasketStore";
-import { basketContext } from "../../components/basket/Basket";
-import { IItemByPageResponce } from "../../api/responce/itembyPageResponce";
+import { basketContext } from "../../App";
 
 
 

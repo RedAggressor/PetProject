@@ -41,8 +41,8 @@ class HomeStore {
         try {
             this.setRequest();
             const respon = await apiClient.Items(this.request);           
-            this.setItems(respon.data);
-            this.setCount(respon.count);
+            this.setItems(respon?.data);
+            this.setCount(respon?.count);
             this.setTotalPage();
         }
         catch (error) {

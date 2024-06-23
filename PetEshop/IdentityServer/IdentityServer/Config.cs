@@ -43,11 +43,24 @@ namespace IdentityServer
             {
                 new Client
                 {
+                    ClientId = "react_spa",
+                    ClientName = "React SPA",
+                    AllowedGrantTypes = GrantTypes.Code,
+                    RequirePkce = true,
+                    RequireClientSecret = false,
+                    RedirectUris = { $"{configuration["ReactClientUrl"]}/callback" },
+                    PostLogoutRedirectUris = { $"{configuration["ReactClientUrl"]}" },
+                    AllowedCorsOrigins = { configuration["ReactClientUrl"] },
+                    AllowedScopes = { "openid", "profile", "mvc" },
+                    AllowAccessTokensViaBrowser = true
+                },
+                new Client
+                {
                     ClientId = "mvc_pkce",
                     ClientName = "MVC PKCE Client",
                     AllowedGrantTypes = GrantTypes.Code,
                     ClientSecrets = {new Secret("secret".Sha256())},
-                    RedirectUris = { $"{configuration["MvcUrl"]}/signin-oidc"}, // redirect befor and after login
+                    RedirectUris = { $"{configuration["MvcUrl"]}/signin-oidc"},
                     AllowedScopes = {"openid", "profile", "mvc"},
                     RequirePkce = true,
                     RequireConsent = false

@@ -1,16 +1,16 @@
 import { FC, ReactElement, useContext } from "react";
 import { Card, CardActionArea, CardContent, CardMedia, Typography } from "@mui/material";
 import { IItemForBasket } from "../../api/responce/IItemForBasket";
-import { basketContext } from "./Basket";
+import { basketContext } from "../../App";
 
 const BasketCard: FC< {item : IItemForBasket} & { index: number }> = ({ item, index }) => {
 
     const basketStore = useContext(basketContext);
-
+    
     return (
         <Card sx={{maxWidth: 250}}>
             <CardActionArea>
-            <CardMedia
+                <CardMedia
                     component='img'
                     height='250'
                     image={item.pictureUrl}
@@ -29,8 +29,7 @@ const BasketCard: FC< {item : IItemForBasket} & { index: number }> = ({ item, in
                     <Typography variant="body2" color="text.secondary">
                         {item.name} {item.availableStock}
                     </Typography>
-                </CardContent>
-                               
+                </CardContent>                               
             </CardActionArea>
             <button onClick={() => basketStore.basket.removeItem(index)}>Delete from Basket</button>
             <button onClick={() => basketStore.basket.addItem(item)}>Add to Basket</button>

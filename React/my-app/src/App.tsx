@@ -2,13 +2,18 @@ import { createContext, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from './Layout/Layout';
 import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
-import AuthStore from './Authentification/AuthStore';
-import { IAppStore } from './interfaces/appStore';
+import AuthStore from './Authentification/authStore';
 import { routes as appRoutes } from "./routes";
+import BasketStore from './components/basket/BasketStore';
+import { IBasketStore } from './interfaces/backetStor';
 
-const store: IAppStore = {
-  'authStore': new AuthStore()
+const store = AuthStore;
+
+const storeBasket : IBasketStore = {
+  'basket': new BasketStore()
 }
+
+export const basketContext = createContext(storeBasket)
 
 export const AppStoreContext = createContext(store)
 

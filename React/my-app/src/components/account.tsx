@@ -9,11 +9,6 @@ import React from "react";
 import { observer } from "mobx-react";
 import { Box, IconButton, Tooltip, Typography } from "@mui/material";
 import Mail from "./mail";
-import BasketElement from "./basket/basketElement";
-import { useNavigate } from "react-router-dom";
-import BasketStore from "./basket/BasketStore";
-import { basketContext } from "./basket/Basket";
-
 
 
 const Acount: FC<any> = (amount:number): ReactElement => {
@@ -33,7 +28,7 @@ const Acount: FC<any> = (amount:number): ReactElement => {
     return(
         <React.Fragment>
           <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>        
-            <Typography sx={{ minWidth: 100 }}>{appStore.authStore.email}</Typography>
+            <Typography sx={{ minWidth: 100 }}>{appStore.user?.profile.name}</Typography>
             <Tooltip title="Account settings">
               <IconButton
                 onClick={handleClick}
@@ -88,7 +83,7 @@ const Acount: FC<any> = (amount:number): ReactElement => {
               </ListItemIcon>
               Mail
             </MenuItem>
-            <MenuItem onClick={() => {handleClose(); appStore.authStore.logOut();}}>
+            <MenuItem onClick={() => {handleClose(); appStore.logOut()}}>
               <ListItemIcon>
                 <Logout fontSize="small" />
               </ListItemIcon>

@@ -1,4 +1,4 @@
-import {ReactElement, FC, useEffect, useState} from "react";
+import {ReactElement, FC, useEffect, useState, useContext} from "react";
 import {   
     Card,
     CardContent,
@@ -13,13 +13,14 @@ import {useParams} from "react-router-dom";
 import { IItemForBasket} from "../api/responce/IItemForBasket";
 import { observer } from "mobx-react";
 import BasketStore from "../components/basket/BasketStore";
+import { basketContext } from "../App";
 
 const Items: FC<any> = (): ReactElement => {
-
+    const basketStore = useContext(basketContext);
     const [item, setItem] = useState<IItemForBasket | null>(null);
     const [isLoading, setisLoading] = useState<boolean>(false)
     const {id} = useParams();    
-    const basketStore = new BasketStore(); 
+     
 
     useEffect(() => {
         if(id) {
@@ -43,7 +44,7 @@ const Items: FC<any> = (): ReactElement => {
 
     const addItemToBasket = async () => {
             if(item)
-            await basketStore.addItem(item);
+            await basketStore.basket.addItem(item);
         };
 
     return (

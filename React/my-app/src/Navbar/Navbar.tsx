@@ -9,7 +9,7 @@ import { AppStoreContext } from "../App";
 import {observer} from "mobx-react-lite";
 import Acount from "../components/account";
 import BasketElement from "../components/basket/basketElement";
-import { basketContext } from "../components/basket/Basket";
+import { basketContext } from "../App";
 
 const Navbar: FC = (): ReactElement => {
 
@@ -19,8 +19,6 @@ const Navbar: FC = (): ReactElement => {
   useEffect(()=>{
      setAmount(basketStore.basket.amount)},
   [basketStore.basket.amount]);
-
-
 
   const appStore = useContext(AppStoreContext);
 
@@ -32,24 +30,10 @@ const Navbar: FC = (): ReactElement => {
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
-  };
-  
+  };  
   
   const navigate = useNavigate();
   const HandlClick = async () => {navigate('/Basket')};
-
-  const DisplayAuthnEl = (pin:boolean) => {
-    routes?.map((item)=> {
-      (item.title === 'Login') &&
-      (item.enabled = pin);
-      (item.title === 'Registartion') &&
-      (item.enabled = pin);
-    }) 
-  }
-
-  useEffect(()=> navigate('/'), [appStore.authStore.token]);  
-
-  (!!appStore.authStore.token) ? DisplayAuthnEl(false) : DisplayAuthnEl(true);
 
   return (
     <Box
@@ -100,19 +84,23 @@ const Navbar: FC = (): ReactElement => {
                   variant="button"
                 >
                   <MenuItem onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center">{page.title}</Typography>
-                  </MenuItem>
+                  <Typography textAlign="center">{page.title}</Typography>
+                  </MenuItem>                  
                 </Link>
               ))}
-            </Menu>
-          </Box>
+              
+              
+            </Menu> 
+                       
+          </Box>  
+               
           <Typography
             variant="h6"
             noWrap
             component="div"
             sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}
           >
-            {!!appStore.authStore.token && <span>{<Acount/>}</span> }
+            {!!appStore.user?.access_token && <span>{<Acount/>}</span> } Тут
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             <Box
@@ -147,7 +135,19 @@ const Navbar: FC = (): ReactElement => {
               display: { xs: "none", md: "flex" },
             }}
           >
-            {!!appStore.authStore.token && <span>{<Acount/>}</span> }
+            {!!appStore.user?.access_token ?
+                (<span>{<Acount/>}</span> ) :
+                (<Link                  
+                  color="black"
+                  underline="none"
+                  variant="button"
+                >
+                  <MenuItem onClick={() => appStore.login()}>
+                    <Typography textAlign="center">Login</Typography>
+                  </MenuItem>                   
+                  </Link> 
+                ) 
+            } 
           </Typography>
           <Box>
             <MenuItem onClick={HandlClick}>
