@@ -8,7 +8,7 @@ namespace Catalog.Host.Controllers;
 [Route(ComponentDefaults.DefaultRoute)]
 public class CatalogTypeController : ControllerBase
 {
-    private readonly ILogger<CatalogTypeController> _logger;
+    private readonly ILogger<CatalogTypeController> _logger; 
     private readonly ICatalogTypeService _serivice;
 
     public CatalogTypeController(
@@ -61,6 +61,6 @@ public class CatalogTypeController : ControllerBase
             };
         }
 
-        return await _serivice.DeleteType(id);
+        return await _serivice.DeleteType((int)id);
     }
 }

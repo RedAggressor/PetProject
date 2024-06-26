@@ -1,7 +1,7 @@
 using Catalog.Host.Configurations;
 using Catalog.Host.Data;
 using Catalog.Host.Repositories;
-using Catalog.Host.Repositories.Interfaces;
+using Catalog.Host.Repositories.Abstractions;
 using Catalog.Host.Services;
 using Catalog.Host.Services.Interfaces;
 using Infrastructure.Extensions;

@@ -8,7 +8,7 @@ namespace IdentityServer
     {
         public static IEnumerable<IdentityResource> GetIdentityResources()
         {
-            return new IdentityResource[] // default 
+            return new IdentityResource[] 
             {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile()
@@ -19,6 +19,13 @@ namespace IdentityServer
         {
             return new ApiResource[]
             {
+                new ApiResource("react_spa")
+                {
+                    Scopes = new List<Scope>
+                    {
+                        new Scope("react")
+                    },
+                },
                 new ApiResource("alevelwebsite.com")
                 {
                     Scopes = new List<Scope>
@@ -49,22 +56,22 @@ namespace IdentityServer
                     RequirePkce = true,
                     RequireClientSecret = false,
                     RedirectUris = { $"{configuration["ReactClientUrl"]}/callback" },
-                    PostLogoutRedirectUris = { $"{configuration["ReactClientUrl"]}" },
+                    PostLogoutRedirectUris = { $"{configuration["ReactClientUrl"]}/signin-oidc" },
                     AllowedCorsOrigins = { configuration["ReactClientUrl"] },
                     AllowedScopes = { "openid", "profile", "mvc" },
                     AllowAccessTokensViaBrowser = true
                 },
-                new Client
-                {
-                    ClientId = "mvc_pkce",
-                    ClientName = "MVC PKCE Client",
-                    AllowedGrantTypes = GrantTypes.Code,
-                    ClientSecrets = {new Secret("secret".Sha256())},
-                    RedirectUris = { $"{configuration["MvcUrl"]}/signin-oidc"},
-                    AllowedScopes = {"openid", "profile", "mvc"},
-                    RequirePkce = true,
-                    RequireConsent = false
-                },
+                //new Client
+                //{
+                //    ClientId = "mvc_pkce",
+                //    ClientName = "MVC PKCE Client",
+                //    AllowedGrantTypes = GrantTypes.Code,
+                //    ClientSecrets = {new Secret("secret".Sha256())},
+                //    RedirectUris = { $"{configuration["MvcUrl"]}/signin-oidc"},
+                //    AllowedScopes = {"openid", "profile", "mvc"},
+                //    RequirePkce = true,
+                //    RequireConsent = false
+                //},
                 new Client
                 {
                     ClientId = "catalog",
@@ -83,10 +90,10 @@ namespace IdentityServer
                     ClientId = "catalogswaggerui",
                     ClientName = "Catalog Swagger UI",
                     AllowedGrantTypes = GrantTypes.Implicit,
-                    AllowAccessTokensViaBrowser = true, // token brauser
+                    AllowAccessTokensViaBrowser = true, 
 
                     RedirectUris = { $"{configuration["CatalogApi"]}/swagger/oauth2-redirect.html" },
-                    PostLogoutRedirectUris = { $"{configuration["CatalogApi"]}/swagger/" },// redirect after login out
+                    PostLogoutRedirectUris = { $"{configuration["CatalogApi"]}/swagger/" },
 
                     AllowedScopes =
                     {

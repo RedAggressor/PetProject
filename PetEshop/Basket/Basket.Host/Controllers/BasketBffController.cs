@@ -1,8 +1,6 @@
 using Basket.Host.Models.Requests;
 using Basket.Host.Models.Responces;
 using Basket.Host.Services.Abstractions;
-using Infrastructure.Identity;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Basket.Host.Controllers;
 
@@ -11,7 +9,7 @@ namespace Basket.Host.Controllers;
 [Route(ComponentDefaults.DefaultRoute)]
 public class BasketBffController : ControllerBase
 {
-    private readonly ILogger<BasketBffController> _logger;
+    private readonly ILogger<BasketBffController> _logger; // release logger!! or wrapper do this
     private readonly IBasketService _basketService;
 
     public BasketBffController(
@@ -23,7 +21,7 @@ public class BasketBffController : ControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(TestGetResponse<ItemRequest>), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(GetDataResponse<ItemRequest>), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> GetItems()
     {
         var basketId = User.Claims.FirstOrDefault(x => x.Type == "sub")?.Value;
@@ -35,7 +33,7 @@ public class BasketBffController : ControllerBase
     [ProducesResponseType((int)HttpStatusCode.OK)] // responce model will be different
     public async Task<IActionResult> AddItems(ICollection<ItemRequest> items)
     {
-        var basketId = User.Claims.FirstOrDefault(x => x.Type == "sub")?.Value;
+        var basketId = User.Claims.FirstOrDefault(x => x.Type == "sub")?.Value!;
         await _basketService.AddItems(basketId, items);
         return Ok();
     }

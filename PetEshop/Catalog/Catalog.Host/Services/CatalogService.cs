@@ -1,8 +1,7 @@
 using Catalog.Host.Data;
 using Catalog.Host.Models.Dtos;
-using Catalog.Host.Models.enums;
 using Catalog.Host.Models.Response;
-using Catalog.Host.Repositories.Interfaces;
+using Catalog.Host.Repositories.Abstractions;
 using Catalog.Host.Services.Interfaces;
 
 namespace Catalog.Host.Services;
@@ -23,7 +22,10 @@ public class CatalogService : BaseDataService<ApplicationDbContext>, ICatalogSer
         _mapper = mapper;
     }
 
-    public async Task<PaginatedItemsResponse<CatalogItemDto>> GetByPageAsync(int pageSize, int pageIndex, int filterTypeId)
+    public async Task<PaginatedItemsResponse<CatalogItemDto>> GetByPageAsync(
+        int pageSize, 
+        int pageIndex,
+        int filterTypeId)
     {
         return await ExecuteSafeAsync(async () =>
         {     
@@ -34,18 +36,23 @@ public class CatalogService : BaseDataService<ApplicationDbContext>, ICatalogSer
                 Count = result.TotalCount,
                 Data = result.Data.Select(s => _mapper.Map<CatalogItemDto>(s)).ToList(),
                 PageIndex = pageIndex,
-                PageSize = pageSize
-                 
+                PageSize = pageSize                 
             };
 
             return responce;
         });
     }
 
-    public async Task<IEnumerable<CatalogItemDto>> GetCatalogItem()
+    public async Task<DataResponse<CatalogItemDto>> GetCatalogItem()
     {
-        var list = await _catalogItemRepository.GetCatalogItemList();
+        return await ExecuteSafeAsync(async () =>
+        {
+            var list = await _catalogItemRepository.GetCatalogItemList();
 
-        return list.Select(s=> _mapper.Map<CatalogItemDto>(s));
+            return new DataResponse<CatalogItemDto>()
+            {
+                Data = list.Select(s => _mapper.Map<CatalogItemDto>(s)).ToList()
+            };
+        });
     }
 }

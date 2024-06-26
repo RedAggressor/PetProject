@@ -1,71 +1,81 @@
 ﻿using Catalog.Host.Data;
 using Catalog.Host.Data.Entities;
-using Catalog.Host.Models.Dtos;
-using Catalog.Host.Repositories.Interfaces;
-using Catalog.Host.Services.Interfaces;
-using Microsoft.EntityFrameworkCore;
+using Catalog.Host.Repositories.Abstractions;
 
 namespace Catalog.Host.Repositories
 {
-    public class CatalogTypeRepository : ICatalogTypeRepository
+    public class CatalogTypeRepository : BaseRepository, ICatalogTypeRepository
     {
-        private readonly ApplicationDbContext _dbContext;
-        private readonly ILogger<CatalogTypeRepository> _logger;
+        private readonly ApplicationDbContext _dbContext;       
 
         public CatalogTypeRepository(
             IDbContextWrapper<ApplicationDbContext> dbContextWrapper,
             ILogger<CatalogTypeRepository> logger)
+            : base (logger)
         {
-            _dbContext = dbContextWrapper.DbContext;
-            _logger = logger;
+            _dbContext = dbContextWrapper.DbContext;           
         }
 
-        public async Task<CatalogType?> GetById(int? id)
+        public async Task<CatalogTypeEntity> GetById(int id)
         {
-            return await _dbContext.CatalogTypes
-                .FirstOrDefaultAsync(f => f.Id == id);           
-        }
-
-        public async Task<ICollection<CatalogType>> GetList()
-        {
-            return await _dbContext.CatalogTypes.ToListAsync();             
-        }
-
-        public async Task<int?> AddTypeAsync(string? type)
-        {
-            if(type is null)
+            return await ExecutSafeAsync(async () =>
             {
-                return null;
-            }
+                var entity = await _dbContext.CatalogTypes
+                .FirstOrDefaultAsync(f => f.Id == id);
 
-            var entity = await _dbContext.CatalogTypes.AddAsync(new CatalogType()
-            { 
-                Type = type
+                return entity!;
             });
-
-            await _dbContext.SaveChangesAsync();
-
-            return entity.Entity.Id;
         }
 
-        public async Task<string?> DeleteType(int? id)
+        public async Task<ICollection<CatalogTypeEntity>> GetList()
         {
-            var entity = await GetById(id);
-            var message = _dbContext.CatalogTypes.Remove(entity!);
-
-            await _dbContext.SaveChangesAsync();
-
-            return message.State.ToString();
+            return await ExecutSafeAsync(async () =>
+            {
+                return await _dbContext.CatalogTypes.ToListAsync();
+            });
         }
 
-        public async Task<CatalogType> Update(CatalogType catalogType)
+        public async Task<int> AddTypeAsync(string type)
         {
-            var entity = await GetById(catalogType.Id);
-            entity!.Type = catalogType.Type;
+            return await ExecutSafeAsync(async () =>
+            {
+                var entity = await _dbContext.CatalogTypes.AddAsync(new CatalogTypeEntity()
+                {
+                    Type = type
+                });
 
-            await _dbContext.SaveChangesAsync();
+                await _dbContext.SaveChangesAsync();
 
-            return entity;
+                return entity.Entity.Id!;
+            });
+        }
+
+        public async Task<string> DeleteType(int id)
+        {
+            return await ExecutSafeAsync(async () =>
+            {
+                var entity = await GetById(id);
+
+                var message = _dbContext.CatalogTypes.Remove(entity!);
+
+                await _dbContext.SaveChangesAsync();
+
+                return message.State.ToString();
+            });
+        }
+
+        public async Task<CatalogTypeEntity> Update(CatalogTypeEntity catalogType)
+        {
+            return await ExecutSafeAsync(async () =>
+            {
+                var entity = await GetById(catalogType.Id);
+
+                entity!.Type = catalogType.Type;
+
+                await _dbContext.SaveChangesAsync();
+
+                return entity!;
+            });
         }
     }
 }

@@ -2,7 +2,7 @@ using Catalog.Host.Data;
 using Catalog.Host.Data.Entities;
 using Catalog.Host.Models.Dtos;
 using Catalog.Host.Models.Response;
-using Catalog.Host.Repositories.Interfaces;
+using Catalog.Host.Repositories.Abstractions;
 using Catalog.Host.Services.Interfaces;
 
 namespace Catalog.Host.Services;
@@ -29,20 +29,21 @@ public class CatalogItemService : BaseDataService<ApplicationDbContext>, ICatalo
         decimal price,
         int availableStock,        
         int catalogTypeId,
-        string pictureFileName)
+        string pictureFileName) // create dto responce model!!!
     {
-
-
-        return ExecuteSafeAsync(async () => new AddResponse() { Id = await _catalogItemRepository.Add(
+        return ExecuteSafeAsync(async () => new AddResponse() 
+        { 
+            Id = await _catalogItemRepository.Add(
             name,
             description,
             price,
             availableStock,
             catalogTypeId,
-            pictureFileName)});
+            pictureFileName)
+        });
     }
 
-    public async Task<CatalogItemDto> GetCatalogItemsByIdAsync(int? id)
+    public async Task<CatalogItemDto> GetCatalogItemsByIdAsync(int id)
     {
         return await ExecuteSafeAsync(async () =>
         {
@@ -50,12 +51,12 @@ public class CatalogItemService : BaseDataService<ApplicationDbContext>, ICatalo
 
             var dto = _mapper.Map<CatalogItemDto>(item);
 
-            return dto;
+            return dto!;
         });
         
     }
 
-    public async Task<ListResponse<CatalogItemDto>> GetCatalogItemByTypeAsync(int? idType)
+    public async Task<DataResponse<CatalogItemDto>> GetCatalogItemByTypeAsync(int idType)
     {
         return await ExecuteSafeAsync(async () =>
         {
@@ -65,14 +66,14 @@ public class CatalogItemService : BaseDataService<ApplicationDbContext>, ICatalo
 
             itemColections.AddRange(items.Select(i => _mapper.Map<CatalogItemDto>(i)));
 
-            return new ListResponse<CatalogItemDto>()
+            return new DataResponse<CatalogItemDto>()
             {
-                List = itemColections
+                Data = itemColections
             };
         });
     }
 
-    public async Task<DeleteResponse> DeleteAsync(int? id)
+    public async Task<DeleteResponse> DeleteAsync(int id)
     {
         return await ExecuteSafeAsync(async () =>
         {
@@ -88,11 +89,13 @@ public class CatalogItemService : BaseDataService<ApplicationDbContext>, ICatalo
     {
         return await ExecuteSafeAsync(async () =>
         {
-            var item = _mapper.Map<CatalogItem>(catalogItemDto);
+            var item = _mapper.Map<CatalogItemEntity>(catalogItemDto);
+
             item = await _catalogItemRepository.Update(item);
+
             var dto = _mapper.Map<CatalogItemDto>(item);
 
-            return dto;
+            return dto!;
         });
     }
 

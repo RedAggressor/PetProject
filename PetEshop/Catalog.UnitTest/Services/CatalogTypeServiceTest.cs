@@ -1,5 +1,6 @@
 ﻿using Catalog.Host.Data.Entities;
 using Catalog.Host.Models.Dtos;
+using Catalog.Host.Repositories.Abstractions;
 
 namespace Catalog.UnitTest.Services
 {
@@ -48,8 +49,7 @@ namespace Catalog.UnitTest.Services
 
             //assert
             responce.Should().NotBeNull();
-            responce.Id.Should().Be(outTest);
-            responce.Id.Should().NotBeNull();
+            responce.Id.Should().Be(outTest);            
             responce.ErrorMessage.Should().BeNull();
             responce.RespCode.Should().BeNull();
         }
@@ -58,8 +58,8 @@ namespace Catalog.UnitTest.Services
         public async Task Add_Failed()
         {
             //arrage
-            string? inTest = null;
-            int? outTest = null;
+            string inTest = "";
+            int outTest = 0;
 
             _catalogTypeRepository
                 .Setup(s => 
@@ -70,8 +70,7 @@ namespace Catalog.UnitTest.Services
             var responce = await _catalogTypeService.AddType(inTest);
 
             //assert
-            responce.Should().NotBeNull();
-            responce.Id.Should().BeNull();
+            responce.Should().NotBeNull();            
             responce.ErrorMessage.Should().NotBeNull();
             responce.RespCode.Should().NotBeNull();
         }
@@ -103,7 +102,7 @@ namespace Catalog.UnitTest.Services
         public async Task Delete_failed()
         {
             //arrage
-            int? inTest = null;
+            int inTest = 0;
             string? outTest = "test";
 
             _catalogTypeRepository
@@ -129,22 +128,22 @@ namespace Catalog.UnitTest.Services
             {
                 Type = "test"
             };
-            var entity = new CatalogType()
+            var entity = new CatalogTypeEntity()
             {
                 Type= "test"
             };
 
-            _mapper.Setup(s => s.Map<CatalogType>(It.Is<CatalogTypeDto>(i => i.Equals(dto)))).Returns(entity);
+            _mapper.Setup(s => s.Map<CatalogTypeEntity>(It.Is<CatalogTypeDto>(i => i.Equals(dto)))).Returns(entity);
 
             _catalogTypeRepository
                 .Setup(s => 
-                    s.Update(It.Is<CatalogType>(i => 
+                    s.Update(It.Is<CatalogTypeEntity>(i => 
                         i.Equals(entity))))
                 .ReturnsAsync(entity);
                         
             _mapper
                 .Setup(s => 
-                    s.Map<CatalogTypeDto>(It.Is<CatalogType>(i => 
+                    s.Map<CatalogTypeDto>(It.Is<CatalogTypeEntity>(i => 
                         i.Equals(entity))))
                 .Returns(dto);
 
@@ -164,23 +163,23 @@ namespace Catalog.UnitTest.Services
         {
             //arrage
             CatalogTypeDto? dto = null;
-            CatalogType? entity = null;
+            CatalogTypeEntity? entity = null;
 
             _mapper
                 .Setup(s => 
-                    s.Map<CatalogType>(It.Is<CatalogTypeDto>(i => 
+                    s.Map<CatalogTypeEntity>(It.Is<CatalogTypeDto>(i => 
                         i.Equals(dto))))
                 .Returns(entity);
 
             _catalogTypeRepository
                 .Setup(s => 
-                    s.Update(It.Is<CatalogType>(i => 
+                    s.Update(It.Is<CatalogTypeEntity>(i => 
                         i.Equals(entity))))
                 .ReturnsAsync(entity);
 
             _mapper
                 .Setup(s => 
-                    s.Map<CatalogTypeDto>(It.Is<CatalogType>(i => 
+                    s.Map<CatalogTypeDto>(It.Is<CatalogTypeEntity>(i => 
                         i.Equals(entity))))
                 .Returns(dto);
 

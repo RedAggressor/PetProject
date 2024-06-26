@@ -4,7 +4,7 @@ using Catalog.Host.Models.Dtos;
 
 namespace Catalog.Host.Mapping;
 
-public class CatalogItemPictureResolver : IMemberValueResolver<CatalogItem, CatalogItemDto, string, object>
+public class CatalogItemPictureResolver : IMemberValueResolver<CatalogItemEntity, CatalogItemDto, string, object>
 {
     private readonly CatalogConfig _config;
 
@@ -14,7 +14,7 @@ public class CatalogItemPictureResolver : IMemberValueResolver<CatalogItem, Cata
     }
 
     public object Resolve(
-        CatalogItem source,
+        CatalogItemEntity source,
         CatalogItemDto destination,
         string sourceMember,
         object destMember,

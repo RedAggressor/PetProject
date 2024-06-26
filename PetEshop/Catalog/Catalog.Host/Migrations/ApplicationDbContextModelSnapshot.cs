@@ -24,10 +24,16 @@ namespace Catalog.Host.Migrations
             modelBuilder.HasSequence("catalog_hilo")
                 .IncrementsBy(10);
 
-            modelBuilder.HasSequence("catalog_type_hilo")
+            modelBuilder.HasSequence("order_catalog_item_hilo")
                 .IncrementsBy(10);
 
-            modelBuilder.Entity("Catalog.Host.Data.Entities.CatalogItem", b =>
+            modelBuilder.HasSequence("order_hilo")
+                .IncrementsBy(10);
+
+            modelBuilder.HasSequence("user_hilo")
+                .IncrementsBy(10);
+
+            modelBuilder.Entity("Catalog.Host.Data.Entities.CatalogItemEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -63,33 +69,138 @@ namespace Catalog.Host.Migrations
                     b.ToTable("Catalog", (string)null);
                 });
 
-            modelBuilder.Entity("Catalog.Host.Data.Entities.CatalogType", b =>
+            modelBuilder.Entity("Catalog.Host.Data.Entities.CatalogTypeEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "catalog_type_hilo");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.ToTable("CatalogType", (string)null);
+                    b.ToTable("CatalogTypes");
                 });
 
-            modelBuilder.Entity("Catalog.Host.Data.Entities.CatalogItem", b =>
+            modelBuilder.Entity("Catalog.Host.Data.Entities.OrderCatalogItemEntity", b =>
                 {
-                    b.HasOne("Catalog.Host.Data.Entities.CatalogType", "CatalogType")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "order_catalog_item_hilo");
+
+                    b.Property<int>("CatalogItemId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CatalogItemId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("OrderCatalogItem", (string)null);
+                });
+
+            modelBuilder.Entity("Catalog.Host.Data.Entities.OrderEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "order_hilo");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Order", (string)null);
+                });
+
+            modelBuilder.Entity("Catalog.Host.Data.Entities.UserEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "user_hilo");
+
+                    b.Property<string>("Mail")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("User", (string)null);
+                });
+
+            modelBuilder.Entity("Catalog.Host.Data.Entities.CatalogItemEntity", b =>
+                {
+                    b.HasOne("Catalog.Host.Data.Entities.CatalogTypeEntity", "CatalogType")
                         .WithMany()
                         .HasForeignKey("CatalogTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("CatalogType");
+                });
+
+            modelBuilder.Entity("Catalog.Host.Data.Entities.OrderCatalogItemEntity", b =>
+                {
+                    b.HasOne("Catalog.Host.Data.Entities.CatalogItemEntity", "CatalogItem")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("CatalogItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Catalog.Host.Data.Entities.OrderEntity", "Order")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CatalogItem");
+
+                    b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("Catalog.Host.Data.Entities.OrderEntity", b =>
+                {
+                    b.HasOne("Catalog.Host.Data.Entities.UserEntity", "User")
+                        .WithMany("Orders")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Catalog.Host.Data.Entities.CatalogItemEntity", b =>
+                {
+                    b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("Catalog.Host.Data.Entities.OrderEntity", b =>
+                {
+                    b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("Catalog.Host.Data.Entities.UserEntity", b =>
+                {
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

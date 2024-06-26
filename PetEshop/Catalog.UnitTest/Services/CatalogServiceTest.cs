@@ -2,6 +2,7 @@
 using Catalog.Host.Models.Dtos;
 using Catalog.Host.Models.enums;
 using Catalog.Host.Models.Response;
+using Catalog.Host.Repositories.Abstractions;
 
 namespace Catalog.UnitTest.Services
 {
@@ -34,27 +35,24 @@ namespace Catalog.UnitTest.Services
             int pageSizeTest = 1;
             int pageIndexTest = 5;
             int totalCountTest = 12;
-            int brandFilter = 1;
             int typeFilter = 1;
-            var filter = new Dictionary<CatalogTypeFilter, int>()
-            {                
-                [CatalogTypeFilter.Type] = 1 
-            };
+            var filter = 1;
+            
 
-            var paginationItemReponceSeccusfull = new PaginatedItems<CatalogItem>()
+            var paginationItemReponceSeccusfull = new PaginatedItems<CatalogItemEntity>()
             {
                 TotalCount = totalCountTest,
-                Data = new List<CatalogItem>()
+                Data = new List<CatalogItemEntity>()
                 {
-                    new CatalogItem()
+                    new CatalogItemEntity()
                     {
                          Name ="Test",
                     },
-                    new CatalogItem()
+                    new CatalogItemEntity()
                     {
                          Name ="Test",                         
                     },
-                    new CatalogItem()
+                    new CatalogItemEntity()
                     {
                          Name ="Test",                         
                     },
@@ -68,7 +66,7 @@ namespace Catalog.UnitTest.Services
                 Name = "Test",                              
             };
 
-            var catalogItemSuccesfull = new CatalogItem()
+            var catalogItemSuccesfull = new CatalogItemEntity()
             {
                 Name = "Test",
             };            
@@ -76,13 +74,12 @@ namespace Catalog.UnitTest.Services
             _catalogRepository.Setup(s => s.GetByPageAsync(
                 It.Is<int>(i => i == pageIndexTest),
                 It.Is<int>(i => i == pageSizeTest),
-                It.Is<int>(i=> i == brandFilter),
                 It.Is<int>(i=>i == typeFilter)
                 ))
             .ReturnsAsync(paginationItemReponceSeccusfull);
 
             _mapper.Setup(s => s.Map<CatalogItemDto>(
-                    It.Is<CatalogItem>(i => i.Name == "Test")))
+                    It.Is<CatalogItemEntity>(i => i.Name == "Test")))
                 .Returns(catalogItemDtoSuccesfull); // check mapper failed
 
             //act
@@ -103,18 +100,17 @@ namespace Catalog.UnitTest.Services
             //arrage
             var pageIndexTest = 2000;
             var pageSizeTest = 1000;
-            int? typeFilter = null;
-            int? brandFilter = null;
+            int typeFilter = 1;
+            
 
             _catalogRepository.Setup(s => s.GetByPageAsync(
                 It.Is<int>(i => i == pageIndexTest),
                 It.Is<int>(i => i == pageSizeTest),
-                It.Is<int?>(i=>i == typeFilter),
-                It.Is<int>(i=>i== brandFilter)))
+                It.Is<int>(i=>i == typeFilter)))
             .Returns((Func<PaginatedItemsResponse<CatalogItemDto>>)null!);
 
             //act
-            var responce = await _serviceCatalog.GetByPageAsync(pageSizeTest, pageIndexTest, null);
+            var responce = await _serviceCatalog.GetByPageAsync(pageSizeTest, pageIndexTest, 1);
 
             //assert
             responce.Should().NotBeNull();

@@ -1,5 +1,6 @@
 ﻿using Catalog.Host.Data.Entities;
 using Catalog.Host.Models.Dtos;
+using Catalog.Host.Repositories.Abstractions;
 using Infrastructure.Enums;
 using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities.Serialization;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
@@ -15,7 +16,7 @@ namespace Catalog.UnitTest.Services
         private readonly Mock<ILogger<CatalogItemService>> _logger;
         private readonly Mock<IMapper> _mapper;
 
-        private readonly CatalogItem _testItem = new CatalogItem()
+        private readonly CatalogItemEntity _testItem = new CatalogItemEntity()
         {
             Name = "NameTest",
             Description = "DescriptionTest",
@@ -69,8 +70,7 @@ namespace Catalog.UnitTest.Services
             result.Should().NotBeNull();
             result.Id.Should().Be(testResult);
             result.RespCode.Should().BeNull();
-            result.ErrorMessage.Should().BeNull();
-            result.Id.Should().NotBeNull();
+            result.ErrorMessage.Should().BeNull();            
         }
 
         [Fact]
@@ -100,8 +100,7 @@ namespace Catalog.UnitTest.Services
             //asert
             result.Should().NotBeNull();            
             result.RespCode.Should().NotBeNull();
-            result.ErrorMessage.Should().NotBeNull();
-            result.Id.Should().BeNull();
+            result.ErrorMessage.Should().NotBeNull();            
         }
 
         [Fact]
@@ -120,7 +119,7 @@ namespace Catalog.UnitTest.Services
                 Id = 1
             };
 
-            var catalogItemSuccesfull = new CatalogItem()
+            var catalogItemSuccesfull = new CatalogItemEntity()
             {
                 Name = "Test",
                 AvailableStock = 5,
@@ -135,7 +134,7 @@ namespace Catalog.UnitTest.Services
                 .ReturnsAsync(catalogItemSuccesfull);
 
             _mapper.Setup(s => s.Map<CatalogItemDto>(
-                    It.Is<CatalogItem>(i => i.Equals(catalogItemSuccesfull))))
+                    It.Is<CatalogItemEntity>(i => i.Equals(catalogItemSuccesfull))))
                 .Returns(catalogItemDtoSuccesfull);
 
             //act
@@ -150,7 +149,7 @@ namespace Catalog.UnitTest.Services
         public async Task GetCatalogItemsByIdAsync_Failedl()
         {
             //arrage
-            int? id = null;
+            int id = 0;
 
             _catalogItemRepository
                 .Setup(s => s.GetCatalogItemsByIdAsync(It.IsAny<int>()))
@@ -187,7 +186,7 @@ namespace Catalog.UnitTest.Services
         public async Task Delete_Failed()
         {
             //arrage
-            int? id = null!;
+            int id = 0;
 
             string? answer = "";
 
@@ -217,7 +216,7 @@ namespace Catalog.UnitTest.Services
                 Id = 1
             };
 
-            var catalogItemSuccesfull = new CatalogItem()
+            var catalogItemSuccesfull = new CatalogItemEntity()
             {
                 Name = "Test",
                 AvailableStock = 5,
@@ -229,18 +228,18 @@ namespace Catalog.UnitTest.Services
 
             _mapper
                 .Setup(s => 
-                    s.Map<CatalogItem>(It.Is<CatalogItemDto>(i => 
+                    s.Map<CatalogItemEntity>(It.Is<CatalogItemDto>(i => 
                         i.Equals(catalogItemDtoSuccesfull))))
                 .Returns(catalogItemSuccesfull);
 
             _catalogItemRepository
-                .Setup(s => s.Update(It.IsAny<CatalogItem>()))
+                .Setup(s => s.Update(It.IsAny<CatalogItemEntity>()))
                 .ReturnsAsync(catalogItemSuccesfull);
 
 
             _mapper
                 .Setup(s => 
-                    s.Map<CatalogItemDto>(It.Is<CatalogItem>(i => 
+                    s.Map<CatalogItemDto>(It.Is<CatalogItemEntity>(i => 
                         i.Equals(catalogItemSuccesfull))))
                 .Returns(catalogItemDtoSuccesfull);
 
@@ -261,7 +260,7 @@ namespace Catalog.UnitTest.Services
             var catalog = new CatalogItemDto();
 
             _catalogItemRepository
-                .Setup(s => s.Update(It.IsAny<CatalogItem>()))
+                .Setup(s => s.Update(It.IsAny<CatalogItemEntity>()))
                 .ThrowsAsync(new Exception(messageTest));
 
             //act
@@ -283,13 +282,13 @@ namespace Catalog.UnitTest.Services
         {
             //arrage
             var id = 1;
-            var list = new List<CatalogItem>()
+            var list = new List<CatalogItemEntity>()
             {
-                new CatalogItem()
+                new CatalogItemEntity()
                 {
                     Name ="Test",
                 },
-                new CatalogItem()
+                new CatalogItemEntity()
                 {
                     Name ="Test",
                     AvailableStock = 5,
@@ -298,7 +297,7 @@ namespace Catalog.UnitTest.Services
                     CatalogTypeId = 2,
                     PictureFileName = "Test"
                 },
-                new CatalogItem()
+                new CatalogItemEntity()
                 {
                     Name ="Test",
                     AvailableStock = 5,
@@ -319,7 +318,7 @@ namespace Catalog.UnitTest.Services
 
             };
 
-            _mapper.Setup(s => s.Map<CatalogItemDto>(It.IsAny<CatalogItem>())).Returns(dto);
+            _mapper.Setup(s => s.Map<CatalogItemDto>(It.IsAny<CatalogItemEntity>())).Returns(dto);
 
             _catalogItemRepository
                 .Setup(s => s.GetCatalogItemsByTypeAsync(It.IsAny<int>()))
@@ -336,9 +335,7 @@ namespace Catalog.UnitTest.Services
         public async Task GetCatalogItemByTypeAsync_Failed()
         {
             //arrage
-            int? id = 7667777;
-
-            List<CatalogItem>? list = null;
+            int id = 7667777;
 
             CatalogItemDto? dto = null;
             var messageText = "Test1";
@@ -349,7 +346,7 @@ namespace Catalog.UnitTest.Services
                 .Setup(s => s.GetCatalogItemsByTypeAsync(It.IsAny<int>()))
                 .ThrowsAsync(new Exception(messageText));
 
-            _mapper.Setup(s => s.Map<CatalogItemDto>(It.IsAny<CatalogItem>())).Returns(dto!);
+            _mapper.Setup(s => s.Map<CatalogItemDto>(It.IsAny<CatalogItemEntity>())).Returns(dto!);
 
             //act
             var responce = await _catalogItemService.GetCatalogItemByTypeAsync(id);
@@ -357,8 +354,7 @@ namespace Catalog.UnitTest.Services
             //asert
             responce.Should().NotBeNull();
             responce.RespCode.Should().NotBeNull();
-            responce.ErrorMessage.Should().NotBeNull();
-            responce.List.Should().BeNull();
+            responce.ErrorMessage.Should().NotBeNull();            
             responce.RespCode.Should().Be(ResponceCode.Failed);
             responce.ErrorMessage.Should().Be("Test1");
         }

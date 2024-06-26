@@ -16,7 +16,7 @@ namespace Basket.Host.Services
             //{
              //   EndPoints = { "localhost:6380" },
              //   ConnectTimeout = 5000,                 
-           // };
+           //}; delete after test!!! 
 
             var redisConfigurationOptions = ConfigurationOptions.Parse(config.Value.Host);
            

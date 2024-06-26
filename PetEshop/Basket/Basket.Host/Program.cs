@@ -1,12 +1,8 @@
 using Basket.Host.Configurations;
-using Basket.Host.Data;
-using Basket.Host.Repositories;
-using Basket.Host.Repositories.Abstractions;
 using Basket.Host.Services;
 using Basket.Host.Services.Abstractions;
 using Infrastructure.Extensions;
 using Infrastructure.Filters;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
 var configuration = GetConfiguration();
@@ -59,11 +55,6 @@ builder.Services.AddTransient<IJsonSerializer, JsonSerializer>();
 builder.Services.AddSingleton<IRedisCacheConnectionService, RedisCacheConnectionService>();
 builder.Services.AddTransient<ICacheService, CacheService>();
 builder.Services.AddTransient<IBasketService, BasketService>();
-builder.Services.AddTransient<IOrderRepository, OrderRepository>();
-
-
-builder.Services.AddDbContextFactory<ApplicationDbContext>(opts => opts.UseNpgsql(configuration["ConnectionString"]!));
-builder.Services.AddScoped<IDbContextWrapper<ApplicationDbContext>, DbContextWrapper<ApplicationDbContext>>();
 
 builder.Services.AddCors(options =>
 {

@@ -10,7 +10,7 @@ namespace Infrastructure.Repositories
             _logger = logger;
         }
 
-        protected async Task<TResult> ExecutCafeAsync<TResult>(Func<Task<TResult>> func)
+        protected async Task<TResult> ExecutSafeAsync<TResult>(Func<Task<TResult>> func)
         {
             try 
             {
