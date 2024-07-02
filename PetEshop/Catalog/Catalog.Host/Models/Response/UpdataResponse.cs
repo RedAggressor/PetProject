@@ -4,9 +4,6 @@
     {
         public T? UpdataModel { get; set; }
 
-        public override ResponceCode GetResponce() =>
-            UpdataModel is null ?
-            ResponceCode.Failed :
-            ResponceCode.Seccusfull;
+        //public override ResponceCode GetResponce() =>     UpdataModel is null ?      ResponceCode.Failed :       ResponceCode.Seccusfull;
     }
 }

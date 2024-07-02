@@ -5,8 +5,10 @@ import * as apiBasket from "../../api/moduls/basket";
 class BasketStore {
     amount = 0;
     items: IItemForBasket [] = [];
-    price = 0;
-    error = '';    
+    totalPrice = 0;
+    error = '';
+    clickButton = false;
+    state = ''; 
     
     constructor()
     {
@@ -16,11 +18,13 @@ class BasketStore {
     prefetchData = async () => {
         try{
             const responce = await apiBasket.getItems();
-            this.items = responce.data;            
+            if(responce.respCode === 1){
+                this.items = responce.data;
+            }                        
         }
         catch (error) {
-            if(error instanceof Error)
             console.assert(error)
+            
         }
     }
 
@@ -57,8 +61,17 @@ class BasketStore {
     }
 
     setPrice(){
-        this.price = this.items.map(item => item.price).reduce((acc, curr) => acc + curr, 0);
+        this.totalPrice = this.items.map(item => item.price).reduce((acc, curr) => acc + curr, 0);
     }
+
+    setError(error:string){
+        this.error = error;
+    }
+
+    getError() {
+        return this.error;
+    }
+    
 }
 
 export default BasketStore;

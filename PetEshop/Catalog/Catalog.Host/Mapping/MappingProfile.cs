@@ -7,12 +7,12 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<CatalogItemEntity, CatalogItemDto>()
-            .ForMember(nameof(CatalogItemDto.PictureUrl), opt
-                => opt.MapFrom<CatalogItemPictureResolver,
+        CreateMap<ItemEntity, ItemDto>()
+            .ForMember(nameof(ItemDto.PictureUrl), opt
+                => opt.MapFrom<ItemPictureResolver,
                 string>(c => c.PictureFileName))
             .ReverseMap();
         
-        CreateMap<CatalogTypeEntity, CatalogTypeDto>().ReverseMap();
+        CreateMap<TypeEntity, TypeDto>().ReverseMap();
     }
 }

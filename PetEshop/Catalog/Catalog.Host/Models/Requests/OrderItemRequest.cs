@@ -6,6 +6,6 @@ namespace Catalog.Host.Models.Requests
     {
         public int Count { get; set; }
         public int ItemId { get; set; }
-        public CatalogItemDto Item { get; set; } = null!;
+        //public ItemDto Item { get; set; } = null!;
     }
 }

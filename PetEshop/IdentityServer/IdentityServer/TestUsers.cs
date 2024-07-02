@@ -9,7 +9,7 @@ using System.Security.Claims;
 
 namespace IdentityServer4.Quickstart.UI
 {
-    public class TestUsers // conect to Databse mock info
+    public class TestUsers
     {
         public static List<TestUser> Users = new List<TestUser>
         {

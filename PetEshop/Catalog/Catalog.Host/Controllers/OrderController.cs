@@ -1,13 +1,13 @@
 ﻿using Catalog.Host.Models.Requests;
 using Catalog.Host.Models.Response;
 using Catalog.Host.Services.Abstractions;
+using Infrastructure.Identity;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Catalog.Host.Controllers
 {
     [ApiController]
-    [Authorize]
+    [Authorize(Policy = AuthPolicy.AllowEndUserPolicy)]
     [Route(ComponentDefaults.DefaultRoute)]
     public class OrderController : ControllerBase
     {
@@ -21,7 +21,7 @@ namespace Catalog.Host.Controllers
 
         [HttpPost]
         [ProducesResponseType(typeof(AddResponse), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> AddOrder(List<OrderItemRequest> order)
+        public async Task<IActionResult> AddOrder(List<OrderItemRequest> orderItem)
         {
             var userIds = User.Claims.FirstOrDefault(x => x.Type == "sub")?.Value;
 
@@ -29,7 +29,7 @@ namespace Catalog.Host.Controllers
 
             if (int.TryParse(userIds, out userId))
             {
-                var id = await _orderService.AddOrderAsync(userId, order);
+                var id = await _orderService.AddOrderAsync(userId, orderItem);
 
                 return Ok(id);
             };
@@ -58,8 +58,8 @@ namespace Catalog.Host.Controllers
             });
         }
 
-        [HttpPost]
-        [ProducesResponseType(typeof(int), (int)HttpStatusCode.OK)]
+        [HttpPost]        
+        [ProducesResponseType(typeof(DataResponse<OrderResponse>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetOrderByUserId()
         {
             var userIds = User.Claims.FirstOrDefault(x => x.Type == "sub")?.Value; 

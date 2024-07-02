@@ -3,6 +3,7 @@ using Catalog.Host.Data;
 using Catalog.Host.Repositories;
 using Catalog.Host.Repositories.Abstractions;
 using Catalog.Host.Services;
+using Catalog.Host.Services.Abstractions;
 using Catalog.Host.Services.Interfaces;
 using Infrastructure.Extensions;
 using Infrastructure.Filters;
@@ -22,9 +23,9 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "eShop - Basket HTTP API",
+        Title = "eShop- Catalog HTTP API",
         Version = "v1",
-        Description = "The Basket Service HTTP API"
+        Description = "The Catalog Service HTTP API"
     });
 
     var authority = configuration["Authorization:Authority"];
@@ -39,7 +40,7 @@ builder.Services.AddSwaggerGen(options =>
                 TokenUrl = new Uri($"{authority}/connect/token"),
                 Scopes = new Dictionary<string, string>()
                 {
-                    { "mvc", "website" },
+                    { "react", "website" },
                     { "catalog.catalogbff", "catalog.catalogbff" },
                     { "catalog.catalogitem", "catalog.catalogitem" }
                 }
@@ -57,13 +58,15 @@ builder.Services.AddAuthorization(configuration);
 
 builder.Services.AddAutoMapper(typeof(Program));
 
-builder.Services.AddTransient<ICatalogItemRepository, CatalogItemRepository>();
+builder.Services.AddTransient<IItemRepository, CatalogItemRepository>();
 builder.Services.AddTransient<ICatalogService, CatalogService>();
-builder.Services.AddTransient<ICatalogItemService, CatalogItemService>();
-builder.Services.AddTransient<ICatalogTypeRepository, CatalogTypeRepository>();
-builder.Services.AddTransient<ICatalogTypeService, CatalogTypeService>();
+builder.Services.AddTransient<IItemService, CatalogItemService>();
+builder.Services.AddTransient<ITypeRepository, TypeRepository>();
+builder.Services.AddTransient<ITypeService, TypeService>();
+builder.Services.AddTransient<IOrderService, OrderService>();
+builder.Services.AddTransient<IOrderRepository, OrderRepository>();
 
-builder.Services.AddDbContextFactory<ApplicationDbContext>(opts => opts.UseNpgsql(configuration["ConnectionString"]!));
+builder.Services.AddDbContextFactory<ApplicationDbContext>(opts => opts.UseNpgsql(configuration["ConnectionString"]));
 builder.Services.AddScoped<IDbContextWrapper<ApplicationDbContext>, DbContextWrapper<ApplicationDbContext>>();
 
 builder.Services.AddCors(options =>
@@ -123,16 +126,10 @@ void CreateDbIfNotExists(IHost host)
 
             DbInitializer.Initialize(context).Wait();
         }
-        catch (BusinessException ex)
-        {
-            var logger = services.GetRequiredService<ILogger<Program>>();
-            logger.LogError(ex, "An error occurred creating the DB.");
-        }
         catch (Exception ex)
         {
             var logger = services.GetRequiredService<ILogger<Program>>();
             logger.LogError(ex, "An error occurred creating the DB.");
         }
-        
     }
 }

@@ -2,9 +2,8 @@
 {
     public class OrderEntity
     {
-        public int Id { get; set; }
-        public UserEntity User { get; set; } = null!;       
+        public int Id { get; set; }           
         public int UserId { get; set; }
-        public ICollection<OrderCatalogItemEntity> OrderItems { get; set; } = new List<OrderCatalogItemEntity>();        
+        public ICollection<OrderItemEntity> OrderItems { get; set; } = new List<OrderItemEntity>();        
     }
 }

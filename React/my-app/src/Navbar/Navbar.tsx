@@ -7,7 +7,7 @@ import { routes } from "../routes";
 import { NavLink, useNavigate } from "react-router-dom";
 import { AppStoreContext } from "../App";
 import {observer} from "mobx-react-lite";
-import Acount from "../components/account";
+import Acount from "../components/acount/account";
 import BasketElement from "../components/basket/basketElement";
 import { basketContext } from "../App";
 

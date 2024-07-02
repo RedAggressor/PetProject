@@ -24,16 +24,16 @@ namespace Catalog.Host.Migrations
             modelBuilder.HasSequence("catalog_hilo")
                 .IncrementsBy(10);
 
-            modelBuilder.HasSequence("order_catalog_item_hilo")
-                .IncrementsBy(10);
-
             modelBuilder.HasSequence("order_hilo")
                 .IncrementsBy(10);
 
-            modelBuilder.HasSequence("user_hilo")
+            modelBuilder.HasSequence("order_item_hilo")
                 .IncrementsBy(10);
 
-            modelBuilder.Entity("Catalog.Host.Data.Entities.CatalogItemEntity", b =>
+            modelBuilder.HasSequence("type_hilo")
+                .IncrementsBy(10);
+
+            modelBuilder.Entity("Catalog.Host.Data.Entities.ItemEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -42,9 +42,6 @@ namespace Catalog.Host.Migrations
                     NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "catalog_hilo");
 
                     b.Property<int>("AvailableStock")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("CatalogTypeId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Description")
@@ -62,54 +59,14 @@ namespace Catalog.Host.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("numeric");
 
+                    b.Property<int>("TypeId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("CatalogTypeId");
+                    b.HasIndex("TypeId");
 
                     b.ToTable("Catalog", (string)null);
-                });
-
-            modelBuilder.Entity("Catalog.Host.Data.Entities.CatalogTypeEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CatalogTypes");
-                });
-
-            modelBuilder.Entity("Catalog.Host.Data.Entities.OrderCatalogItemEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "order_catalog_item_hilo");
-
-                    b.Property<int>("CatalogItemId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Count")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("OrderId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CatalogItemId");
-
-                    b.HasIndex("OrderId");
-
-                    b.ToTable("OrderCatalogItem", (string)null);
                 });
 
             modelBuilder.Entity("Catalog.Host.Data.Entities.OrderEntity", b =>
@@ -125,44 +82,69 @@ namespace Catalog.Host.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("Order", (string)null);
                 });
 
-            modelBuilder.Entity("Catalog.Host.Data.Entities.UserEntity", b =>
+            modelBuilder.Entity("Catalog.Host.Data.Entities.OrderItemEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "user_hilo");
+                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "order_item_hilo");
 
-                    b.Property<string>("Mail")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("Count")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ItemId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.ToTable("User", (string)null);
+                    b.HasIndex("ItemId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("OrderItem", (string)null);
                 });
 
-            modelBuilder.Entity("Catalog.Host.Data.Entities.CatalogItemEntity", b =>
+            modelBuilder.Entity("Catalog.Host.Data.Entities.TypeEntity", b =>
                 {
-                    b.HasOne("Catalog.Host.Data.Entities.CatalogTypeEntity", "CatalogType")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "type_hilo");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Type", (string)null);
+                });
+
+            modelBuilder.Entity("Catalog.Host.Data.Entities.ItemEntity", b =>
+                {
+                    b.HasOne("Catalog.Host.Data.Entities.TypeEntity", "Type")
                         .WithMany()
-                        .HasForeignKey("CatalogTypeId")
+                        .HasForeignKey("TypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CatalogType");
+                    b.Navigation("Type");
                 });
 
-            modelBuilder.Entity("Catalog.Host.Data.Entities.OrderCatalogItemEntity", b =>
+            modelBuilder.Entity("Catalog.Host.Data.Entities.OrderItemEntity", b =>
                 {
-                    b.HasOne("Catalog.Host.Data.Entities.CatalogItemEntity", "CatalogItem")
+                    b.HasOne("Catalog.Host.Data.Entities.ItemEntity", "Item")
                         .WithMany("OrderItems")
-                        .HasForeignKey("CatalogItemId")
+                        .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -172,23 +154,12 @@ namespace Catalog.Host.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CatalogItem");
+                    b.Navigation("Item");
 
                     b.Navigation("Order");
                 });
 
-            modelBuilder.Entity("Catalog.Host.Data.Entities.OrderEntity", b =>
-                {
-                    b.HasOne("Catalog.Host.Data.Entities.UserEntity", "User")
-                        .WithMany("Orders")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Catalog.Host.Data.Entities.CatalogItemEntity", b =>
+            modelBuilder.Entity("Catalog.Host.Data.Entities.ItemEntity", b =>
                 {
                     b.Navigation("OrderItems");
                 });
@@ -196,11 +167,6 @@ namespace Catalog.Host.Migrations
             modelBuilder.Entity("Catalog.Host.Data.Entities.OrderEntity", b =>
                 {
                     b.Navigation("OrderItems");
-                });
-
-            modelBuilder.Entity("Catalog.Host.Data.Entities.UserEntity", b =>
-                {
-                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

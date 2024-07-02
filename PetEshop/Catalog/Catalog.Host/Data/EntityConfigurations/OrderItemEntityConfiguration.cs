@@ -2,21 +2,21 @@
 
 namespace Catalog.Host.Data.EntityConfigurations
 {
-    public class OrderCatalogItemEntityConfiguration : IEntityTypeConfiguration<OrderCatalogItemEntity>
+    public class OrderItemEntityConfiguration : IEntityTypeConfiguration<OrderItemEntity>
     {
-        public void Configure(EntityTypeBuilder<OrderCatalogItemEntity> builder)
+        public void Configure(EntityTypeBuilder<OrderItemEntity> builder)
         {
-            builder.ToTable("OrderCatalogItem");
+            builder.ToTable("OrderItem");
 
             builder.HasKey(x => x.Id);
 
             builder.Property(x => x.Id)
-                .UseHiLo("order_catalog_item_hilo")
+                .UseHiLo("order_item_hilo")
                 .IsRequired();
 
-            builder.HasOne(x => x.CatalogItem)
+            builder.HasOne(x => x.Item)
                 .WithMany(m => m.OrderItems)
-                .HasForeignKey(f => f.CatalogItemId);
+                .HasForeignKey(f => f.ItemId);
 
             builder.HasOne(o => o.Order)
                 .WithMany(m => m.OrderItems)

@@ -1,4 +1,4 @@
-import { FC, ReactElement, useContext } from "react";
+import { FC, useContext } from "react";
 import { Card, CardActionArea, CardContent, CardMedia, Typography } from "@mui/material";
 import { IItemForBasket } from "../../api/responce/IItemForBasket";
 import { basketContext } from "../../App";
@@ -24,7 +24,7 @@ const BasketCard: FC< {item : IItemForBasket} & { index: number }> = ({ item, in
                         Price:{item.price}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                        {item.description} typeId:{item.catalogTypeId}
+                        {item.description} typeId:{item.type}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
                         {item.name} {item.availableStock}

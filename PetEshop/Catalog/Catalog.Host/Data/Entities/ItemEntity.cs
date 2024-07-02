@@ -1,6 +1,6 @@
 namespace Catalog.Host.Data.Entities;
 
-public class CatalogItemEntity
+public class ItemEntity
 {
     public int Id { get; set; }
 
@@ -12,10 +12,10 @@ public class CatalogItemEntity
 
     public string PictureFileName { get; set; } = null!;
 
-    public int CatalogTypeId { get; set; }
+    public int TypeId { get; set; }
 
-    public CatalogTypeEntity CatalogType { get; set; } = null!;
+    public TypeEntity Type { get; set; } = null!;
 
     public int AvailableStock { get; set; }
-    public ICollection<OrderCatalogItemEntity> OrderItems { get; set; } = new List<OrderCatalogItemEntity>();
+    public ICollection<OrderItemEntity> OrderItems { get; set; } = new List<OrderItemEntity>();
 }

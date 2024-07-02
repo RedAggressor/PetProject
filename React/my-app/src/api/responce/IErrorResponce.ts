@@ -1,5 +1,5 @@
 export interface IErrorResponce{
     
     "errorMessage": null,
-    "respCode": null
+    "respCode": number
 }

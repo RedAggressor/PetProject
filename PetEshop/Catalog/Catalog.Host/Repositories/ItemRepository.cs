@@ -4,7 +4,7 @@ using Catalog.Host.Repositories.Abstractions;
 
 namespace Catalog.Host.Repositories;
 
-public class CatalogItemRepository : BaseRepository, ICatalogItemRepository
+public class CatalogItemRepository : BaseRepository, IItemRepository
 {
     private readonly ApplicationDbContext _dbContext;   
 
@@ -16,29 +16,29 @@ public class CatalogItemRepository : BaseRepository, ICatalogItemRepository
         _dbContext = dbContextWrapper.DbContext;       
     }
 
-    public async Task<PaginatedItems<CatalogItemEntity>> GetByPageAsync(
+    public async Task<PaginatedItems<ItemEntity>> GetByPageAsync(
         int pageIndex,
         int pageSize,
         int typeFilter)
     {
         return await ExecutSafeAsync(async () =>
         {
-            IQueryable<CatalogItemEntity> query = _dbContext.CatalogItems;
+            IQueryable<ItemEntity> query = _dbContext.Items;
 
             if (typeFilter > 0)
             {
-                query = query.Where(w => w.CatalogTypeId == typeFilter);
+                query = query.Where(w => w.TypeId == typeFilter);
             }
 
             var totalItems = await query.LongCountAsync();
 
             var itemsOnPage = await query.OrderBy(c => c.Name)
-               .Include(i => i.CatalogType)
+               .Include(i => i.Type)
                .Skip(pageSize * pageIndex)
                .Take(pageSize)
                .ToListAsync();
 
-            return new PaginatedItems<CatalogItemEntity>() 
+            return new PaginatedItems<ItemEntity>() 
             { 
                 TotalCount = totalItems,
                 Data = itemsOnPage 
@@ -56,9 +56,9 @@ public class CatalogItemRepository : BaseRepository, ICatalogItemRepository
     {
         return await ExecutSafeAsync(async () =>
         {
-            var item = await _dbContext.AddAsync(new CatalogItemEntity
+            var item = await _dbContext.AddAsync(new ItemEntity
             {
-                CatalogTypeId = catalogTypeId,
+                TypeId = catalogTypeId,
                 Description = description,
                 Name = name,
                 PictureFileName = pictureFileName,
@@ -71,12 +71,12 @@ public class CatalogItemRepository : BaseRepository, ICatalogItemRepository
         });
     }
 
-    public async Task<CatalogItemEntity> GetCatalogItemsByIdAsync(int idItem)
+    public async Task<ItemEntity> GetCatalogItemsByIdAsync(int idItem)
     {
         return await ExecutSafeAsync(async () =>
         {
-            var entity = await _dbContext.CatalogItems
-            .Include(i => i.CatalogType)
+            var entity = await _dbContext.Items
+            .Include(i => i.Type)
             .FirstOrDefaultAsync(item => item.Id == idItem);
 
             return entity!;
@@ -84,14 +84,14 @@ public class CatalogItemRepository : BaseRepository, ICatalogItemRepository
     }
 
 
-    public async Task<ICollection<CatalogItemEntity>> GetCatalogItemsByTypeAsync(int idType)
+    public async Task<ICollection<ItemEntity>> GetCatalogItemsByTypeAsync(int idType)
     {
         return await ExecutSafeAsync(async () =>
         {
-            return await _dbContext.CatalogItems
-            .Include(i => i.CatalogType)
+            return await _dbContext.Items
+            .Include(i => i.Type)
             .Select(item => item)
-            .Where(item => item.CatalogType.Id == idType)
+            .Where(item => item.Type.Id == idType)
             .ToListAsync();
         });
     }
@@ -102,7 +102,7 @@ public class CatalogItemRepository : BaseRepository, ICatalogItemRepository
         {
             var item = await GetCatalogItemsByIdAsync(id);
 
-            var message = _dbContext.CatalogItems.Remove(item!);
+            var message = _dbContext.Items.Remove(item!);
 
             await _dbContext.SaveChangesAsync();
 
@@ -110,7 +110,7 @@ public class CatalogItemRepository : BaseRepository, ICatalogItemRepository
         });
     }
 
-    public async Task<CatalogItemEntity> Update(CatalogItemEntity catalogItem)
+    public async Task<ItemEntity> Update(ItemEntity catalogItem)
     {
         return await ExecutSafeAsync(async () =>
         {
@@ -121,8 +121,8 @@ public class CatalogItemRepository : BaseRepository, ICatalogItemRepository
             item.PictureFileName = catalogItem.PictureFileName;
             item.Name = catalogItem.Name;
             item.AvailableStock = catalogItem.AvailableStock;
-            item.CatalogType = catalogItem.CatalogType;
-            item.CatalogTypeId = catalogItem.CatalogTypeId;
+            item.Type = catalogItem.Type;
+            item.TypeId = catalogItem.TypeId;
 
             await _dbContext.SaveChangesAsync();
 
@@ -130,12 +130,12 @@ public class CatalogItemRepository : BaseRepository, ICatalogItemRepository
         });
     }
 
-    public async Task<ICollection<CatalogItemEntity>> GetCatalogItemList()
+    public async Task<ICollection<ItemEntity>> GetCatalogItemList()
     {
         return await ExecutSafeAsync(async () =>
         {
-            var listEntity = await _dbContext.CatalogItems
-            .Include(i => i.CatalogType)
+            var listEntity = await _dbContext.Items
+            .Include(i => i.Type)
             .Select(item => item)
             .ToListAsync();
 

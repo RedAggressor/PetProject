@@ -1,6 +1,6 @@
 namespace Catalog.Host.Models.Dtos;
 
-public class CatalogTypeDto : BaseResponce
+public class TypeDto : BaseResponce
 {
     public int Id { get; set; }
 

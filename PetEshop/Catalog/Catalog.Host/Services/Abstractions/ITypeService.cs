@@ -4,11 +4,11 @@ using Catalog.Host.Models.Response;
 
 namespace Catalog.Host.Services.Interfaces
 {
-    public interface ICatalogTypeService
+    public interface ITypeService
     {
-        Task<UpdataResponse<CatalogTypeDto>> UpdateType(CatalogTypeDto typeDto);
+        Task<UpdataResponse<TypeDto>> UpdateType(TypeDto typeDto);
         Task<DeleteResponse> DeleteType(int id);
         Task<AddResponse> AddType(string type);
-        Task<DataResponse<CatalogTypeDto>> GetList();
+        Task<DataResponse<TypeDto>> GetList();
     }
 }

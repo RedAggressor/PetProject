@@ -4,19 +4,15 @@ import { IItemByPageResponce } from "../responce/itembyPageResponce";
 
 export const getItemById = async (id: string) => 
     await apiClient({
-        path:`http://localhost:5000/api/v1/CatalogBff/GetById?id=${id}`,
-        options: {method:'POST'},        
+        path:`http://localhost:5000/api/v1/CatalogItem/GetById?id=${id}`,
+        options: {method:'GET'},        
     })
-
 
 export const getItems = async () =>    
     await apiClient ({
         path:'http://localhost:5000/api/v1/CatalogBff/GetListItem',
         options:{method:'POST'}           
     })
-
-    
-
 
 export const Items = async (items: IItemRequest) =>       
     await apiClient ({

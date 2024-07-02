@@ -8,13 +8,13 @@ namespace Catalog.Host.Services;
 
 public class CatalogService : BaseDataService<ApplicationDbContext>, ICatalogService
 {
-    private readonly ICatalogItemRepository _catalogItemRepository;
+    private readonly IItemRepository _catalogItemRepository;
     private readonly IMapper _mapper;    
 
     public CatalogService(        
         IDbContextWrapper<ApplicationDbContext> dbContextWrapper,
         ILogger<BaseDataService<ApplicationDbContext>> logger,
-        ICatalogItemRepository catalogItemRepository,
+        IItemRepository catalogItemRepository,
         IMapper mapper)
         : base(dbContextWrapper, logger)
     {       
@@ -22,19 +22,19 @@ public class CatalogService : BaseDataService<ApplicationDbContext>, ICatalogSer
         _mapper = mapper;
     }
 
-    public async Task<PaginatedItemsResponse<CatalogItemDto>> GetByPageAsync(
+    public async Task<PaginatedItemsResponse<ItemDto>> GetByPageAsync(
         int pageSize, 
         int pageIndex,
         int filterTypeId)
     {
         return await ExecuteSafeAsync(async () =>
         {     
-            var result = await _catalogItemRepository.GetByPageAsync(pageIndex, pageSize, filterTypeId);
-            
-            var responce = new PaginatedItemsResponse<CatalogItemDto>()
+            var result = await _catalogItemRepository.GetByPageAsync(pageIndex, pageSize, filterTypeId);                        
+
+            var responce = new PaginatedItemsResponse<ItemDto>()
             {
                 Count = result.TotalCount,
-                Data = result.Data.Select(s => _mapper.Map<CatalogItemDto>(s)).ToList(),
+                Data = result.Data.Select(s => _mapper.Map<ItemDto>(s)).ToList(),
                 PageIndex = pageIndex,
                 PageSize = pageSize                 
             };
@@ -43,15 +43,15 @@ public class CatalogService : BaseDataService<ApplicationDbContext>, ICatalogSer
         });
     }
 
-    public async Task<DataResponse<CatalogItemDto>> GetCatalogItem()
+    public async Task<DataResponse<ItemDto>> GetCatalogItem()
     {
         return await ExecuteSafeAsync(async () =>
         {
             var list = await _catalogItemRepository.GetCatalogItemList();
 
-            return new DataResponse<CatalogItemDto>()
+            return new DataResponse<ItemDto>()
             {
-                Data = list.Select(s => _mapper.Map<CatalogItemDto>(s)).ToList()
+                Data = list.Select(s => _mapper.Map<ItemDto>(s)).ToList()
             };
         });
     }

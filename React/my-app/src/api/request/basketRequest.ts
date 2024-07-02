@@ -5,6 +5,6 @@ export interface IBasketRequest {
     "description": string,
     "price": number,
     "pictureUrl": string,
-    "catalogTypeId": number,
+    "typeId": number,
     "availableStock": number  
 }

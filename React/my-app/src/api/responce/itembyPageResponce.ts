@@ -1,20 +1,20 @@
 export interface IItemByPageResponce{
-    "errorMessage": string,
+    "errorMessage": string | null,
     "respCode": number,
     "pageIndex": number,
     "pageSize": number,
     "count": number,
     "data": [
       {
-        "errorMessage": string,
+        "errorMessage": string | null,
         "respCode": number,
         "id": number,
         "name": string,
         "description": string,
         "price": number,
         "pictureUrl": string,
-        "catalogType": {
-          "errorMessage": string,
+        "type": {
+          "errorMessage": string | null,
           "respCode": number,
           "id": number,
           "type": string

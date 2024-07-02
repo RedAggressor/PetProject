@@ -1,19 +1,22 @@
 using Catalog.Host.Models.Dtos;
 using Catalog.Host.Models.Response;
 using Catalog.Host.Services.Interfaces;
+using Infrastructure.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Catalog.Host.Controllers;
 
 [ApiController]
+[Authorize]
 [Route(ComponentDefaults.DefaultRoute)]
 public class CatalogTypeController : ControllerBase
 {
     private readonly ILogger<CatalogTypeController> _logger; 
-    private readonly ICatalogTypeService _serivice;
+    private readonly ITypeService _serivice;
 
     public CatalogTypeController(
         ILogger<CatalogTypeController> logger,
-        ICatalogTypeService service)
+        ITypeService service)
     {
         _logger = logger;
         _serivice = service;
@@ -35,14 +38,15 @@ public class CatalogTypeController : ControllerBase
     }
 
     [HttpPut]
-    public async Task<UpdataResponse<CatalogTypeDto>> UpdateType(CatalogTypeDto? catalogType)
+    public async Task<UpdataResponse<TypeDto>> UpdateType(TypeDto? catalogType)
     {
         if (catalogType is null)
         {
-            return new UpdataResponse<CatalogTypeDto>() 
+            return new UpdataResponse<TypeDto>() 
             {
                 ErrorMessage = "Null data",
                 RespCode = ResponceCode.Failed
+
             };
         }
 
@@ -56,6 +60,7 @@ public class CatalogTypeController : ControllerBase
         {
             return new DeleteResponse() 
             { 
+               
                 RespCode = ResponceCode.Failed,
                 ErrorMessage = "id is null"
             };

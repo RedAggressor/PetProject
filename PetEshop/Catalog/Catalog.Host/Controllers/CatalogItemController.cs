@@ -14,11 +14,11 @@ namespace Catalog.Host.Controllers;
 public class CatalogItemController : ControllerBase
 {
     private readonly ILogger<CatalogItemController> _logger;
-    private readonly ICatalogItemService _catalogItemService;
+    private readonly IItemService _catalogItemService;
 
     public CatalogItemController(
         ILogger<CatalogItemController> logger,
-        ICatalogItemService catalogItemService)
+        IItemService catalogItemService)
     {
         _logger = logger;
         _catalogItemService = catalogItemService;
@@ -33,14 +33,14 @@ public class CatalogItemController : ControllerBase
             request.Description,
             request.Price,
             request.AvailableStock,
-            request.CatalogTypeId,
+            request.TypeId,
             request.PictureFileName);
 
         return Ok(result);
     }
 
     [HttpGet]
-    public async Task<CatalogItemDto> GetById(int id)
+    public async Task<ItemDto> GetById(int id)
     {
         return await _catalogItemService.GetCatalogItemsByIdAsync(id);
     }
@@ -52,7 +52,7 @@ public class CatalogItemController : ControllerBase
     }
 
     [HttpPut]
-    public async Task<CatalogItemDto> Update(CatalogItemDto catalogItemDto)
+    public async Task<ItemDto> Update(ItemDto catalogItemDto)
     {
         return await _catalogItemService.UpdateAsync(catalogItemDto);
     }

@@ -6,10 +6,7 @@ namespace Catalog.Host.Models.Response
     {
         public string? Status { get; set; }
 
-        public override ResponceCode GetResponce() =>
-            Status is null ?
-            ResponceCode.Failed :
-            ResponceCode.Seccusfull;
+        //public override ResponceCode GetResponce() =>   Status is null ?   ResponceCode.Failed :     ResponceCode.Seccusfull;
 
     }
 }

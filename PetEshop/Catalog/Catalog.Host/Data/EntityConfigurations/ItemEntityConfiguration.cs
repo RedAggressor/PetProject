@@ -2,10 +2,10 @@ using Catalog.Host.Data.Entities;
 
 namespace Catalog.Host.Data.EntityConfigurations;
 
-public class CatalogItemEntityConfiguration
-    : IEntityTypeConfiguration<CatalogItemEntity>
+public class ItemEntityConfiguration
+    : IEntityTypeConfiguration<ItemEntity>
 {
-    public void Configure(EntityTypeBuilder<CatalogItemEntity> builder)
+    public void Configure(EntityTypeBuilder<ItemEntity> builder)
     {
         builder.ToTable("Catalog");
 
@@ -23,8 +23,8 @@ public class CatalogItemEntityConfiguration
         builder.Property(ci => ci.PictureFileName)
             .IsRequired(false);
 
-        builder.HasOne(ci => ci.CatalogType)
+        builder.HasOne(ci => ci.Type)
             .WithMany()
-            .HasForeignKey(ci => ci.CatalogTypeId);
+            .HasForeignKey(ci => ci.TypeId);
     }
 }

@@ -36,7 +36,7 @@ builder.Services.AddSwaggerGen(options =>
                 TokenUrl = new Uri($"{authority}/connect/token"),
                 Scopes = new Dictionary<string, string>()
                 {
-                    { "mvc", "website" },
+                    { "react", "website" },
                 }
             }
         }
@@ -52,7 +52,7 @@ builder.Services.Configure<RedisConfig>(
 builder.Services.AddAuthorization(configuration);
 
 builder.Services.AddTransient<IJsonSerializer, JsonSerializer>();
-builder.Services.AddSingleton<IRedisCacheConnectionService, RedisCacheConnectionService>();
+builder.Services.AddTransient<IRedisCacheConnectionService, RedisCacheConnectionService>();
 builder.Services.AddTransient<ICacheService, CacheService>();
 builder.Services.AddTransient<IBasketService, BasketService>();
 

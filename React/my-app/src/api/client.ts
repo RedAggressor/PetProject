@@ -1,8 +1,5 @@
 import AuthStore from "../Authentification/authStore";
 
-const baseUrl = "http://localhost:5000/api/v1/CatalogBff/"
-
-
 const handlResponce = async (response: Response) => {
   if(!response.ok){
     const message = await response.json()   
@@ -12,7 +9,7 @@ const handlResponce = async (response: Response) => {
   return response.json();
 }
 
-export const apiClient = async ({path,options, data}: apiClientProps) => {
+export const apiClient = async ({path, options, data}: apiClientProps) => {
 
   const token = AuthStore.user?.access_token;
   //if(!token) {
@@ -21,17 +18,17 @@ export const apiClient = async ({path,options, data}: apiClientProps) => {
 
 const requestOptions = {
   ...options,
-  headers: {
-      ...options.headers,
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json' 
+  headers: {      
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'      
   },
   body: !!data ? JSON.stringify(data) : undefined,
 };
 
-return await fetch(`${path}`, requestOptions).then((responce) => handlResponce(responce))
-  };
-  
+const resp = await fetch(`${path}`, requestOptions).then((responce) => handlResponce(responce));
+
+return resp;
+}; 
 
   interface apiClientProps {
     path:string,

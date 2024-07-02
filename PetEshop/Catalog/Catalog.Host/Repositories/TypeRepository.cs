@@ -4,34 +4,34 @@ using Catalog.Host.Repositories.Abstractions;
 
 namespace Catalog.Host.Repositories
 {
-    public class CatalogTypeRepository : BaseRepository, ICatalogTypeRepository
+    public class TypeRepository : BaseRepository, ITypeRepository
     {
         private readonly ApplicationDbContext _dbContext;       
 
-        public CatalogTypeRepository(
+        public TypeRepository(
             IDbContextWrapper<ApplicationDbContext> dbContextWrapper,
-            ILogger<CatalogTypeRepository> logger)
+            ILogger<TypeRepository> logger)
             : base (logger)
         {
             _dbContext = dbContextWrapper.DbContext;           
         }
 
-        public async Task<CatalogTypeEntity> GetById(int id)
+        public async Task<TypeEntity> GetById(int id)
         {
             return await ExecutSafeAsync(async () =>
             {
-                var entity = await _dbContext.CatalogTypes
+                var entity = await _dbContext.Types
                 .FirstOrDefaultAsync(f => f.Id == id);
 
                 return entity!;
             });
         }
 
-        public async Task<ICollection<CatalogTypeEntity>> GetList()
+        public async Task<ICollection<TypeEntity>> GetList()
         {
             return await ExecutSafeAsync(async () =>
             {
-                return await _dbContext.CatalogTypes.ToListAsync();
+                return await _dbContext.Types.ToListAsync();
             });
         }
 
@@ -39,7 +39,7 @@ namespace Catalog.Host.Repositories
         {
             return await ExecutSafeAsync(async () =>
             {
-                var entity = await _dbContext.CatalogTypes.AddAsync(new CatalogTypeEntity()
+                var entity = await _dbContext.Types.AddAsync(new TypeEntity()
                 {
                     Type = type
                 });
@@ -56,7 +56,7 @@ namespace Catalog.Host.Repositories
             {
                 var entity = await GetById(id);
 
-                var message = _dbContext.CatalogTypes.Remove(entity!);
+                var message = _dbContext.Types.Remove(entity!);
 
                 await _dbContext.SaveChangesAsync();
 
@@ -64,7 +64,7 @@ namespace Catalog.Host.Repositories
             });
         }
 
-        public async Task<CatalogTypeEntity> Update(CatalogTypeEntity catalogType)
+        public async Task<TypeEntity> Update(TypeEntity catalogType)
         {
             return await ExecutSafeAsync(async () =>
             {

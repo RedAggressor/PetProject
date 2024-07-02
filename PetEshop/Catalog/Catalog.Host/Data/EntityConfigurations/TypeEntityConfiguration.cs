@@ -2,17 +2,17 @@ using Catalog.Host.Data.Entities;
 
 namespace Catalog.Host.Data.EntityConfigurations;
 
-public class CatalogTypeEntityConfiguration
-    : IEntityTypeConfiguration<CatalogTypeEntity>
+public class TypeEntityConfiguration
+    : IEntityTypeConfiguration<TypeEntity>
 {
-    public void Configure(EntityTypeBuilder<CatalogTypeEntity> builder)
+    public void Configure(EntityTypeBuilder<TypeEntity> builder)
     {
-        builder.ToTable("CatalogType");
+        builder.ToTable("Type");
 
         builder.HasKey(ci => ci.Id);
 
         builder.Property(ci => ci.Id)
-            .UseHiLo("catalog_type_hilo")
+            .UseHiLo("type_hilo")
             .IsRequired();
 
         builder.Property(cb => cb.Type)

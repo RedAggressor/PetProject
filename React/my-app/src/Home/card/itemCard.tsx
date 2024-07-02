@@ -17,8 +17,8 @@ const ItemCard: FC< ICatalogItemResponse > = (props) : ReactElement => {
         description: props.description,
         price: props.price,
         pictureUrl: props.pictureUrl,
-        catalogTypeId: props.catalogType.id,
-        availableStock: props.availableStock
+        type: props.type.id,
+        availableStock: props.availableStock,        
     };
 
     const puInItem = async () => {  
@@ -37,16 +37,16 @@ const ItemCard: FC< ICatalogItemResponse > = (props) : ReactElement => {
                 />               
                 <CardContent>
                     <Typography noWrap gutterBottom variant="h6" component='div'>
-                        itemId: {props.id} 
+                    {props.name}
+                    </Typography>
+                    <Typography noWrap gutterBottom variant="h6" component='div'>
+                    Price:{props.price}
+                    </Typography>                    
+                    <Typography variant="body2" color="text.secondary">
+                        {props.description} 
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                        Price:{props.price}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                        {props.description} typeId:{props.catalogType.type}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                        {props.name} {props.availableStock}
+                         {props.availableStock}
                     </Typography>
                 </CardContent>                
             </CardActionArea>

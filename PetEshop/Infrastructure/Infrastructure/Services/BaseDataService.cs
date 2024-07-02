@@ -1,5 +1,5 @@
 using Infrastructure.Enums;
-using Infrastructure.Exeptions;
+using Infrastructure.Exceptions;
 using Infrastructure.Models;
 using Infrastructure.Services.Interfaces;
 
@@ -92,7 +92,7 @@ public abstract class BaseDataService<T>
             return new TResult() 
             { 
                  ErrorMessage = ex.Message,
-                 RespCode = ResponceCode.Failed
+                RespCode = ResponceCode.Failed
             };
         }        
     }

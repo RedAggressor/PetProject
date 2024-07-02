@@ -1,6 +1,6 @@
-﻿using Basket.Host.Repositories.Abstractions;
-using Catalog.Host.Data;
+﻿using Catalog.Host.Data;
 using Catalog.Host.Data.Entities;
+using Catalog.Host.Repositories.Abstractions;
 
 namespace Catalog.Host.Repositories
 {
@@ -16,7 +16,7 @@ namespace Catalog.Host.Repositories
             _dbContext = dbContextWrapper.DbContext;
         }
 
-        public async Task<int> AddOrderAsync(int UserId, List<OrderCatalogItemEntity> orderItemList)
+        public async Task<int> AddOrderAsync(int UserId, List<OrderItemEntity> orderItemList)
         {
             return await ExecutSafeAsync(async () =>
             {
@@ -26,11 +26,11 @@ namespace Catalog.Host.Repositories
                         UserId = UserId
                     });
 
-                await _dbContext.OrderItems.AddRangeAsync(orderItemList.Select(s => new OrderCatalogItemEntity()
+                await _dbContext.OrderItems.AddRangeAsync(orderItemList.Select(s => new OrderItemEntity()
                 {
                     Count = s.Count,
                     OrderId = order.Entity.Id,
-                    CatalogItemId = s.CatalogItemId
+                    ItemId = s.ItemId
                 }));
 
                 await _dbContext.SaveChangesAsync();
@@ -45,7 +45,8 @@ namespace Catalog.Host.Repositories
             {
                 var entity = await _dbContext
                 .Orders
-                .Include(i => i.OrderItems)
+                .Include(i => i.OrderItems)                
+                .ThenInclude(i =>i.Item)
                 .FirstOrDefaultAsync(o => o.Id == id);
 
                 return entity!;
@@ -59,7 +60,8 @@ namespace Catalog.Host.Repositories
                 var entity = await _dbContext
                 .Orders
                 .Include(i => i.OrderItems)
-                .Where(w => w.User.Id == UserId)
+                .ThenInclude(i => i.Item)
+                .Where(w => w.UserId == UserId)
                 .ToListAsync();
 
                 return entity!;

@@ -4,6 +4,6 @@
     {
         public int Id { get; set; }
         public int Count { get; set; }
-        public CatalogItemDto CatalogItem { get; set; } = null!;
+        public ItemDto Item { get; set; } = null!;
     }
 }

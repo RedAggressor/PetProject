@@ -3,11 +3,11 @@ using Catalog.Host.Models.Response;
 
 namespace Catalog.Host.Services.Interfaces;
 
-public interface ICatalogItemService
+public interface IItemService
 {
     Task<AddResponse> Add(string name, string description, decimal price, int availableStock, int catalogTypeId, string pictureFileName);
-    Task<CatalogItemDto> GetCatalogItemsByIdAsync(int id);
-    Task<DataResponse<CatalogItemDto>> GetCatalogItemByTypeAsync(int idType);
+    Task<ItemDto> GetCatalogItemsByIdAsync(int id);
+    Task<DataResponse<ItemDto>> GetCatalogItemByTypeAsync(int idType);
     Task<DeleteResponse> DeleteAsync(int id);
-    Task<CatalogItemDto> UpdateAsync(CatalogItemDto catalogItemDto);
+    Task<ItemDto> UpdateAsync(ItemDto catalogItemDto);
 }

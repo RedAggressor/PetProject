@@ -7,6 +7,7 @@ import TabList from "@mui/lab/TabList";
 import TabContext from "@mui/lab/TabContext";
 import TabPanel from "@mui/lab/TabPanel";
 import authStore from "../Authentification/authStore";
+import { count } from "console";
 
 
 const store = new HomeStore();
@@ -25,8 +26,8 @@ const handleChange = (event: React.SyntheticEvent, newValue: string) => {
                         <TabList onChange={handleChange}  aria-label="lab API tabs example">
                             <Tab value="0" label={"All product"} onClick={() => store.setType(0)}/>
                             {store.listType.map((tab) => (
-                                <Tab key={tab.id} label={tab.type} value={`${tab.id}`} onClick={() => store.setType(tab.id)}/>
-                            ))}  
+                                <Tab key={tab.id} label={tab.type} value={`${tab.id}`} onClick={() => {store.setCorrentPage(0); store.setType(tab.id);}}/>
+                            ))} 
                         </TabList>
                     </Box>
                     <TabPanel value={`0`}>
@@ -50,7 +51,7 @@ const handleChange = (event: React.SyntheticEvent, newValue: string) => {
                                         justifyContent: 'center',
                                     }}
                                 >
-                                    <Pagination
+                                    <Pagination 
                                         count={store.totalPages}
                                         page={store.currentPage}
                                         onChange={(event, page) => store.changePage(page)}
@@ -75,16 +76,11 @@ const handleChange = (event: React.SyntheticEvent, newValue: string) => {
                                             }
                                         </>
                                     </Grid>
-                                    <Box
-                                        sx={{
-                                            display: 'flex',
-                                            justifyContent: 'center',
-                                        }}
-                                    >
-                                        <Pagination
+                                    <Box  sx={{ display: 'flex',  justifyContent: 'center', }} >
+                                        <Pagination                
                                             count={store.totalPages}
                                             page={store.currentPage}
-                                            onChange={(event, page) => store.changePage(page)}
+                                            onChange={(event, page) => { alert(store.currentPage); store.changePage(page);}}
                                         />
                                     </Box>
                                 </Box>

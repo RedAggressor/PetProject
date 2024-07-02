@@ -11,7 +11,6 @@ namespace IdentityServer
 {
     public class Startup
     {
-        //public IConfiguration AppConfiguration { get; } connect to database...
         public void ConfigureServices(IServiceCollection services)
         {
             var configuration = new ConfigurationBuilder()
@@ -21,7 +20,7 @@ namespace IdentityServer
 
             services.Configure<AppSettings>(configuration);
 
-            services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_1); // Delete mvc use React
+            services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_1);
 
             services.AddIdentityServer()
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())

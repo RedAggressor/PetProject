@@ -1,10 +1,9 @@
-﻿
-using Basket.Host.Repositories.Abstractions;
-using Catalog.Host.Data;
+﻿using Catalog.Host.Data;
 using Catalog.Host.Data.Entities;
 using Catalog.Host.Models.Dtos;
 using Catalog.Host.Models.Requests;
 using Catalog.Host.Models.Response;
+using Catalog.Host.Repositories.Abstractions;
 using Catalog.Host.Services.Abstractions;
 
 namespace Catalog.Host.Services
@@ -29,11 +28,11 @@ namespace Catalog.Host.Services
         {
             return await ExecuteSafeAsync(async () =>
             {
-                var orderItemEntity = new List<OrderCatalogItemEntity>();
+                var orderItemEntity = new List<OrderItemEntity>();
 
-                orderItem.ForEach(o => orderItemEntity.Add(new OrderCatalogItemEntity()
+                orderItem.ForEach(o => orderItemEntity.Add(new OrderItemEntity()
                 {
-                    CatalogItemId = o.ItemId,
+                    ItemId = o.ItemId,
                     Count = o.Count,
                 }));
 
@@ -59,7 +58,7 @@ namespace Catalog.Host.Services
                     {
                         Id = o.Id,
                         Count = o.Count,
-                        CatalogItem = _mapper.Map<CatalogItemDto>(o.CatalogItem)
+                        Item = _mapper.Map<ItemDto>(o.Item)
                     }).ToList()
                 };
             });
@@ -80,7 +79,7 @@ namespace Catalog.Host.Services
                         {
                             Id = o.Id,
                             Count = o.Count,
-                            CatalogItem = _mapper.Map<CatalogItemDto>(o.CatalogItem)
+                            Item = _mapper.Map<ItemDto>(o.Item)
 
                         }).ToList(),
 

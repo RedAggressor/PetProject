@@ -1,8 +1,8 @@
-﻿using Infrastructure.Exeptions;
+﻿using System.Net;
+using Infrastructure.Exceptions;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Infrastructure.Filters;
 

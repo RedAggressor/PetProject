@@ -12,7 +12,6 @@ import * as itemApi from "../api/moduls/items";
 import {useParams} from "react-router-dom";
 import { IItemForBasket} from "../api/responce/IItemForBasket";
 import { observer } from "mobx-react";
-import BasketStore from "../components/basket/BasketStore";
 import { basketContext } from "../App";
 
 const Items: FC<any> = (): ReactElement => {
@@ -64,7 +63,7 @@ const Items: FC<any> = (): ReactElement => {
                         />
                         <CardContent>
                             <Typography noWrap gutterBottom variant="h6" component='div'>
-                                {item?.name} {item?.catalogTypeId} {item?.description}
+                                {item?.name} {item?.description}
                             </Typography>
                             <Typography variant="body2" color="text.secondary">
                                 {item?.price}

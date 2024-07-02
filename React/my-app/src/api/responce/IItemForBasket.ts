@@ -6,6 +6,6 @@ export interface IItemForBasket{
     "description": string,
     "price": number,
     "pictureUrl": string,
-    "catalogTypeId": number,
-    "availableStock": number
+    "type": number,
+    "availableStock": number  
 };

@@ -8,27 +8,19 @@ public static class DbInitializer
     {
         await context.Database.EnsureCreatedAsync();
 
-        if (!context.CatalogTypes.Any())
+        if (!context.Types.Any())
         {
-            await context.CatalogTypes.AddRangeAsync(GetPreconfiguredCatalogTypes());
+            await context.Types.AddRangeAsync(GetPreconfiguredCatalogTypes());
 
             await context.SaveChangesAsync();
         }
 
-        if (!context.CatalogItems.Any())
+        if (!context.Items.Any())
         {
-            await context.CatalogItems.AddRangeAsync(GetPreconfiguredItems());
+            await context.Items.AddRangeAsync(GetPreconfiguredItems());
 
             await context.SaveChangesAsync();
         }
-
-
-        if (!context.Users.Any())
-        {
-            await context.Users.AddRangeAsync(GetPreconfigurationUser());
-            await context.SaveChangesAsync();
-        }
-
 
         if (!context.Orders.Any())
         {
@@ -44,30 +36,23 @@ public static class DbInitializer
         }
     }
 
-    private static IEnumerable<CatalogTypeEntity> GetPreconfiguredCatalogTypes()
+    private static IEnumerable<TypeEntity> GetPreconfiguredCatalogTypes()
     {
-        return new List<CatalogTypeEntity>()
+        return new List<TypeEntity>()
         {
-            new CatalogTypeEntity() { Type = "Fruit" },
-            new CatalogTypeEntity() { Type = "Nut" },
-            new CatalogTypeEntity() { Type = "Mushroom" },
-            new CatalogTypeEntity() { Type = "Vegatable" }
+            new TypeEntity() { Type = "Fruit" },
+            new TypeEntity() { Type = "Nut" },
+            new TypeEntity() { Type = "Mushroom" },
+            new TypeEntity() { Type = "Vegatable" }
         };
     }
-
-    private static IEnumerable<UserEntity> GetPreconfigurationUser()
+    
+    private static IEnumerable<OrderItemEntity> GetPreconfigurationOrderItem()
     {
-        return new List<UserEntity>()
+        return new List<OrderItemEntity>()
             {
-                new UserEntity { Mail = "Test@gmail.com" }
-            };
-    }
-    private static IEnumerable<OrderCatalogItemEntity> GetPreconfigurationOrderItem()
-    {
-        return new List<OrderCatalogItemEntity>()
-            {
-                new OrderCatalogItemEntity {  Count = 2,  CatalogItemId = 1, OrderId = 1 },
-                new OrderCatalogItemEntity {  Count = 3,  CatalogItemId = 2, OrderId = 1 },
+                new OrderItemEntity {  Count = 2,  ItemId = 1, OrderId = 1 },
+                new OrderItemEntity {  Count = 3,  ItemId = 2, OrderId = 1 },
             };
     }
 
@@ -79,22 +64,22 @@ public static class DbInitializer
         };
     }
 
-    private static IEnumerable<CatalogItemEntity> GetPreconfiguredItems()
+    private static IEnumerable<ItemEntity> GetPreconfiguredItems()
     {
-        return new List<CatalogItemEntity>()
+        return new List<ItemEntity>()
         {
-            new CatalogItemEntity { CatalogTypeId = 1, AvailableStock = 100, Description = "strawberry.discription", Name = "strawberry", Price = 19.5M, PictureFileName = "strawberry.png" },
-            new CatalogItemEntity { CatalogTypeId = 1, AvailableStock = 100, Description = "bilberry.discription", Name = "bilberry", Price = 8.50M, PictureFileName = "bilberry.png" },
-            new CatalogItemEntity { CatalogTypeId = 1, AvailableStock = 100, Description = "orange.discription", Name = "orange", Price = 12, PictureFileName = "orange.png" },
-            new CatalogItemEntity { CatalogTypeId = 1, AvailableStock = 100, Description = "lemon.discription", Name = "lemon", Price = 12, PictureFileName = "lemon.png" },
-            new CatalogItemEntity { CatalogTypeId = 1, AvailableStock = 100, Description = "mango.discription", Name = "mango", Price = 8.5M, PictureFileName = "mango.png" },
-            new CatalogItemEntity { CatalogTypeId = 1, AvailableStock = 100, Description = "kiwi.discription", Name = "kiwi", Price = 12, PictureFileName = "kiwi.png" },
-            new CatalogItemEntity { CatalogTypeId = 1, AvailableStock = 100, Description = "coconut.discription", Name = "coconut", Price = 12, PictureFileName = "coconut.png" },
-            new CatalogItemEntity { CatalogTypeId = 1, AvailableStock = 100, Description = "lime.discription", Name = "lime", Price = 8.5M, PictureFileName = "lime.png" },
-            new CatalogItemEntity { CatalogTypeId = 1, AvailableStock = 100, Description = "apple.discription", Name = "apple", Price = 12, PictureFileName = "apple.png" },
-            new CatalogItemEntity { CatalogTypeId = 2, AvailableStock = 100, Description = "peanut.discription", Name = "peanut", Price = 12, PictureFileName = "peanut.png" },
-            new CatalogItemEntity { CatalogTypeId = 3, AvailableStock = 100, Description = "mushroom.discription", Name = "mushroom", Price = 8.5M, PictureFileName = "mushroom.png" },
-            new CatalogItemEntity { CatalogTypeId = 4, AvailableStock = 100, Description = "corn.discription", Name = "corn", Price = 12, PictureFileName = "corn.png" },
+            new ItemEntity { TypeId = 1, AvailableStock = 100, Description = "strawberry.discription", Name = "strawberry", Price = 19.5M, PictureFileName = "strawberry.png" },
+            new ItemEntity { TypeId = 1, AvailableStock = 100, Description = "bilberry.discription", Name = "bilberry", Price = 8.50M, PictureFileName = "bilberry.png" },
+            new ItemEntity { TypeId = 1, AvailableStock = 100, Description = "orange.discription", Name = "orange", Price = 12, PictureFileName = "orange.png" },
+            new ItemEntity { TypeId = 1, AvailableStock = 100, Description = "lemon.discription", Name = "lemon", Price = 12, PictureFileName = "lemon.png" },
+            new ItemEntity { TypeId = 1, AvailableStock = 100, Description = "mango.discription", Name = "mango", Price = 8.5M, PictureFileName = "mango.png" },
+            new ItemEntity { TypeId = 1, AvailableStock = 100, Description = "kiwi.discription", Name = "kiwi", Price = 12, PictureFileName = "kiwi.png" },
+            new ItemEntity { TypeId = 1, AvailableStock = 100, Description = "coconut.discription", Name = "coconut", Price = 12, PictureFileName = "coconut.png" },
+            new ItemEntity { TypeId = 1, AvailableStock = 100, Description = "lime.discription", Name = "lime", Price = 8.5M, PictureFileName = "lime.png" },
+            new ItemEntity { TypeId = 1, AvailableStock = 100, Description = "apple.discription", Name = "apple", Price = 12, PictureFileName = "apple.png" },
+            new ItemEntity { TypeId = 2, AvailableStock = 100, Description = "peanut.discription", Name = "peanut", Price = 12, PictureFileName = "peanut.png" },
+            new ItemEntity { TypeId = 3, AvailableStock = 100, Description = "mushroom.discription", Name = "mushroom", Price = 8.5M, PictureFileName = "mushroom.png" },
+            new ItemEntity { TypeId = 4, AvailableStock = 100, Description = "corn.discription", Name = "corn", Price = 12, PictureFileName = "corn.png" },
         };
     }
 }

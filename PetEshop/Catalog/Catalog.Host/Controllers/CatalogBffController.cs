@@ -8,19 +8,20 @@ using Microsoft.AspNetCore.Authorization;
 namespace Catalog.Host.Controllers;
 
 [ApiController]
-//[Authorize(Policy = AuthPolicy.AllowEndUserPolicy)]
+[Authorize(Policy = AuthPolicy.AllowClientPolicy)]
+[Scope("catalog.catalogbff")]
 [Route(ComponentDefaults.DefaultRoute)]
 public class CatalogBffController : ControllerBase
 {
     private readonly ILogger<CatalogBffController> _logger;
     private readonly ICatalogService _catalogService;
-    private readonly ICatalogItemService _catalogItemService;
-    private readonly ICatalogTypeService _catalogTypeService;    
+    private readonly IItemService _catalogItemService;
+    private readonly ITypeService _catalogTypeService;    
     public CatalogBffController(
         ILogger<CatalogBffController> logger,
         ICatalogService catalogService,
-        ICatalogItemService catalogItemService,        
-        ICatalogTypeService catalogTypeService
+        IItemService catalogItemService,        
+        ITypeService catalogTypeService
         )
     {
         _logger = logger;
@@ -30,8 +31,8 @@ public class CatalogBffController : ControllerBase
     }
 
     [HttpPost]
-    //[AllowAnonymous]
-    [ProducesResponseType(typeof(PaginatedItemsResponse<CatalogItemDto>), (int)HttpStatusCode.OK)]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(PaginatedItemsResponse<ItemDto>), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> Items(PaginatedItemsRequest request)
     {
         if (request is not null)
@@ -43,15 +44,16 @@ public class CatalogBffController : ControllerBase
         _logger.LogWarning("request null!");
         var responce = new BaseResponce()
         {
-            ErrorMessage = "request null!"
+            ErrorMessage = "request null!",
+            RespCode = ResponceCode.Failed
         };
-        responce.GetResponce();
+        
 
         return Ok(responce);
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(CatalogItemDto), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(ItemDto), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> GetItemById(int? id)
     {
         if (id is not null && id != default(int))
@@ -62,15 +64,16 @@ public class CatalogBffController : ControllerBase
         }
         var responce = new BaseResponce()
         {
-            ErrorMessage = "id is null"
+            ErrorMessage = "id is null",
+            RespCode = ResponceCode.Failed
         };
-        responce.GetResponce();
+        
         return Ok(responce);
 
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(DataResponse<CatalogItemDto>), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(DataResponse<ItemDto>), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> GetByType(int? idType)
     {
         if (idType is not null)
@@ -81,15 +84,16 @@ public class CatalogBffController : ControllerBase
 
         var responce = new BaseResponce()
         {
-            ErrorMessage = "id is null"
+            ErrorMessage = "id is null",
+            RespCode = ResponceCode.Failed
         };
-        responce.GetResponce();
+        
         return Ok(responce);
     }
 
     [HttpPost]
-    //[AllowAnonymous]
-    [ProducesResponseType(typeof(DataResponse<CatalogTypeDto>), (int)HttpStatusCode.OK)]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(DataResponse<TypeDto>), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> GetListType()
     {
         var result = await _catalogTypeService.GetList();
@@ -97,8 +101,8 @@ public class CatalogBffController : ControllerBase
     }
 
     [HttpPost]
-    //[AllowAnonymous]
-    [ProducesResponseType(typeof(DataResponse<CatalogItemDto>), (int)HttpStatusCode.OK)]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(DataResponse<ItemDto>), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> GetListItem()
     {
         var result = await _catalogService.GetCatalogItem();

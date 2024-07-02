@@ -7,17 +7,17 @@ using Catalog.Host.Services.Interfaces;
 
 namespace Catalog.Host.Services
 {
-    public class CatalogTypeService : BaseDataService<ApplicationDbContext>, ICatalogTypeService
+    public class TypeService : BaseDataService<ApplicationDbContext>, ITypeService
     {
-        private readonly ICatalogTypeRepository _repository;
+        private readonly ITypeRepository _repository;
         private readonly IMapper _mapping;
-        private readonly ILogger<CatalogTypeService> _logger;
+        private readonly ILogger<TypeService> _logger;
 
-        public CatalogTypeService(
-            ICatalogTypeRepository repository,
+        public TypeService(
+            ITypeRepository repository,
             IMapper mapper,
             IDbContextWrapper<ApplicationDbContext> dbContextWrapper,
-            ILogger<CatalogTypeService> logger)
+            ILogger<TypeService> logger)
             : base(dbContextWrapper, logger)
         {
             _repository = repository;
@@ -38,15 +38,15 @@ namespace Catalog.Host.Services
             });
         }
 
-        public async Task<DataResponse<CatalogTypeDto>> GetList()
+        public async Task<DataResponse<TypeDto>> GetList()
         {
             return await ExecuteSafeAsync(async () =>
             {
                 var entity = await _repository.GetList();
 
-                var list = entity.Select(s => _mapping.Map<CatalogTypeDto>(s));
+                var list = entity.Select(s => _mapping.Map<TypeDto>(s));
 
-                return new DataResponse<CatalogTypeDto>()
+                return new DataResponse<TypeDto>()
                 {
                     Data = list
                 };
@@ -66,17 +66,17 @@ namespace Catalog.Host.Services
             });
         }
 
-        public async Task<UpdataResponse<CatalogTypeDto>> UpdateType(CatalogTypeDto typeDto)
+        public async Task<UpdataResponse<TypeDto>> UpdateType(TypeDto typeDto)
         {
             return await ExecuteSafeAsync(async () =>
             {
-                var entity = _mapping.Map<CatalogTypeEntity>(typeDto);
+                var entity = _mapping.Map<TypeEntity>(typeDto);
 
                 var upentity = await _repository.Update(entity);
 
-                var dto = _mapping.Map<CatalogTypeDto>(upentity);
+                var dto = _mapping.Map<TypeDto>(upentity);
 
-                return new UpdataResponse<CatalogTypeDto>()
+                return new UpdataResponse<TypeDto>()
                 {
                     UpdataModel = dto
                 };

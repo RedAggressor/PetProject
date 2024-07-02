@@ -8,7 +8,7 @@ namespace IdentityServer
     {
         public static IEnumerable<IdentityResource> GetIdentityResources()
         {
-            return new IdentityResource[] 
+            return new IdentityResource[]
             {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile()
@@ -19,28 +19,28 @@ namespace IdentityServer
         {
             return new ApiResource[]
             {
-                new ApiResource("react_spa")
+                new ApiResource("localhost")
                 {
                     Scopes = new List<Scope>
                     {
-                        new Scope("react")
-                    },
-                },
-                new ApiResource("alevelwebsite.com")
-                {
-                    Scopes = new List<Scope>
-                    {
-                        new Scope("mvc")
-                    },
-                },
+                        new Scope("react")                       
+                    }
+                },                
+                //new ApiResource("alevelwebsite.com")
+                //{
+                //    Scopes = new List<Scope>
+                //    {
+                //        new Scope("mvc")
+                //    },
+                //},
                 new ApiResource("catalog")
                 {
                     Scopes = new List<Scope>
                     {
                         new Scope("catalog.catalogbff"),
-                        new Scope("catalog.catalogitem"),
+                        new Scope("catalog.catalogitem")
                     },
-                }
+                },
             };
         }
 
@@ -58,8 +58,9 @@ namespace IdentityServer
                     RedirectUris = { $"{configuration["ReactClientUrl"]}/callback" },
                     PostLogoutRedirectUris = { $"{configuration["ReactClientUrl"]}/signin-oidc" },
                     AllowedCorsOrigins = { configuration["ReactClientUrl"] },
-                    AllowedScopes = { "openid", "profile", "mvc" },
+                    AllowedScopes = { "openid", "profile", "react", "catalog.catalogbff", "catalog.catalogitem" },
                     AllowAccessTokensViaBrowser = true
+                    
                 },
                 //new Client
                 //{
@@ -90,14 +91,14 @@ namespace IdentityServer
                     ClientId = "catalogswaggerui",
                     ClientName = "Catalog Swagger UI",
                     AllowedGrantTypes = GrantTypes.Implicit,
-                    AllowAccessTokensViaBrowser = true, 
+                    AllowAccessTokensViaBrowser = true,
 
                     RedirectUris = { $"{configuration["CatalogApi"]}/swagger/oauth2-redirect.html" },
                     PostLogoutRedirectUris = { $"{configuration["CatalogApi"]}/swagger/" },
 
                     AllowedScopes =
                     {
-                        "mvc", "catalog.catalogbff", "catalog.catalogitem"
+                        "react", "catalog.catalogbff", "catalog.catalogitem"
                     }
                 },
                 new Client
@@ -112,9 +113,9 @@ namespace IdentityServer
 
                     AllowedScopes =
                     {
-                        "mvc"
+                        "react"
                     }
-                },
+                },                
             };
         }
     }

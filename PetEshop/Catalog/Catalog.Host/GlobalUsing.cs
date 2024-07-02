@@ -12,5 +12,5 @@ global using AutoMapper;
 global using Microsoft.Extensions.Options;
 global using Infrastructure.Models;
 global using Infrastructure.Enums;
-global using Infrastructure.Exeptions;
+global using Infrastructure.Exceptions;
 global using Infrastructure.Repositories;

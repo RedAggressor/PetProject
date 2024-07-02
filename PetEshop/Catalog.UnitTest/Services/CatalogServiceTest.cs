@@ -1,6 +1,5 @@
 ﻿using Catalog.Host.Data.Entities;
 using Catalog.Host.Models.Dtos;
-using Catalog.Host.Models.enums;
 using Catalog.Host.Models.Response;
 using Catalog.Host.Repositories.Abstractions;
 
@@ -10,14 +9,14 @@ namespace Catalog.UnitTest.Services
     {
         private readonly ICatalogService _serviceCatalog;
 
-        private readonly Mock<ICatalogItemRepository> _catalogRepository;
+        private readonly Mock<IItemRepository> _catalogRepository;
         private readonly Mock<IMapper> _mapper;
         private readonly Mock<IDbContextWrapper<ApplicationDbContext>> _dbContextWrapper;
         private readonly Mock<ILogger<CatalogService>> _logger;
 
         public CatalogServiceTest()
         {
-            _catalogRepository = new Mock<ICatalogItemRepository>();
+            _catalogRepository = new Mock<IItemRepository>();
             _mapper = new Mock<IMapper>();
             _dbContextWrapper = new Mock<IDbContextWrapper<ApplicationDbContext>>();
             _logger = new Mock<ILogger<CatalogService>>();
@@ -39,20 +38,20 @@ namespace Catalog.UnitTest.Services
             var filter = 1;
             
 
-            var paginationItemReponceSeccusfull = new PaginatedItems<CatalogItemEntity>()
+            var paginationItemReponceSeccusfull = new PaginatedItems<ItemEntity>()
             {
                 TotalCount = totalCountTest,
-                Data = new List<CatalogItemEntity>()
+                Data = new List<ItemEntity>()
                 {
-                    new CatalogItemEntity()
+                    new ItemEntity()
                     {
                          Name ="Test",
                     },
-                    new CatalogItemEntity()
+                    new ItemEntity()
                     {
                          Name ="Test",                         
                     },
-                    new CatalogItemEntity()
+                    new ItemEntity()
                     {
                          Name ="Test",                         
                     },
@@ -61,12 +60,12 @@ namespace Catalog.UnitTest.Services
 
             var countData = paginationItemReponceSeccusfull.Data.Count();
 
-            var catalogItemDtoSuccesfull = new CatalogItemDto()
+            var catalogItemDtoSuccesfull = new ItemDto()
             {
                 Name = "Test",                              
             };
 
-            var catalogItemSuccesfull = new CatalogItemEntity()
+            var catalogItemSuccesfull = new ItemEntity()
             {
                 Name = "Test",
             };            
@@ -78,8 +77,8 @@ namespace Catalog.UnitTest.Services
                 ))
             .ReturnsAsync(paginationItemReponceSeccusfull);
 
-            _mapper.Setup(s => s.Map<CatalogItemDto>(
-                    It.Is<CatalogItemEntity>(i => i.Name == "Test")))
+            _mapper.Setup(s => s.Map<ItemDto>(
+                    It.Is<ItemEntity>(i => i.Name == "Test")))
                 .Returns(catalogItemDtoSuccesfull); // check mapper failed
 
             //act
@@ -107,7 +106,7 @@ namespace Catalog.UnitTest.Services
                 It.Is<int>(i => i == pageIndexTest),
                 It.Is<int>(i => i == pageSizeTest),
                 It.Is<int>(i=>i == typeFilter)))
-            .Returns((Func<PaginatedItemsResponse<CatalogItemDto>>)null!);
+            .Returns((Func<PaginatedItemsResponse<ItemDto>>)null!);
 
             //act
             var responce = await _serviceCatalog.GetByPageAsync(pageSizeTest, pageIndexTest, 1);

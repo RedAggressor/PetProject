@@ -10,7 +10,7 @@ public class CreateItemRequest
 
     public string PictureFileName { get; set; } = null!;
 
-    public int CatalogTypeId { get; set; }
+    public int TypeId { get; set; }
 
     public int AvailableStock { get; set; }
 }

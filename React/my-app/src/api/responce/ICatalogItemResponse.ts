@@ -5,13 +5,13 @@ export interface ICatalogItemResponse{
     "description": string,
     "price": number,
     "pictureUrl": string,
-    "catalogType": {
+    "type": {
         "id": number,
         "type": string,
-        "errorMessage": string,
-        "respCode": string
+        "errorMessage": string | null,
+        "respCode": number
     },
     "availableStock": number,
     "errorMessage": string,
-    "respCode": string    
+    "respCode": number   
 }

@@ -1,5 +1,5 @@
 import { FC, ReactElement, useContext, useState } from "react";
-import { AppStoreContext } from "../App";
+import { AppStoreContext } from "../../App";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Avatar from "@mui/material/Avatar";

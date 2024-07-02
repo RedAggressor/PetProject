@@ -3,7 +3,6 @@ import * as apiClient from "../api/moduls/items";
 import * as apiType from "../api/moduls/type";
 import { ICatalogItemResponse } from "../api/responce/ICatalogItemResponse";
 import { IItemRequest } from "../api/request/itemRequest";
-import { IItemByPageResponce } from "../api/responce/itembyPageResponce";
 import { ITypeResponce } from "../api/responce/ITypeResponce";
 
 class HomeStore {
@@ -13,24 +12,32 @@ class HomeStore {
     currentPage = 0;
     pageSize = 6;
     type = 0;
-    count = 0;    
+    count = 0;
+    error = '';
     listType: ITypeResponce [] = [];
 
     request: IItemRequest = {
-        pageIndex: 0,
+        pageIndex: 1,
         pageSize: 0,
         filterTypeId: 0        
     }
 
     constructor() {
         makeAutoObservable(this);
-        runInAction(async() => {await this.setTypeList(); await this.prefetchData();});        
+        runInAction(async() => {
+            await this.setTypeList();
+            await this.prefetchData();
+        });        
     }
 
     async setTypeList(){
         try{
         const responce = await apiType.getType();
-        this.setListType(responce.list);
+        
+        this.setListType(responce.data);
+        
+            //this.setError(responce.errorMessage);
+        
         }
         catch (error) {
             console.log(error)
@@ -40,14 +47,17 @@ class HomeStore {
     prefetchData = async () => {
         try {
             this.setRequest();
-            const respon = await apiClient.Items(this.request);           
-            this.setItems(respon?.data);
-            this.setCount(respon?.count);
+            const responce = await apiClient.Items(this.request);
+                  
+            this.setItems(responce?.data);
+            this.setCount(responce?.count);
             this.setTotalPage();
+            //this.setError(responce.errorMessage);
+            
         }
         catch (error) {
             if(error instanceof Error) {
-                console.error(error.message)   
+                console.error(error)   
             }
         }
     };
@@ -81,6 +91,14 @@ class HomeStore {
         this.request.pageIndex = this.currentPage;
         this.request.pageSize = this.pageSize;
         this.request.filterTypeId = this.type;
+    }
+
+    setCorrentPage(currentPage: number){
+        this.currentPage = currentPage;
+    }
+
+    setError(error:string){
+        this.error = error;
     }
 }
 

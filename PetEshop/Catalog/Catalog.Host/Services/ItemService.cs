@@ -7,15 +7,15 @@ using Catalog.Host.Services.Interfaces;
 
 namespace Catalog.Host.Services;
 
-public class CatalogItemService : BaseDataService<ApplicationDbContext>, ICatalogItemService
+public class CatalogItemService : BaseDataService<ApplicationDbContext>, IItemService
 {
-    private readonly ICatalogItemRepository _catalogItemRepository;
+    private readonly IItemRepository _catalogItemRepository;
     private readonly IMapper _mapper;
 
     public CatalogItemService(
         IDbContextWrapper<ApplicationDbContext> dbContextWrapper,
         ILogger<BaseDataService<ApplicationDbContext>> logger,
-        ICatalogItemRepository catalogItemRepository,
+        IItemRepository catalogItemRepository,
         IMapper mapper)
         : base(dbContextWrapper, logger)
     {
@@ -43,30 +43,30 @@ public class CatalogItemService : BaseDataService<ApplicationDbContext>, ICatalo
         });
     }
 
-    public async Task<CatalogItemDto> GetCatalogItemsByIdAsync(int id)
+    public async Task<ItemDto> GetCatalogItemsByIdAsync(int id)
     {
         return await ExecuteSafeAsync(async () =>
         {
             var item = await _catalogItemRepository.GetCatalogItemsByIdAsync(id);
 
-            var dto = _mapper.Map<CatalogItemDto>(item);
+            var dto = _mapper.Map<ItemDto>(item);
 
             return dto!;
         });
         
     }
 
-    public async Task<DataResponse<CatalogItemDto>> GetCatalogItemByTypeAsync(int idType)
+    public async Task<DataResponse<ItemDto>> GetCatalogItemByTypeAsync(int idType)
     {
         return await ExecuteSafeAsync(async () =>
         {
-            var itemColections = new List<CatalogItemDto>();
+            var itemColections = new List<ItemDto>();
 
             var items = await _catalogItemRepository.GetCatalogItemsByTypeAsync(idType);
 
-            itemColections.AddRange(items.Select(i => _mapper.Map<CatalogItemDto>(i)));
+            itemColections.AddRange(items.Select(i => _mapper.Map<ItemDto>(i)));
 
-            return new DataResponse<CatalogItemDto>()
+            return new DataResponse<ItemDto>()
             {
                 Data = itemColections
             };
@@ -85,15 +85,15 @@ public class CatalogItemService : BaseDataService<ApplicationDbContext>, ICatalo
         });
     }
 
-    public async Task<CatalogItemDto> UpdateAsync(CatalogItemDto catalogItemDto)
+    public async Task<ItemDto> UpdateAsync(ItemDto catalogItemDto)
     {
         return await ExecuteSafeAsync(async () =>
         {
-            var item = _mapper.Map<CatalogItemEntity>(catalogItemDto);
+            var item = _mapper.Map<ItemEntity>(catalogItemDto);
 
             item = await _catalogItemRepository.Update(item);
 
-            var dto = _mapper.Map<CatalogItemDto>(item);
+            var dto = _mapper.Map<ItemDto>(item);
 
             return dto!;
         });

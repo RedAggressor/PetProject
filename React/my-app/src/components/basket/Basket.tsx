@@ -1,4 +1,4 @@
-import { Box, Container, Grid, styled} from "@mui/material";
+import { Box, Button, Container, Grid, Stack, styled} from "@mui/material";
 import { observer } from "mobx-react";
 import { FC, ReactElement, useContext} from "react";
 import BasketCard from "./basketCard";
@@ -27,8 +27,13 @@ const Basket: FC<any> = (): ReactElement => {
                 </>                
             </Grid>
         </Box>
-       <Div> Total Price: {basketstore.basket.price}</Div>
+       <Div> Total Price: {basketstore.basket.totalPrice}</Div>
        <Div> Total Amount: {basketstore.basket.amount}</Div>
+       <Stack direction="row" spacing={2}>      
+      <Button variant="contained" color="success" onClick={()=>alert("Suucesful")} >
+        {basketstore.basket.totalPrice} Buy
+      </Button>      
+    </Stack>
     </Container>
     );
 }

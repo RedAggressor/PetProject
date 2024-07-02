@@ -1,7 +1,6 @@
 import { makeAutoObservable} from "mobx";
-import * as authApi from "../api/moduls/authApi"
 import { User, UserManager, WebStorageStateStore } from "oidc-client";
-import autConfig from "../interfaces/config"
+import autConfig from "./config"
 
 class AuthStore{
     user: User | null = null;
@@ -37,8 +36,7 @@ class AuthStore{
     async getUser(){
         try{
         const responce = await this.userManager!.getUser();
-        this.setUser(responce);
-        console.log("User ----->>>", this.user)
+        return this.setUser(responce);        
         }
         catch (error){
             console.log(error);

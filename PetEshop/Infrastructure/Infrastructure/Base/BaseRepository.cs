@@ -1,4 +1,4 @@
-﻿using Infrastructure.Exeptions;
+﻿using Infrastructure.Exceptions;
 
 namespace Infrastructure.Repositories
 {

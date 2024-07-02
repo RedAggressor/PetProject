@@ -12,10 +12,7 @@ namespace Catalog.Host.Data.EntityConfigurations
 
             builder.Property(p => p.Id).UseHiLo("order_hilo");
 
-            builder
-                .HasOne(o => o.User)
-                .WithMany(m => m.Orders)
-                .HasForeignKey(o => o.UserId);
+            builder.Property(p => p.UserId).IsRequired();
         }
     }
 }

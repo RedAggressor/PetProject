@@ -1,6 +1,6 @@
 namespace Catalog.Host.Models.Dtos;
 
-public class CatalogItemDto : BaseResponce
+public class ItemDto : BaseResponce
 {
     public int Id { get; set; }
 
@@ -12,7 +12,8 @@ public class CatalogItemDto : BaseResponce
 
     public string PictureUrl { get; set; } = null!;
 
-    public CatalogTypeDto CatalogType { get; set; } = null!;
+    public TypeDto Type { get; set; } = null!;
        
     public int AvailableStock { get; set; }
+
 }
