@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace Catalog.Host.Controllers
 {
     [ApiController]
-    [Authorize(Policy = AuthPolicy.AllowEndUserPolicy)]
+    //[Authorize(Policy = AuthPolicy.AllowEndUserPolicy)]
     [Route(ComponentDefaults.DefaultRoute)]
     public class OrderController : ControllerBase
     {
@@ -21,15 +21,13 @@ namespace Catalog.Host.Controllers
 
         [HttpPost]
         [ProducesResponseType(typeof(AddResponse), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> AddOrder(List<OrderItemRequest> orderItem)
+        public async Task<IActionResult> AddOrder(OrderRequest order)
         {
-            var userIds = User.Claims.FirstOrDefault(x => x.Type == "sub")?.Value;
+            //var userIds = User.Claims.FirstOrDefault(x => x.Type == "sub")?.Value;                       
 
-            int userId;
-
-            if (int.TryParse(userIds, out userId))
+            if (int.TryParse(order.UserId, out int userId))
             {
-                var id = await _orderService.AddOrderAsync(userId, orderItem);
+                var id = await _orderService.AddOrderAsync(userId, order.items);
 
                 return Ok(id);
             };
@@ -60,9 +58,9 @@ namespace Catalog.Host.Controllers
 
         [HttpPost]        
         [ProducesResponseType(typeof(DataResponse<OrderResponse>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetOrderByUserId()
+        public async Task<IActionResult> GetOrderByUserId(string userIds)
         {
-            var userIds = User.Claims.FirstOrDefault(x => x.Type == "sub")?.Value; 
+            //var userIds = User.Claims.FirstOrDefault(x => x.Type == "sub")?.Value; 
 
             int userId;
 

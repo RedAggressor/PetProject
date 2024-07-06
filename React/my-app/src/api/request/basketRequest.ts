@@ -1,10 +1,10 @@
-export interface IBasketRequest {
-    
-    "id": number,
-    "name": string,
-    "description": string,
-    "price": number,
-    "pictureUrl": string,
-    "typeId": number,
-    "availableStock": number  
+import { IItemForBasket } from "../responce/IItemForBasket"
+
+export interface IBasketAddRequest{
+    "userId": string,
+    "item": IItemForBasket[]
+}
+
+export interface IBAskerGetRequest{
+    'userId':string
 }

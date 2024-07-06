@@ -9,7 +9,7 @@ class HomeStore {
     
     items: ICatalogItemResponse[] = [];
     totalPages = 0;
-    currentPage = 0;
+    currentPage = 1;
     pageSize = 6;
     type = 0;
     count = 0;
@@ -47,8 +47,7 @@ class HomeStore {
     prefetchData = async () => {
         try {
             this.setRequest();
-            const responce = await apiClient.Items(this.request);
-                  
+            const responce = await apiClient.Items(this.request);                  
             this.setItems(responce?.data);
             this.setCount(responce?.count);
             this.setTotalPage();
@@ -63,7 +62,7 @@ class HomeStore {
     };
 
     async changePage( page: number){        
-        this.currentPage = (page -1);               
+        this.currentPage = page;               
         await this.prefetchData();           
     };
 

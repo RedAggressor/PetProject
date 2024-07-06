@@ -25,7 +25,7 @@ namespace IdentityServer
                     {
                         new Scope("react")                       
                     }
-                },                
+                },
                 //new ApiResource("alevelwebsite.com")
                 //{
                 //    Scopes = new List<Scope>
@@ -58,7 +58,7 @@ namespace IdentityServer
                     RedirectUris = { $"{configuration["ReactClientUrl"]}/callback" },
                     PostLogoutRedirectUris = { $"{configuration["ReactClientUrl"]}/signin-oidc" },
                     AllowedCorsOrigins = { configuration["ReactClientUrl"] },
-                    AllowedScopes = { "openid", "profile", "react", "catalog.catalogbff", "catalog.catalogitem" },
+                    AllowedScopes = { "openid", "profile", "react", "catalog.catalogbff", "catalog.catalogitem"},                    
                     AllowAccessTokensViaBrowser = true
                     
                 },
@@ -98,7 +98,7 @@ namespace IdentityServer
 
                     AllowedScopes =
                     {
-                        "react", "catalog.catalogbff", "catalog.catalogitem"
+                        "catalog.catalogbff", "catalog.catalogitem", "react"
                     }
                 },
                 new Client

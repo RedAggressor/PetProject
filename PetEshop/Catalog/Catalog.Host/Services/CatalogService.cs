@@ -28,8 +28,14 @@ public class CatalogService : BaseDataService<ApplicationDbContext>, ICatalogSer
         int filterTypeId)
     {
         return await ExecuteSafeAsync(async () =>
-        {     
-            var result = await _catalogItemRepository.GetByPageAsync(pageIndex, pageSize, filterTypeId);                        
+        {
+            var corectionPage = 1; // page start at 1 not 0!
+
+            pageIndex -= corectionPage;
+
+            var result = await _catalogItemRepository.GetByPageAsync(pageIndex, pageSize, filterTypeId);
+
+            pageIndex += corectionPage;
 
             var responce = new PaginatedItemsResponse<ItemDto>()
             {

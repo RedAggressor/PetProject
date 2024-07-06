@@ -1,10 +1,10 @@
-import { makeAutoObservable} from "mobx";
+import { makeAutoObservable, runInAction} from "mobx";
 import { User, UserManager, WebStorageStateStore } from "oidc-client";
 import autConfig from "./config"
 
 class AuthStore{
     user: User | null = null;
-    userManager: UserManager | null = null;
+    userManager: UserManager | null = null;   
 
     constructor(){
         makeAutoObservable(this);
@@ -22,12 +22,12 @@ class AuthStore{
             this.setUser(null);
         })
 
-        this.getUser();
+        this.getUser();        
     }
 
     setUser(user: User | null){
         this.user = user;
-    }
+    }       
 
     setUserManager(userManager: UserManager | null){
         this.userManager = userManager;
@@ -36,7 +36,9 @@ class AuthStore{
     async getUser(){
         try{
         const responce = await this.userManager!.getUser();
-        return this.setUser(responce);        
+        console.log(responce)
+        this.setUser(responce);
+        return this.user;   
         }
         catch (error){
             console.log(error);
@@ -47,13 +49,14 @@ class AuthStore{
         this.userManager?.signinRedirect();     
     }
 
-    logOut() {
+    async logOut() {
         this.userManager?.signoutRedirect();
     }
 
     async complitLogin(){
         try{
         const responce = await this.userManager!.signinRedirectCallback(); 
+        console.log('responce >>>>', responce)
         this.setUser(responce);
         } 
         catch(error){

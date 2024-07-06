@@ -3,6 +3,8 @@ import Items from "./Items/Items";
 import Home from "./Home/Home";
 import Basket from "./components/basket/Basket"
 import Callback from "./components/redirect/callback";
+import UserCabinet from "./components/acount/userCabinet";
+import SuccusfullPay from "./components/redirect/succesfullpay";
 
 interface IRoute{
     key: string,
@@ -40,5 +42,19 @@ export const routes: Array<IRoute> = [
         path: '/callback',
         enabled: false,
         component: Callback
-    }
+    },
+    {
+        key: 'user-route',
+        title: 'UserCabinet',
+        path: '/usercabinet',
+        enabled: false,
+        component: UserCabinet
+    },
+    {
+        key: 'succusfullpay-route',
+        title: 'SuccusfullPay',
+        path: '/succusfullpay',
+        enabled: false,
+        component: SuccusfullPay
+    },
 ]

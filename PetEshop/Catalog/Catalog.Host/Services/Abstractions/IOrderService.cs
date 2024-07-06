@@ -6,7 +6,7 @@ namespace Catalog.Host.Services.Abstractions
 {
     public interface IOrderService
     {
-        Task<AddResponse> AddOrderAsync(int UserId, List<OrderItemRequest> orderItem);
+        Task<AddResponse> AddOrderAsync(int UserId, ICollection<OrderItemRequest> orderItem);
         Task<OrderResponse> GetOrderByIdAsync(int idOrder);
         Task<DataResponse<OrderResponse>> GetOrderByUserIdAsync(int userId);
     }

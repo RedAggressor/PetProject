@@ -24,7 +24,7 @@ const BasketCard: FC< {item : IItemForBasket} & { index: number }> = ({ item, in
                         Price:{item.price}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                        {item.description} typeId:{item.type}
+                        {item.description} {item.type}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
                         {item.name} {item.availableStock}

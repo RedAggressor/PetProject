@@ -3,7 +3,8 @@
 namespace Catalog.Host.Models.Requests
 {
     public class OrderRequest
-    {        
-        public ICollection<OrderItemDto> items { get; set; } = new List<OrderItemDto>();
+    {
+        public string UserId { get; set; } = null!;
+        public ICollection<OrderItemRequest> items { get; set; } = new List<OrderItemRequest>();
     }
 }

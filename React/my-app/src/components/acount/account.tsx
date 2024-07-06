@@ -9,12 +9,15 @@ import React from "react";
 import { observer } from "mobx-react";
 import { Box, IconButton, Tooltip, Typography } from "@mui/material";
 import Mail from "./mail";
+import { useNavigate } from "react-router-dom";
 
 
 const Acount: FC<any> = (amount:number): ReactElement => {
 
   const appStore = useContext(AppStoreContext);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  const navigateCabinet = useNavigate(); 
 
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -77,7 +80,15 @@ const Acount: FC<any> = (amount:number): ReactElement => {
             transformOrigin={{ horizontal: 'right', vertical: 'top' }}
             anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
           >         
+          <MenuItem onClick={() => {navigateCabinet('/usercabinet'); handleClose();}}>
+            
+            <ListItemIcon>                
+              
+            </ListItemIcon>
+            Cabinet
+          </MenuItem>
             <MenuItem onClick={() => {handleClose();}}>
+            
               <ListItemIcon>                
                 <Mail />
               </ListItemIcon>

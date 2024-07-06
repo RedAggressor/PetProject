@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext, FC, ReactElement, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from './Layout/Layout';
 import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
@@ -6,6 +6,7 @@ import AuthStore from './Authentification/authStore';
 import { routes as appRoutes } from "./routes";
 import BasketStore from './components/basket/BasketStore';
 import { IBasketStore } from './interfaces/backetStor';
+import { observer } from 'mobx-react';
 
 const store = AuthStore;
 
@@ -17,7 +18,8 @@ export const basketContext = createContext(storeBasket)
 
 export const AppStoreContext = createContext(store)
 
-function App() {  
+const App: FC<any> = (): ReactElement => { 
+
   const theme = createTheme({
     palette:{
       primary:{
@@ -60,4 +62,5 @@ function App() {
   );
 }
 
-export default App;
+export default observer(App);
+

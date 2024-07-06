@@ -24,13 +24,13 @@ namespace Catalog.Host.Services
             _mapper = mapper;
         }
 
-        public async Task<AddResponse> AddOrderAsync(int UserId, List<OrderItemRequest> orderItem)
+        public async Task<AddResponse> AddOrderAsync(int UserId, ICollection<OrderItemRequest> orderItem)
         {
             return await ExecuteSafeAsync(async () =>
             {
                 var orderItemEntity = new List<OrderItemEntity>();
 
-                orderItem.ForEach(o => orderItemEntity.Add(new OrderItemEntity()
+                orderItem.ToList().ForEach(o => orderItemEntity.Add(new OrderItemEntity()
                 {
                     ItemId = o.ItemId,
                     Count = o.Count,
@@ -54,7 +54,7 @@ namespace Catalog.Host.Services
                 return new OrderResponse()
                 {
                     Id = entity.Id,
-                    OrderItems = entity.OrderItems.Select(o => new OrderItemDto()
+                    OrderItems = entity.OrderItems.Select(o => new Models.Dtos.OrderItemDto()
                     {
                         Id = o.Id,
                         Count = o.Count,
@@ -75,7 +75,7 @@ namespace Catalog.Host.Services
                     Data = listEntity.Select(s => new OrderResponse()
                     {
                         Id = s.Id,
-                        OrderItems = s.OrderItems.Select(o => new OrderItemDto()
+                        OrderItems = s.OrderItems.Select(o => new Models.Dtos.OrderItemDto()
                         {
                             Id = o.Id,
                             Count = o.Count,

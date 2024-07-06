@@ -42,7 +42,7 @@ builder.Services.AddSwaggerGen(options =>
                 {
                     { "react", "website" },
                     { "catalog.catalogbff", "catalog.catalogbff" },
-                    { "catalog.catalogitem", "catalog.catalogitem" }
+                    { "catalog.catalogitem", "catalog.catalogitem" }                    
                 }
             }
         }

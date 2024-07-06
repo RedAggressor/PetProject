@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace Catalog.Host.Controllers;
 
 [ApiController]
-[Authorize]
+
 [Route(ComponentDefaults.DefaultRoute)]
 public class CatalogTypeController : ControllerBase
 {
