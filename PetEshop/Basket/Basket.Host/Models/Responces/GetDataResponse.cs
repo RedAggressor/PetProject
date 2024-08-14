@@ -1,6 +1,7 @@
-﻿namespace Basket.Host.Models.Responces
+﻿
+namespace Basket.Host.Models.Responces
 {
-    public class GetDataResponse<T>
+    public class GetDataResponse<T> : BaseResponse
     {
         public ICollection<T>? Data { get; set; } 
     }

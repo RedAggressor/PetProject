@@ -1,11 +1,9 @@
 ﻿using System.IO;
 using IdentityServer4.Quickstart.UI;
-using IdentityServer4.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 
 namespace IdentityServer
 {
@@ -31,7 +29,7 @@ namespace IdentityServer
         }
 
         public void Configure(IApplicationBuilder app)
-        {
+        {            
             app.UseDeveloperExceptionPage();
 
             app.UseIdentityServer();
@@ -39,7 +37,7 @@ namespace IdentityServer
             app.UseStaticFiles();
             app.UseRouting();
 
-            app.UseAuthentication();
+            app.UseAuthentication();            
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => endpoints.MapDefaultControllerRoute());

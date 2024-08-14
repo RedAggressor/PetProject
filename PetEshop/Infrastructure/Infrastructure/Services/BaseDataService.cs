@@ -27,7 +27,7 @@ public abstract class BaseDataService<T>
     protected Task<TResult> ExecuteSafeAsync<TResult>(
         Func<Task<TResult>> action,
         CancellationToken cancellationToken = default)
-        where TResult : BaseResponce, new()
+        where TResult : BaseResponse, new()
         =>
         ExecuteSafeAsync(token => action(), cancellationToken);
 
@@ -61,7 +61,7 @@ public abstract class BaseDataService<T>
         Func<CancellationToken,
         Task<TResult>> action,
         CancellationToken cancellationToken = default)
-        where TResult : BaseResponce, new()
+        where TResult : BaseResponse, new()
     {
         await using var transaction = await _dbContextWrapper.BeginTransactionAsync(cancellationToken);
 
@@ -80,8 +80,7 @@ public abstract class BaseDataService<T>
 
             return new TResult()
             {
-                ErrorMessage = bx.Message,
-                RespCode = ResponceCode.Failed
+                ErrorMessage = bx.Message,                
             };
         }
         catch (Exception ex)
@@ -91,8 +90,7 @@ public abstract class BaseDataService<T>
 
             return new TResult() 
             { 
-                 ErrorMessage = ex.Message,
-                RespCode = ResponceCode.Failed
+                 ErrorMessage = ex.Message,                
             };
         }        
     }

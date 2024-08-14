@@ -1,8 +1,6 @@
-﻿using Catalog.Host.Models.Requests;
-using Catalog.Host.Models.Response;
+﻿using Catalog.Host.Models.Response;
 using Catalog.Host.Services.Abstractions;
-using Infrastructure.Identity;
-using Microsoft.AspNetCore.Authorization;
+using Catalog.Host.Models.Dtos;
 
 namespace Catalog.Host.Controllers
 {
@@ -11,7 +9,6 @@ namespace Catalog.Host.Controllers
     [Route(ComponentDefaults.DefaultRoute)]
     public class OrderController : ControllerBase
     {
-
         private readonly IOrderService _orderService;
 
         public OrderController(IOrderService orderService)
@@ -20,62 +17,58 @@ namespace Catalog.Host.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(AddResponse), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> AddOrder(OrderRequest order)
+        [ProducesResponseType(typeof(AddResponse<int>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> AddOrder(OrderDto order)
         {
             //var userIds = User.Claims.FirstOrDefault(x => x.Type == "sub")?.Value;                       
-
-            if (int.TryParse(order.UserId, out int userId))
+            if(order != null) 
             {
-                var id = await _orderService.AddOrderAsync(userId, order.items);
-
+                var id = await _orderService.AddOrderAsync(order.UserId, order.OrderItems);
                 return Ok(id);
-            };
-
-            return Ok(new BaseResponce()
+            }
+            var response = new BaseResponse()
             {
-                ErrorMessage = "userId not valid!",
-                RespCode = ResponceCode.Failed
-            });
+                ErrorMessage = "order is null"
+            };
+            return Ok(response);
         }
 
         [HttpPost]
         [ProducesResponseType(typeof(OrderResponse), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetOrderById(int? orderId)
         {
-            if (orderId is not null && orderId is not default(int))
+            if(orderId != null && orderId != 0)
             {
                 var order = await _orderService.GetOrderByIdAsync((int)orderId);
                 return Ok(order);
             }
 
-            return Ok(new BaseResponce()
+            var response = new BaseResponse()
             {
-                RespCode = ResponceCode.Failed,
-                ErrorMessage = "Order id is null or 0"
-            });
+                ErrorMessage = "Id is Null"
+            };
+            return Ok(response);
+                     
         }
 
         [HttpPost]        
-        [ProducesResponseType(typeof(DataResponse<OrderResponse>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetOrderByUserId(string userIds)
+        [ProducesResponseType(typeof(DataResponse<OrderDto>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetOrderByUserId(string userId)
         {
             //var userIds = User.Claims.FirstOrDefault(x => x.Type == "sub")?.Value; 
-
-            int userId;
-
-            if (int.TryParse(userIds, out userId))
+            if(userId != null)
             {
-                var id = await _orderService.GetOrderByUserIdAsync(userId);
-
+                var id = await _orderService.GetOrderByUserIdAsync(userId!);
                 return Ok(id);
+            }
+
+            var response = new BaseResponse()
+            { 
+                ErrorMessage = "userId null" 
             };
 
-            return Ok(new BaseResponce()
-            {
-                ErrorMessage = "userId not valid!",
-                RespCode = ResponceCode.Failed
-            });
+            return Ok(response);
+                       
         }
     }
 }

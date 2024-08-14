@@ -1,7 +1,6 @@
-
 namespace Catalog.Host.Models.Response;
 
-public class PaginatedItemsResponse<T> : BaseResponce
+public class PaginatedItemsResponse<T> : BaseResponse
 {
     public int PageIndex { get; init; }
 

@@ -20,9 +20,20 @@ public class BasketService : IBasketService
         return new GetDataResponse<ItemDto>() { Data = result };
     }
 
-    public async Task AddItems(string userId, ICollection<ItemDto> data)
+    public async Task<BaseResponse> AddItems(string userId, ICollection<ItemDto> data)
     {
-        string key = $"{_key}{userId}";
-        await _cacheService.AddOrUpdateAsync(key, data);   
+        try
+        {
+            string key = $"{_key}{userId}";
+            await _cacheService.AddOrUpdateAsync(key, data);
+            return new BaseResponse();
+        } 
+        catch (Exception ex) 
+        { 
+            return new BaseResponse()
+            {
+                ErrorMessage = ex.Message,
+            };
+        }   
     }
 }

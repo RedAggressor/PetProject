@@ -8,7 +8,6 @@ namespace Catalog.Host.Services.Interfaces
     {
         Task<UpdataResponse<TypeDto>> UpdateType(TypeDto typeDto);
         Task<DeleteResponse> DeleteType(int id);
-        Task<AddResponse> AddType(string type);
-        Task<DataResponse<TypeDto>> GetList();
+        Task<AddResponse<int>> AddType(string type);        
     }
 }

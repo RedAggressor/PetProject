@@ -1,102 +1,82 @@
 using Catalog.Host.Data;
 using Catalog.Host.Data.Entities;
 using Catalog.Host.Models.Dtos;
+using Catalog.Host.Models.Requests;
 using Catalog.Host.Models.Response;
 using Catalog.Host.Repositories.Abstractions;
 using Catalog.Host.Services.Interfaces;
 
 namespace Catalog.Host.Services;
 
-public class CatalogItemService : BaseDataService<ApplicationDbContext>, IItemService
+public class ItemService : BaseDataService<ApplicationDbContext>, IItemService
 {
-    private readonly IItemRepository _catalogItemRepository;
+    private readonly IItemRepository _itemRepository;
     private readonly IMapper _mapper;
 
-    public CatalogItemService(
+    public ItemService(
         IDbContextWrapper<ApplicationDbContext> dbContextWrapper,
         ILogger<BaseDataService<ApplicationDbContext>> logger,
-        IItemRepository catalogItemRepository,
+        IItemRepository ItemRepository,
         IMapper mapper)
         : base(dbContextWrapper, logger)
     {
-        _catalogItemRepository = catalogItemRepository;
+        _itemRepository = ItemRepository;
         _mapper = mapper;
     }
 
-    public Task<AddResponse> Add(
-        string name,
-        string description,
-        decimal price,
-        int availableStock,        
-        int catalogTypeId,
-        string pictureFileName) // create dto responce model!!!
+    public Task<AddResponse<int>> AddItemAsync(CreateItemRequest itemDto)
     {
-        return ExecuteSafeAsync(async () => new AddResponse() 
-        { 
-            Id = await _catalogItemRepository.Add(
-            name,
-            description,
-            price,
-            availableStock,
-            catalogTypeId,
-            pictureFileName)
-        });
-    }
+        return ExecuteSafeAsync(async () =>
+        {            
+            var entity = _mapper.Map<ItemEntity>(itemDto);
+            var id = await _itemRepository.AddItemAsync(entity);
 
-    public async Task<ItemDto> GetCatalogItemsByIdAsync(int id)
-    {
-        return await ExecuteSafeAsync(async () =>
-        {
-            var item = await _catalogItemRepository.GetCatalogItemsByIdAsync(id);
-
-            var dto = _mapper.Map<ItemDto>(item);
-
-            return dto!;
-        });
-        
-    }
-
-    public async Task<DataResponse<ItemDto>> GetCatalogItemByTypeAsync(int idType)
-    {
-        return await ExecuteSafeAsync(async () =>
-        {
-            var itemColections = new List<ItemDto>();
-
-            var items = await _catalogItemRepository.GetCatalogItemsByTypeAsync(idType);
-
-            itemColections.AddRange(items.Select(i => _mapper.Map<ItemDto>(i)));
-
-            return new DataResponse<ItemDto>()
+            return new AddResponse<int>()
             {
-                Data = itemColections
+                Id = id
             };
         });
     }
 
-    public async Task<DeleteResponse> DeleteAsync(int id)
+    public async Task<DeleteResponse> DeleteItemAsync(int id)
     {
         return await ExecuteSafeAsync(async () =>
         {
-            var message = await _catalogItemRepository.DeleteAsync(id);
-            return new DeleteResponse() 
-            { 
+            var message = await _itemRepository.DeleteItemAsync(id);
+            return new DeleteResponse()
+            {
                 Status = message
             };
         });
     }
 
-    public async Task<ItemDto> UpdateAsync(ItemDto catalogItemDto)
+    public async Task<UpdataResponse<ItemDto>> UpdateItemAsync(ItemDto catalogItemDto)
     {
         return await ExecuteSafeAsync(async () =>
         {
             var item = _mapper.Map<ItemEntity>(catalogItemDto);
 
-            item = await _catalogItemRepository.Update(item);
+            item = await _itemRepository.UpdateItemAsync(item);
 
-            var dto = _mapper.Map<ItemDto>(item);
-
-            return dto!;
+            return new UpdataResponse<ItemDto>()
+            {
+                UpdataModel = _mapper.Map<ItemDto>(item)
+            };
         });
     }
 
+    public async Task<GetCatalogByIdResponse> GetItemByIdAsync(int id)
+    {
+        return await ExecuteSafeAsync(async () =>
+        {
+            var item = await _itemRepository.GetItemByIdAsync(id);
+
+            var dto = _mapper.Map<ItemDto>(item);
+
+            return new GetCatalogByIdResponse()
+            {
+                ItemDto = dto
+            };
+        });
+    }
 }

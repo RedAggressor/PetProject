@@ -2,7 +2,7 @@
 {
     public class UserEntity
     {
-        public int Id { get; set; }
+        public string Id { get; set; } = null!;
         public string Mail { get; set; } = null!;
         public ICollection<OrderEntity> Orders { get; set;} = new List<OrderEntity>();
     }

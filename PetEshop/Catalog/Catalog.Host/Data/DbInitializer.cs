@@ -60,7 +60,7 @@ public static class DbInitializer
     {
         return new OrderEntity()
         {
-            UserId = 1,
+            UserId = "1",
         };
     }
 

@@ -2,13 +2,12 @@ using Basket.Host.Models.Requests;
 using Basket.Host.Models.Responces;
 using Basket.Host.Services.Abstractions;
 using Infrastructure.Identity;
-using Infrastructure.Models;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Basket.Host.Controllers;
 
 [ApiController]
-//[Authorize(Policy = AuthPolicy.AllowEndUserPolicy)]
+[Authorize(Policy = AuthPolicy.AllowEndUserPolicy)]
 [Route(ComponentDefaults.DefaultRoute)]
 public class BasketBffController : ControllerBase
 {
@@ -33,11 +32,11 @@ public class BasketBffController : ControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType((int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> AddItems(AddRequest request)
     {
         //var userId = User.Claims.FirstOrDefault(x => x.Type == "sub")?.Value!;
-        await _basketService.AddItems(request.UserId, request.Item);
-        return Ok(new BaseResponce());
+        var responce = await _basketService.AddItems(request.UserId, request.Item);
+        return Ok(responce);
     }
 }

@@ -1,7 +1,7 @@
 ﻿namespace Catalog.Host.Models.Response
 {
-    public class AddResponse : BaseResponce
+    public class AddResponse<T> : BaseResponse
     {
-        public int Id { get; set; }        
+        public T Id { get; set; } = default(T)!;
     }
 }

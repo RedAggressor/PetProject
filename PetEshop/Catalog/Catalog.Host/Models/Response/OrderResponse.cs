@@ -2,9 +2,9 @@
 
 namespace Catalog.Host.Models.Response
 {
-    public class OrderResponse : BaseResponce
+    public class OrderResponse : BaseResponse
     {
-        public int Id { get; set; }
-        public ICollection<OrderItemDto> OrderItems { get; set; } = new List<OrderItemDto>();
+        public OrderDto Order { get; set; } = null!;
+        public override ResponceCode? RespCode => Order is null ? ResponceCode.Failed : ResponceCode.Seccusfull;
     }
 }

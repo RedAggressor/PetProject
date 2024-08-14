@@ -33,16 +33,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "assets", "assets", "{E48A5E
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "images", "images", "{4FEF2F98-D002-4767-96AD-18C683726AAF}"
 	ProjectSection(SolutionItems) = preProject
-		Proxy\assets\images\bilberry.png = Proxy\assets\images\bilberry.png
 		Proxy\assets\images\apple.png = Proxy\assets\images\apple.png
-		Proxy\assets\images\orange.png = Proxy\assets\images\orange.png
-		Proxy\assets\images\corn.png = Proxy\assets\images\corn.png
-		Proxy\assets\images\mushroom.png = Proxy\assets\images\mushroom.png
-		Proxy\assets\images\lime.png = Proxy\assets\images\lime.png
+		Proxy\assets\images\bilberry.png = Proxy\assets\images\bilberry.png
 		Proxy\assets\images\coconut.png = Proxy\assets\images\coconut.png
+		Proxy\assets\images\corn.png = Proxy\assets\images\corn.png
 		Proxy\assets\images\kiwi.png = Proxy\assets\images\kiwi.png
-		Proxy\assets\images\mango.png = Proxy\assets\images\mango.png
 		Proxy\assets\images\lemon.png = Proxy\assets\images\lemon.png
+		Proxy\assets\images\lime.png = Proxy\assets\images\lime.png
+		Proxy\assets\images\mango.png = Proxy\assets\images\mango.png
+		Proxy\assets\images\mushroom.png = Proxy\assets\images\mushroom.png
+		Proxy\assets\images\orange.png = Proxy\assets\images\orange.png
 		Proxy\assets\images\peanut.png = Proxy\assets\images\peanut.png
 	EndProjectSection
 EndProject
@@ -62,6 +62,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IdintityServer", "IdintityServer", "{8ADCE2BD-D8A6-4B58-AD4D-B8D9852E341A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer", "IdentityServer\IdentityServer\IdentityServer.csproj", "{30B2F24A-C278-40CD-B3EF-C0B6E71F8917}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Payment", "Payment", "{6F979D98-6EA3-4912-AEC0-C643C18EE666}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Payment.Proccessor", "Payment.Proccessor\Payment.Proccessor.csproj", "{317803DD-E8A1-40FA-AAF4-5C553A6B1589}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -85,10 +89,6 @@ Global
 		{820B508D-53DE-422C-953B-A7DD5DC7FB6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{820B508D-53DE-422C-953B-A7DD5DC7FB6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{820B508D-53DE-422C-953B-A7DD5DC7FB6F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{620BD058-7C35-49AA-AB02-A9D7DBEEAE6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{620BD058-7C35-49AA-AB02-A9D7DBEEAE6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{620BD058-7C35-49AA-AB02-A9D7DBEEAE6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{620BD058-7C35-49AA-AB02-A9D7DBEEAE6C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{11816992-6F1E-4921-9E7B-B2CCC707FF10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{11816992-6F1E-4921-9E7B-B2CCC707FF10}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11816992-6F1E-4921-9E7B-B2CCC707FF10}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -97,6 +97,10 @@ Global
 		{30B2F24A-C278-40CD-B3EF-C0B6E71F8917}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30B2F24A-C278-40CD-B3EF-C0B6E71F8917}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30B2F24A-C278-40CD-B3EF-C0B6E71F8917}.Release|Any CPU.Build.0 = Release|Any CPU
+		{317803DD-E8A1-40FA-AAF4-5C553A6B1589}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{317803DD-E8A1-40FA-AAF4-5C553A6B1589}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{317803DD-E8A1-40FA-AAF4-5C553A6B1589}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{317803DD-E8A1-40FA-AAF4-5C553A6B1589}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -106,7 +110,6 @@ Global
 		{C877F308-7870-433C-AA13-DE7DBC3675B9} = {A6C7B2CD-2199-497C-9EF5-32274390D2D7}
 		{EE24AECE-07D8-40D0-9315-6DA6D103AEFD} = {E769E2A0-66AF-44D6-9300-C45D3889E06A}
 		{820B508D-53DE-422C-953B-A7DD5DC7FB6F} = {A6C7B2CD-2199-497C-9EF5-32274390D2D7}
-		{620BD058-7C35-49AA-AB02-A9D7DBEEAE6C} = {F28BB96B-E9D8-465E-90F9-6AA7B9EEB6D3}
 		{E48A5EE0-0DBE-441B-BF88-15A352353DD0} = {3C73827B-4541-4BF9-9FC5-37BF9023C079}
 		{4FEF2F98-D002-4767-96AD-18C683726AAF} = {E48A5EE0-0DBE-441B-BF88-15A352353DD0}
 		{5B31C255-92DA-438D-BB5C-9F0AAB8B8FB3} = {3C73827B-4541-4BF9-9FC5-37BF9023C079}
@@ -114,6 +117,7 @@ Global
 		{883375C4-62CA-4511-8AFC-4319F15AF446} = {6E9D4E94-AAED-4A83-AF3C-7F3B142BF502}
 		{11816992-6F1E-4921-9E7B-B2CCC707FF10} = {641C6F1B-469C-4E16-9E7A-A6EB0FDD8CF4}
 		{30B2F24A-C278-40CD-B3EF-C0B6E71F8917} = {8ADCE2BD-D8A6-4B58-AD4D-B8D9852E341A}
+		{317803DD-E8A1-40FA-AAF4-5C553A6B1589} = {6F979D98-6EA3-4912-AEC0-C643C18EE666}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {ACE14773-8677-4216-9C1E-C1423562D84A}

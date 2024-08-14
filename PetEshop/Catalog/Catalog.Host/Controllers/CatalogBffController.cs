@@ -15,80 +15,74 @@ public class CatalogBffController : ControllerBase
 {
     private readonly ILogger<CatalogBffController> _logger;
     private readonly ICatalogService _catalogService;
-    private readonly IItemService _catalogItemService;
-    private readonly ITypeService _catalogTypeService;    
     public CatalogBffController(
         ILogger<CatalogBffController> logger,
-        ICatalogService catalogService,
-        IItemService catalogItemService,        
-        ITypeService catalogTypeService
+        ICatalogService catalogService
         )
     {
         _logger = logger;
         _catalogService = catalogService;
-        _catalogItemService = catalogItemService;
-        _catalogTypeService = catalogTypeService;
     }
 
     [HttpPost]
     [AllowAnonymous]
     [ProducesResponseType(typeof(PaginatedItemsResponse<ItemDto>), (int)HttpStatusCode.OK)]
-    public async Task<IActionResult> Items(PaginatedItemsRequest request)
+    public async Task<IActionResult> ItemsByPage(PaginatedItemsRequest request)
     {
-        if (request is not null)
+        if (request is null)
         {
-            var result = await _catalogService.GetByPageAsync(request.PageSize, request.PageIndex, request.FilterTypeId);
-            return Ok(result);
-        }        
+            _logger.LogWarning("request null!");
+            var responce = new BaseResponse()
+            {
+                ErrorMessage = "request null!"
+            };
 
-        _logger.LogWarning("request null!");
-        var responce = new BaseResponce()
-        {
-            ErrorMessage = "request null!",
-            RespCode = ResponceCode.Failed
-        };
-        
+            return Ok(responce);
+        }
 
-        return Ok(responce);
+        var result = await _catalogService.GetItemByPageAsync(request);
+        return Ok(result);
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(ItemDto), (int)HttpStatusCode.OK)]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(GetCatalogByIdResponse), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> GetItemById(int? id)
     {
-        if (id is not null && id != default(int))
+        if (id != null && id != 0)
         {
-            var result = await _catalogItemService.GetCatalogItemsByIdAsync((int)id);
-            return Ok(result);
-            
+            var response = await _catalogService.GetItemByIdAsync((int)id);
+            return Ok(response);
+           
         }
-        var responce = new BaseResponce()
+
+        var result = new BaseResponse()
         {
-            ErrorMessage = "id is null",
-            RespCode = ResponceCode.Failed
+            ErrorMessage = "data is null"
         };
-        
-        return Ok(responce);
+
+        return Ok(result);
+
 
     }
 
     [HttpPost]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(DataResponse<ItemDto>), (int)HttpStatusCode.OK)]
-    public async Task<IActionResult> GetByType(int? idType)
+    public async Task<IActionResult> GetItemByTypeId(int? idType)
     {
-        if (idType is not null)
+        if(idType != null && idType != 0) 
         {
-            var result = await _catalogItemService.GetCatalogItemByTypeAsync((int)idType);
+            var result = await _catalogService.GetItemByTypeAsync((int)idType);
             return Ok(result);
-        }        
+        }
 
-        var responce = new BaseResponce()
-        {
-            ErrorMessage = "id is null",
-            RespCode = ResponceCode.Failed
+        var response = new BaseResponse()
+        { 
+            ErrorMessage = "id is null"
         };
-        
-        return Ok(responce);
+
+        return Ok(response);
     }
 
     [HttpPost]
@@ -96,7 +90,7 @@ public class CatalogBffController : ControllerBase
     [ProducesResponseType(typeof(DataResponse<TypeDto>), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> GetListType()
     {
-        var result = await _catalogTypeService.GetList();
+        var result = await _catalogService.GetTypesListAsync();
         return Ok(result);
     }
 
@@ -105,7 +99,7 @@ public class CatalogBffController : ControllerBase
     [ProducesResponseType(typeof(DataResponse<ItemDto>), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> GetListItem()
     {
-        var result = await _catalogService.GetCatalogItem();
+        var result = await _catalogService.GetItemsListAsync();
         return Ok(result);
     }
 }

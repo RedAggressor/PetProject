@@ -8,6 +8,7 @@
         public decimal Price { get; set; }
         public string PictureUrl { get; set; } = null!;
         public int TypeId { get; set; }
+        public string TypeName { get; set; } = null!;
         public int AvailableStock { get; set; }
     }
 }

@@ -27,7 +27,7 @@ namespace Catalog.Host.Repositories
             });
         }
 
-        public async Task<ICollection<TypeEntity>> GetList()
+        public async Task<ICollection<TypeEntity>> GetTypesListAsync()
         {
             return await ExecutSafeAsync(async () =>
             {

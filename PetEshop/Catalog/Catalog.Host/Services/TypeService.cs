@@ -11,8 +11,7 @@ namespace Catalog.Host.Services
     {
         private readonly ITypeRepository _repository;
         private readonly IMapper _mapping;
-        private readonly ILogger<TypeService> _logger;
-
+        
         public TypeService(
             ITypeRepository repository,
             IMapper mapper,
@@ -21,37 +20,21 @@ namespace Catalog.Host.Services
             : base(dbContextWrapper, logger)
         {
             _repository = repository;
-            _mapping = mapper;
-            _logger = logger;
+            _mapping = mapper;            
         }
 
-        public async Task<AddResponse> AddType(string type)
+        public async Task<AddResponse<int>> AddType(string type)
         {
             return await ExecuteSafeAsync(async () =>
             {
                 var responce = await _repository.AddTypeAsync(type);
 
-                return new AddResponse()
+                return new AddResponse<int>()
                 {
                     Id = responce
                 };
             });
-        }
-
-        public async Task<DataResponse<TypeDto>> GetList()
-        {
-            return await ExecuteSafeAsync(async () =>
-            {
-                var entity = await _repository.GetList();
-
-                var list = entity.Select(s => _mapping.Map<TypeDto>(s));
-
-                return new DataResponse<TypeDto>()
-                {
-                    Data = list
-                };
-            });
-        }
+        }       
 
         public async Task<DeleteResponse> DeleteType(int id)
         {

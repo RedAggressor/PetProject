@@ -24,7 +24,7 @@ namespace Catalog.Host.Services
             _mapper = mapper;
         }
 
-        public async Task<AddResponse> AddOrderAsync(int UserId, ICollection<OrderItemRequest> orderItem)
+        public async Task<AddResponse<int>> AddOrderAsync(string UserId, ICollection<OrderItemDto> orderItem)
         {
             return await ExecuteSafeAsync(async () =>
             {
@@ -38,7 +38,7 @@ namespace Catalog.Host.Services
 
                 var id = await _orderRepository.AddOrderAsync(UserId, orderItemEntity);
 
-                return new AddResponse()
+                return new AddResponse<int>()
                 {
                     Id = id,
                 };
@@ -53,37 +53,39 @@ namespace Catalog.Host.Services
 
                 return new OrderResponse()
                 {
-                    Id = entity.Id,
-                    OrderItems = entity.OrderItems.Select(o => new Models.Dtos.OrderItemDto()
+                    Order = new OrderDto()
                     {
-                        Id = o.Id,
-                        Count = o.Count,
-                        Item = _mapper.Map<ItemDto>(o.Item)
-                    }).ToList()
-                };
+                        Id = entity.Id,
+                        OrderItems = entity.OrderItems.Select(o => new OrderItemDto()
+                        {
+                            Id = o.Id,
+                            Count = o.Count,
+                            Item = _mapper.Map<ItemDto>(o.Item)
+                        }).ToList()
+                    }
+                };                    
             });
         }
 
-        public async Task<DataResponse<OrderResponse>> GetOrderByUserIdAsync(int userId)
+        public async Task<DataResponse<OrderDto>> GetOrderByUserIdAsync(string userId)
         {
             return await ExecuteSafeAsync(async () =>
             {
                 var listEntity = await _orderRepository.GetOrderByUserIdAsync(userId);
 
-                return new DataResponse<OrderResponse>()
+                return new DataResponse<OrderDto>()
                 {
-                    Data = listEntity.Select(s => new OrderResponse()
+                    Data = listEntity.Select(s => new OrderDto()
                     {
-                        Id = s.Id,
-                        OrderItems = s.OrderItems.Select(o => new Models.Dtos.OrderItemDto()
+                        Id = s.Id,                        
+                        OrderItems = s.OrderItems.Select(o => new OrderItemDto()
                         {
                             Id = o.Id,
                             Count = o.Count,
                             Item = _mapper.Map<ItemDto>(o.Item)
 
-                        }).ToList(),
-
-                    }).ToList(),
+                        }).ToList()
+                    }),
                 };
             });
         }

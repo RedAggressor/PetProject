@@ -58,9 +58,9 @@ builder.Services.AddAuthorization(configuration);
 
 builder.Services.AddAutoMapper(typeof(Program));
 
-builder.Services.AddTransient<IItemRepository, CatalogItemRepository>();
+builder.Services.AddTransient<IItemRepository, ItemRepository>();
 builder.Services.AddTransient<ICatalogService, CatalogService>();
-builder.Services.AddTransient<IItemService, CatalogItemService>();
+builder.Services.AddTransient<IItemService, ItemService>();
 builder.Services.AddTransient<ITypeRepository, TypeRepository>();
 builder.Services.AddTransient<ITypeService, TypeService>();
 builder.Services.AddTransient<IOrderService, OrderService>();

@@ -6,5 +6,5 @@ namespace Basket.Host.Services.Abstractions;
 public interface IBasketService
 {    
     Task<GetDataResponse<ItemDto>> GetItems(string userId);
-    Task AddItems(string userId, ICollection<ItemDto> data);    
+    Task<BaseResponse> AddItems(string userId, ICollection<ItemDto> data);
 }

@@ -16,7 +16,7 @@ namespace Catalog.Host.Repositories
             _dbContext = dbContextWrapper.DbContext;
         }
 
-        public async Task<int> AddOrderAsync(int UserId, List<OrderItemEntity> orderItemList)
+        public async Task<int> AddOrderAsync(string UserId, List<OrderItemEntity> orderItemList)
         {
             return await ExecutSafeAsync(async () =>
             {
@@ -53,7 +53,7 @@ namespace Catalog.Host.Repositories
             });
         }
 
-        public async Task<ICollection<OrderEntity>> GetOrderByUserIdAsync(int UserId)
+        public async Task<ICollection<OrderEntity>> GetOrderByUserIdAsync(string UserId)
         {
             return await ExecutSafeAsync(async () =>
             {

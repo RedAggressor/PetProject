@@ -19,20 +19,20 @@ namespace IdentityServer
         {
             return new ApiResource[]
             {
-                new ApiResource("localhost")
-                {
-                    Scopes = new List<Scope>
-                    {
-                        new Scope("react")                       
-                    }
-                },
-                //new ApiResource("alevelwebsite.com")
+                //new ApiResource("localhost")
                 //{
                 //    Scopes = new List<Scope>
                 //    {
-                //        new Scope("mvc")
-                //    },
+                //        new Scope("react")                       
+                //    }
                 //},
+                new ApiResource("alevelwebsite.com")
+                {
+                    Scopes = new List<Scope>
+                    {
+                        new Scope("react")
+                    },
+                },
                 new ApiResource("catalog")
                 {
                     Scopes = new List<Scope>
@@ -115,7 +115,35 @@ namespace IdentityServer
                     {
                         "react"
                     }
-                },                
+                },
+                new Client
+                {
+                    ClientId = "payment",
+
+                    // no interactive user, use the clientid/secret for authentication
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+
+                    // secret for authentication
+                    ClientSecrets =
+                    {
+                        new Secret("secret".Sha256())
+                    },
+                },
+                new Client
+                {
+                    ClientId = "paymentswaggerui",
+                    ClientName = "Payment Swagger UI",
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowAccessTokensViaBrowser = true,
+
+                    RedirectUris = { $"{configuration["PaymentApi"]}/swagger/oauth2-redirect.html" },
+                    PostLogoutRedirectUris = { $"{configuration["PaymentApi"]}/swagger/" },
+
+                    AllowedScopes =
+                    {
+                        "react"
+                    }
+                },
             };
         }
     }

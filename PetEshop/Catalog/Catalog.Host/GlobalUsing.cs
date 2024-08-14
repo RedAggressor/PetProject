@@ -1,7 +1,4 @@
-﻿global using System;
-global using System.Net;
-global using System.Threading.Tasks;
-global using Microsoft.Extensions.Logging;
+﻿global using System.Net;
 global using Microsoft.EntityFrameworkCore;
 global using Infrastructure.Services.Interfaces;
 global using Infrastructure.Services;
@@ -12,5 +9,4 @@ global using AutoMapper;
 global using Microsoft.Extensions.Options;
 global using Infrastructure.Models;
 global using Infrastructure.Enums;
-global using Infrastructure.Exceptions;
 global using Infrastructure.Repositories;

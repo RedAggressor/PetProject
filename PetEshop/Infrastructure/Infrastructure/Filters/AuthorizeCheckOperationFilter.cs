@@ -15,6 +15,7 @@ public class AuthorizeCheckOperationFilter : IOperationFilter
         if (!hasAuthorize)
         {
             return;
+
         }
 
         operation.Responses.TryAdd("401", new OpenApiResponse { Description = "Unauthorized" });
