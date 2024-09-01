@@ -1,18 +1,18 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import { IItemForBasket} from "../../api/responce/IItemForBasket";
 import * as apiBasket from "../../api/moduls/basket";
-import { IBAskerGetRequest, IBasketAddRequest } from "../../api/request/basketRequest";
+import { IBasketAdd } from "../../api/request/basketRequest";
 import * as apiOrder from "../../api/moduls/order"
 import { IOrderAddRequest } from "../../api/request/orderRR";
 
 class BasketStore {
-    amount = 0;
-    items: IItemForBasket [] = [];
-    totalPrice = 0;
-    error = '';
-    clickButton = false;
-    state = '';
-    userId: string | undefined = '';
+    amount:number = 0;
+    items: IItemForBasket[] = [];
+    totalPrice:number = 0;
+    error = "";
+    clickButton:boolean = false;
+    state = "";
+    userId: string = "";
 
     itemsOrder: {
         count: number,
@@ -20,17 +20,13 @@ class BasketStore {
     }[] = [];
 
     order: IOrderAddRequest = {
-        userId: '',
+        userId: "",
         items:[]
     }
 
-    requestAdd: IBasketAddRequest = {
+    requestAdd: IBasketAdd = {
         userId: "",
         items: []
-    };
-
-    requestGet: IBAskerGetRequest = {
-        userId: ''
     };
 
     constructor() {
@@ -91,31 +87,35 @@ class BasketStore {
             this.createOrder();
             console.log('oder >>>', this.order);
             const response = await apiOrder.addOrder(this.order);
-            if(response.respCode === 1){
+            //if(response.respCode === 1){
                 console.log('responce >>>', response);
                 this.clearItems();
-            }
+            //}
         }
         catch(eror){
             console.log(eror)
         }        
     }
 
-    setUserId(userId:string| undefined){
+    getUserId(){
+        return this.userId;
+    }
+
+    setUserId(userId:string){
+                
         this.userId = userId;
     }
 
     prefetchData = async () => {
         try{
-            this.setRequestGet(this.userId!);
 
             if(this.userId !== undefined && this.userId !== ''){
-                const responce = await apiBasket.getItems(this.requestGet);
-                if(responce.data !== null && responce.respCode === 1){
-                    this.items = responce.itemDto;
+                const responce = await apiBasket.getItems(this.getUserId());
+                //if(responce.data !== null && responce.respCode === 1){
+                    this.items = responce.data ?? [];
                     this.setAmount();
                     this.setPrice();                    
-                }                
+                //}                
             }
             else {
                 console.log("error user id from basket")
@@ -126,37 +126,49 @@ class BasketStore {
         }
     }
 
-    async addItem(item: IItemForBasket) {
+    async addItemBasket(item: IItemForBasket) {
         try{
-            if(this.userId !== undefined && this.userId !== '')
-            {                
-                this.items.push(item);
-                
+            //if(this.userId !== undefined && this.userId !== '')
+            //{   
+                this.pushItem(item); 
+
                 this.setAmount();
+
                 this.setPrice();
                        
                 this.setRequestAdd();
 
-               const response = await apiBasket.addItems(this.requestAdd);
-               if(response.respCode === 1){
+                const response = await apiBasket.addItems(this.requestAdd);
+
+                if(response.respCode === 1){                   
+
                     await this.prefetchData();
-               }
-               else {
-                    this.items.pop();
-                    this.setAmount();
-                    this.setPrice();
-                    console.log("pop")
+                }
+                //else {
+                    //this.items.pop();
+                    //this.setAmount();
+                    //this.setPrice();
+                    //console.log("pop")
                        
                 this.setRequestAdd();
-               }                 
+                //}                 
             } 
-            else {
-               alert('registrate account or sing in')
-            }                   
-        }
+            //else {
+             //  alert('registrate account or sing in')
+            //}                   
+        //}
         catch (error){
             console.log(error);
         }
+    }
+
+    pushItem(item: IItemForBasket){
+        if(this.items !== null){
+            this.items.push(item);
+        }else{
+            console.log(" item === null!");
+        }
+        
     }
 
     removeItem = async (id: number) => {
@@ -167,9 +179,9 @@ class BasketStore {
             this.setRequestAdd();
 
             const response = await apiBasket.addItems(this.requestAdd);
-            if(response.respCode === 1){
+            //if(response.respCode === 1){
                 await this.prefetchData();
-            }
+            //}
             
         }
         catch (error){
@@ -205,16 +217,12 @@ class BasketStore {
         if(this.userId !== undefined)  {
             this.requestAdd.userId = this.userId;
             this.requestAdd.items = this.items;
+            console.log(this.items, this.userId);
         }
         else{
             console.log("userId is undefined")
         }        
-    }
-
-    setRequestGet(userId:string){
-        this.requestGet.userId = userId;
-    }
-    
+    }    
 }
 
 export default BasketStore;

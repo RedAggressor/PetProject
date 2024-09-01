@@ -26,8 +26,8 @@ public class BasketBffController : ControllerBase
     [ProducesResponseType(typeof(GetDataResponse<ItemDto>), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> GetItems(string userId)
     {
-        //var userId = User.Claims.FirstOrDefault(x => x.Type == "sub")?.Value;
-        var response = await _basketService.GetItems(userId!);
+        var userIda = User.Claims.FirstOrDefault(x => x.Type == "sub")?.Value;
+        var response = await _basketService.GetItems(userIda!);
         return Ok(response);
     }
 
@@ -35,8 +35,8 @@ public class BasketBffController : ControllerBase
     [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> AddItems(AddRequest request)
     {
-        //var userId = User.Claims.FirstOrDefault(x => x.Type == "sub")?.Value!;
-        var responce = await _basketService.AddItems(request.UserId, request.Item);
+        var userIda = User.Claims.FirstOrDefault(x => x.Type == "sub")?.Value!;
+        var responce = await _basketService.AddItems(userIda, request.Items);
         return Ok(responce);
     }
 }

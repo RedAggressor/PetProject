@@ -19,18 +19,18 @@ namespace IdentityServer
         {
             return new ApiResource[]
             {
-                //new ApiResource("localhost")
-                //{
-                //    Scopes = new List<Scope>
-                //    {
-                //        new Scope("react")                       
-                //    }
-                //},
-                new ApiResource("alevelwebsite.com")
+                new ApiResource("localhost:3000")
                 {
                     Scopes = new List<Scope>
                     {
                         new Scope("react")
+                    }
+                },
+                new ApiResource("www.alevelwebsite.com:3000")
+                {
+                    Scopes = new List<Scope>
+                    {
+                        new Scope("mvc")
                     },
                 },
                 new ApiResource("catalog")
@@ -58,7 +58,7 @@ namespace IdentityServer
                     RedirectUris = { $"{configuration["ReactClientUrl"]}/callback" },
                     PostLogoutRedirectUris = { $"{configuration["ReactClientUrl"]}/signin-oidc" },
                     AllowedCorsOrigins = { configuration["ReactClientUrl"] },
-                    AllowedScopes = { "openid", "profile", "react", "catalog.catalogbff", "catalog.catalogitem"},                    
+                    AllowedScopes = { "openid", "profile", "react", "mvc", "catalog.catalogbff", "catalog.catalogitem"},                    
                     AllowAccessTokensViaBrowser = true
                     
                 },
@@ -98,8 +98,21 @@ namespace IdentityServer
 
                     AllowedScopes =
                     {
-                        "catalog.catalogbff", "catalog.catalogitem", "react"
+                        "catalog.catalogbff", "catalog.catalogitem", "react", "mvc"
                     }
+                },
+                new Client
+                {
+                    ClientId = "basket",
+
+                    // no interactive user, use the clientid/secret for authentication
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+
+                    // secret for authentication
+                    ClientSecrets =
+                    {
+                        new Secret("secret".Sha256())
+                    },
                 },
                 new Client
                 {
@@ -113,7 +126,7 @@ namespace IdentityServer
 
                     AllowedScopes =
                     {
-                        "react"
+                        "react", "mvc"
                     }
                 },
                 new Client
@@ -141,7 +154,7 @@ namespace IdentityServer
 
                     AllowedScopes =
                     {
-                        "react"
+                        "react", "mvc"
                     }
                 },
             };

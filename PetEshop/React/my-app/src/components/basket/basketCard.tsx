@@ -32,7 +32,7 @@ const BasketCard: FC< {item : IItemForBasket} & { index: number }> = ({ item, in
                 </CardContent>                               
             </CardActionArea>
             <button onClick={() => basketStore.basket.removeItem(index)}>Delete from Basket</button>
-            <button onClick={() => basketStore.basket.addItem(item)}>Add to Basket</button>
+            <button onClick={() => basketStore.basket.addItemBasket(item)}>Add to Basket</button>
         </Card>
     );
 }

@@ -40,9 +40,10 @@ builder.Services.AddSwaggerGen(options =>
                 TokenUrl = new Uri($"{authority}/connect/token"),
                 Scopes = new Dictionary<string, string>()
                 {
-                    { "react", "website" },
+                    { "react", "client" },
+                    { "mvc", "website" },
                     { "catalog.catalogbff", "catalog.catalogbff" },
-                    { "catalog.catalogitem", "catalog.catalogitem" }                    
+                    { "catalog.catalogitem", "catalog.catalogitem" },                  
                 }
             }
         }
@@ -94,6 +95,12 @@ app.UseRouting();
 app.UseCors("CorsPolicy");
 
 app.UseAuthentication();
+
+app.Use(async (context, next) => {
+    Console.WriteLine($"/IsAuthenticated:{context?.User?.Identity?.IsAuthenticated} / {context!.Request.Headers["Authorization"]} / context.User.Identities: {context.User.Identities} / context.User.Identity: {context.User.Identity} ");
+    await next();
+}); // delete after test
+
 app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>

@@ -40,7 +40,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:5002
       - MvcUrl=http://www.alevelwebsite.com
-      - ReactClientUrl=http://localhost:3000
+      - ReactClientUrl=http://www.alevelwebsite.com:3000
       - CatalogApi=http://www.alevelwebsite.com:5000
       - BasketApi=http://www.alevelwebsite.com:5003
       - PaymentApi=http://www.alevelwebsite.com:5008
@@ -86,7 +86,7 @@ services:
        context: ./React/my-app/
        dockerfile: Dockerfile
     ports:
-      - 3000:3000   
+      - 3000:80   
   nginx-images:
     image: nginx:latest
     container_name: lde.nginx.images

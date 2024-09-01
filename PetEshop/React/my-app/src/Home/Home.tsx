@@ -19,7 +19,7 @@ const authStore = useContext(AppStoreContext);
 const userStore = new UserStore();
 
 useEffect(() =>  {    
-    basketStore.basket.setUserId(authStore.user?.profile.sub);
+    basketStore.basket.setUserId(authStore.user?.profile.sub ?? '');
     basketStore.basket.prefetchData();
     userStore.setUserId(authStore.user?.profile.sub);
     userStore.prefentchOrderList();

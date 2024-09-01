@@ -1,11 +1,13 @@
 ﻿using Catalog.Host.Models.Response;
 using Catalog.Host.Services.Abstractions;
 using Catalog.Host.Models.Dtos;
+using Microsoft.AspNetCore.Authorization;
+using Infrastructure.Identity;
 
 namespace Catalog.Host.Controllers
 {
     [ApiController]
-    //[Authorize(Policy = AuthPolicy.AllowEndUserPolicy)]
+    [Authorize(Policy = AuthPolicy.AllowEndUserPolicy)]
     [Route(ComponentDefaults.DefaultRoute)]
     public class OrderController : ControllerBase
     {
@@ -20,10 +22,10 @@ namespace Catalog.Host.Controllers
         [ProducesResponseType(typeof(AddResponse<int>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> AddOrder(OrderDto order)
         {
-            //var userIds = User.Claims.FirstOrDefault(x => x.Type == "sub")?.Value;                       
-            if(order != null) 
+            var userId = User.Claims.FirstOrDefault(x => x.Type == "sub")?.Value!;                       
+            if(order != null && userId != null) 
             {
-                var id = await _orderService.AddOrderAsync(order.UserId, order.OrderItems);
+                var id = await _orderService.AddOrderAsync(userId, order.OrderItems);
                 return Ok(id);
             }
             var response = new BaseResponse()
@@ -47,8 +49,7 @@ namespace Catalog.Host.Controllers
             {
                 ErrorMessage = "Id is Null"
             };
-            return Ok(response);
-                     
+            return Ok(response);                     
         }
 
         [HttpPost]        
@@ -67,8 +68,7 @@ namespace Catalog.Host.Controllers
                 ErrorMessage = "userId null" 
             };
 
-            return Ok(response);
-                       
+            return Ok(response);                       
         }
     }
 }

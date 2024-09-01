@@ -43,7 +43,7 @@ const Items: FC<any> = (): ReactElement => {
 
     const addItemToBasket = async () => {
             if(item)
-            await basketStore.basket.addItem(item);
+            await basketStore.basket.addItemBasket(item);
         };
 
     return (

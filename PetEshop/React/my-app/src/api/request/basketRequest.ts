@@ -1,10 +1,6 @@
 import { IItemForBasket } from "../responce/IItemForBasket"
 
-export interface IBasketAddRequest{
+export interface IBasketAdd{
     "userId": string,
     "items": IItemForBasket[]
-}
-
-export interface IBAskerGetRequest{
-    'userId':string
 }

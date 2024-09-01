@@ -23,7 +23,7 @@ const ItemCard: FC< ICatalogItemResponse > = (props) : ReactElement => {
     };
 
     const puInItem = async () => {  
-        await basketStore.basket.addItem(item);       
+        await basketStore.basket.addItemBasket(item);       
     };
 
     const navigate = useNavigate();

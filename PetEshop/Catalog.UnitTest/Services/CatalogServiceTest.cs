@@ -230,13 +230,11 @@ namespace Catalog.UnitTest.Services
             ItemDto? dto = null;
             var messageText = "Test1";
 
-
-
             _itemRepository
                 .Setup(s => s.GetItemsByTypeIdAsync(It.IsAny<int>()))
-                .ThrowsAsync(new Exception(messageText));
+                .ThrowsAsync(new BusinessException(messageText));
 
-            _mapper.Setup(s => s.Map<ItemDto>(It.IsAny<ItemEntity>())).Returns(dto!);
+            //_mapper.Setup(s => s.Map<ItemDto>(It.IsAny<ItemEntity>())).Returns(dto!);
 
             //act
             var responce = await _serviceCatalog.GetItemByIdAsync(id);

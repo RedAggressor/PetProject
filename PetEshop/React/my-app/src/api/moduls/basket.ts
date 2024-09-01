@@ -1,18 +1,17 @@
 import {apiClient} from "../client";
-import { IBAskerGetRequest, IBasketAddRequest } from "../request/basketRequest";
+import { IBasketAdd } from "../request/basketRequest";
 
 const bathpass= "http://www.alevelwebsite.com:5003/api/v1/BasketBff/"
 
-export const addItems = async (request:IBasketAddRequest) =>     
+export const addItems = async (request:IBasketAdd) =>     
     await apiClient({
     path: `${bathpass}AddItems`,
     options:  { method: "POST"},
-    data: request }
-    )
+    data: request 
+    });
     
-export const getItems = async (request:IBAskerGetRequest) =>     
+export const getItems = async (userId:string) =>     
     await apiClient({
-        path:`${bathpass}GetItems?userId=${request.userId}`,
-        options: {method:"POST"},
-        data: request       
-    })
+        path:`${bathpass}GetItems?userId=${userId}`,
+        options: {method:"POST"}   
+    });
