@@ -1,6 +1,5 @@
 import { IItemForBasket } from "../responce/IItemForBasket"
 
-export interface IBasketAdd{
-    "userId": string,
+export interface IBasketAdd{    
     "items": IItemForBasket[]
 }

@@ -22,7 +22,7 @@ class AuthStore{
             this.setUser(null);
         })
 
-        this.getUser();        
+        this.prefetchUser();        
     }
 
     setUser(user: User | null){
@@ -31,36 +31,38 @@ class AuthStore{
 
     setUserManager(userManager: UserManager | null){
         this.userManager = userManager;
-    }
+    }        
 
     getToken(){
         return this.user?.access_token;
     }
 
-    async getUser(){
+    async prefetchUser(){
         try{
         const responce = await this.userManager!.getUser();
-        console.log(responce)
+        console.log(responce);
         this.setUser(responce);
-        return this.user;   
         }
         catch (error){
             console.log(error);
         }
     }
+
+    getUser(){
+        return this.user;
+    }
     
-    login() {
-        this.userManager?.signinRedirect();     
+    async login() {
+       await this.userManager?.signinRedirect();     
     }
 
     async logOut() {
-        this.userManager?.signoutRedirect();
+        await this.userManager?.signoutRedirect();
     }
 
     async complitLogin(){
         try{
-        const responce = await this.userManager!.signinRedirectCallback(); 
-        console.log('responce >>>>', responce)
+        const responce = await this.userManager!.signinRedirectCallback();
         this.setUser(responce);
         } 
         catch(error){

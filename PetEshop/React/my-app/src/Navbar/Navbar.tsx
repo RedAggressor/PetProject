@@ -5,22 +5,17 @@ import { Box, Link, Container, IconButton, Menu, MenuItem,
 import MenuIcon from "@mui/icons-material/Menu";
 import { routes } from "../routes";
 import { NavLink, useNavigate } from "react-router-dom";
-import { AppStoreContext } from "../App";
+import { AppContext } from "../App";
 import {observer} from "mobx-react-lite";
 import Acount from "../components/acount/account";
 import BasketElement from "../components/basket/basketElement";
-import { basketContext } from "../App";
+import { basketstore } from "../components/basket/Basket";
+
 
 const Navbar: FC = (): ReactElement => {
 
-  const basketStore = useContext(basketContext);
-  const [amount, setAmount] = useState(basketStore.basket.amount);
-
-  useEffect(()=>{
-     setAmount(basketStore.basket.amount)},
-  [basketStore.basket.amount]);
-
-  const appStore = useContext(AppStoreContext);
+  const basketStore = useContext(basketstore);  
+  const appStore = useContext(AppContext);
 
   const [anchorElNav, setAnchorElNav] = useState(null);
 
@@ -152,7 +147,7 @@ const Navbar: FC = (): ReactElement => {
           <Box>
             <MenuItem onClick={HandlClick}>
               <ListItemIcon>
-                <BasketElement count={amount}/>
+                <BasketElement count={basketStore.basket.getAmount()}/>
               </ListItemIcon>
               Basket
             </MenuItem>

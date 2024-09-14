@@ -1,24 +1,16 @@
-import { createContext, FC, ReactElement, useEffect, useState } from 'react';
+import { createContext, FC, ReactElement, useContext } from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from './Layout/Layout';
 import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
 import AuthStore from './Authentification/authStore';
 import { routes as appRoutes } from "./routes";
-import BasketStore from './components/basket/BasketStore';
-import { IBasketStore } from './interfaces/backetStor';
 import { observer } from 'mobx-react';
 
-const store = AuthStore;
+const storeAuth = AuthStore;
 
-const storeBasket : IBasketStore = {
-  'basket': new BasketStore()
-}
+export const AppContext = createContext(storeAuth);
 
-export const basketContext = createContext(storeBasket)
-
-export const AppStoreContext = createContext(store)
-
-const App: FC<any> = (): ReactElement => { 
+const App: FC<any> = (): ReactElement => {   
 
   const theme = createTheme({
     palette:{
@@ -36,14 +28,12 @@ const App: FC<any> = (): ReactElement => {
       },
     },
   });
-
-  const [appStore, setAppStore] = useState(store);
   
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline>
         <Router>
-          <AppStoreContext.Provider value={appStore}>
+          <AppContext.Provider value={storeAuth}>
             <Layout>
               <Routes>
                 {appRoutes.map((item) => (
@@ -52,10 +42,10 @@ const App: FC<any> = (): ReactElement => {
                   path={item.path}
                   element={<item.component/>}
                   />
-                ))}
-              </Routes>
+                ))}                
+              </Routes>              
             </Layout>
-          </AppStoreContext.Provider>
+          </AppContext.Provider>
         </Router>
       </CssBaseline>
     </ThemeProvider>

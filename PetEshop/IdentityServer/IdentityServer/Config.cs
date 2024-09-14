@@ -26,7 +26,7 @@ namespace IdentityServer
                         new Scope("react")
                     }
                 },
-                new ApiResource("www.alevelwebsite.com:3000")
+                new ApiResource("www.fruitshop.com:3000")
                 {
                     Scopes = new List<Scope>
                     {
@@ -56,7 +56,7 @@ namespace IdentityServer
                     RequirePkce = true,
                     RequireClientSecret = false,
                     RedirectUris = { $"{configuration["ReactClientUrl"]}/callback" },
-                    PostLogoutRedirectUris = { $"{configuration["ReactClientUrl"]}/signin-oidc" },
+                    PostLogoutRedirectUris = { $"{configuration["ReactClientUrl"]}/" },
                     AllowedCorsOrigins = { configuration["ReactClientUrl"] },
                     AllowedScopes = { "openid", "profile", "react", "mvc", "catalog.catalogbff", "catalog.catalogitem"},                    
                     AllowAccessTokensViaBrowser = true

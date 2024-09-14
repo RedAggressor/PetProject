@@ -1,7 +1,7 @@
 import {apiClient} from "../client"
 import { IItemRequest } from "../request/itemRequest"
 
-const bathPass="http://www.alevelwebsite.com:5000/api/v1/CatalogBff/";
+const bathPass="http://www.fruitshop.com:5000/api/v1/CatalogBff/";
 
 export const getItemById = async (id: string) => 
     await apiClient({

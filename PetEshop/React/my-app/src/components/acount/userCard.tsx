@@ -24,6 +24,9 @@ const UserCard: FC<{ user: User | null}> = ({ user }) => {
         <Typography noWrap gutterBottom variant="h6" component='div'>
             Famile:{user?.profile.family_name}
         </Typography>
+        <Typography noWrap gutterBottom variant="h6" component='div'>
+            Email:{user?.profile.email}
+        </Typography>
     </CardContent>                               
 </CardActionArea>
 </Card>

@@ -95,12 +95,6 @@ app.UseRouting();
 app.UseCors("CorsPolicy");
 
 app.UseAuthentication();
-
-app.Use(async (context, next) => {
-    Console.WriteLine($"/IsAuthenticated:{context?.User?.Identity?.IsAuthenticated} / {context!.Request.Headers["Authorization"]} / context.User.Identities: {context.User.Identities} / context.User.Identity: {context.User.Identity} ");
-    await next();
-}); // delete after test
-
 app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>

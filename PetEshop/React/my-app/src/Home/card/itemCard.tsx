@@ -1,15 +1,13 @@
-import { Card, CardActionArea, CardContent, CardMedia, Typography } from "@mui/material";
+import { Button, Card, CardActionArea, CardContent, CardMedia, Typography } from "@mui/material";
 import { FC, ReactElement, useContext } from "react";
 import { IItemForBasket } from "../../api/responce/IItemForBasket";
 import { useNavigate } from "react-router-dom";
 import { ICatalogItemResponse } from "../../api/responce/ICatalogItemResponse";
-import { basketContext } from "../../App";
-
-
+import { basketstore } from "../../components/basket/Basket";
 
 const ItemCard: FC< ICatalogItemResponse > = (props) : ReactElement => {
 
-    const basketStore = useContext(basketContext);
+    const basketStore = useContext(basketstore);
 
     const item: IItemForBasket = {
         id: props.id,
@@ -23,16 +21,16 @@ const ItemCard: FC< ICatalogItemResponse > = (props) : ReactElement => {
     };
 
     const puInItem = async () => {  
-        await basketStore.basket.addItemBasket(item);       
+        await basketStore.basket.addItemToBasket(item);       
     };
 
     const navigate = useNavigate();
     return (
-        <Card sx={{maxWidth: 250}}>
+        <Card sx={{maxWidth: 500}}>
             <CardActionArea onClick={() => navigate(`/item/${props.id}`)}>
             <CardMedia
                     component='img'
-                    height='250'
+                    height='300'
                     image={props.pictureUrl}
                     alt={props.name}
                 />               
@@ -51,7 +49,7 @@ const ItemCard: FC< ICatalogItemResponse > = (props) : ReactElement => {
                     </Typography>
                 </CardContent>                
             </CardActionArea>
-            <button onClick={puInItem}>Add to basket</button>
+            <Button variant="contained" color="success" onClick={puInItem}>Add to basket</Button>
         </Card>
     );
 }

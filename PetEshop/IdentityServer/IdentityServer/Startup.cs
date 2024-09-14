@@ -30,7 +30,7 @@ namespace IdentityServer
 
         public void Configure(IApplicationBuilder app)
         {            
-            app.UseDeveloperExceptionPage();
+            app.UseDeveloperExceptionPage();           
 
             app.UseIdentityServer();
             app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Strict });

@@ -11,7 +11,7 @@ currency = 'UAH';
 description = 'test pay';
 order_id = '';
 
-data = '';
+data: string | null = '';
 signature = '';
 constructor(){
     makeAutoObservable(this)
@@ -41,7 +41,7 @@ setSignature(signature: string){
     this.signature = signature;
 }
 
-setData(data:string){
+setData(data:string | null){
     this.data = data;
 }
 
@@ -58,8 +58,14 @@ request : IPaymentRequest = {
     "order_id": this.order_id
 }
 
+setRequest(){
+    this.request.amount = this.getAmount();
+}
+
 async getResponse(){
     try{
+        this.setRequest();
+        console.log(this.request.amount);
         const response:IPaymentResponse = await client.getPeymentOption(this.request);
         if(response != null){
             this.setData(response.data);        

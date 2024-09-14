@@ -3,6 +3,8 @@ using Catalog.Host.Services.Abstractions;
 using Catalog.Host.Models.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Infrastructure.Identity;
+using Infrastructure.Attributes;
+using Catalog.Host.Models.Requests;
 
 namespace Catalog.Host.Controllers
 {
@@ -19,56 +21,43 @@ namespace Catalog.Host.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(AddResponse<int>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> AddOrder(OrderDto order)
+        [ValidateRequestBody]
+        [ProducesResponseType(typeof(AddResponse<string>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> AddOrder()
         {
             var userId = User.Claims.FirstOrDefault(x => x.Type == "sub")?.Value!;                       
-            if(order != null && userId != null) 
-            {
-                var id = await _orderService.AddOrderAsync(userId, order.OrderItems);
-                return Ok(id);
-            }
-            var response = new BaseResponse()
-            {
-                ErrorMessage = "order is null"
-            };
-            return Ok(response);
+            var id = await _orderService.AddOrderAsync(userId);
+            return Ok(id);            
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(OrderResponse), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetOrderById(int? orderId)
+        [ValidateRequestBody]
+        [ProducesResponseType(typeof(AddResponse<string>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> AddItemToOrder(AddOrderRequest order)
         {
-            if(orderId != null && orderId != 0)
-            {
-                var order = await _orderService.GetOrderByIdAsync((int)orderId);
-                return Ok(order);
-            }
+            var id = await _orderService.AddItemToOrder(order.OrderId, order.OrderItems);
 
-            var response = new BaseResponse()
-            {
-                ErrorMessage = "Id is Null"
-            };
-            return Ok(response);                     
+            return Ok(id);
+        }
+
+
+
+        [HttpPost]
+        [ValidateRequestBody]
+        [ProducesResponseType(typeof(OrderResponse), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetOrderById(string orderId)
+        {
+            var order = await _orderService.GetOrderByIdAsync(orderId);
+            return Ok(order);                                
         }
 
         [HttpPost]        
         [ProducesResponseType(typeof(DataResponse<OrderDto>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetOrderByUserId(string userId)
+        public async Task<IActionResult> GetOrderByUserId()
         {
-            //var userIds = User.Claims.FirstOrDefault(x => x.Type == "sub")?.Value; 
-            if(userId != null)
-            {
-                var id = await _orderService.GetOrderByUserIdAsync(userId!);
-                return Ok(id);
-            }
-
-            var response = new BaseResponse()
-            { 
-                ErrorMessage = "userId null" 
-            };
-
-            return Ok(response);                       
+            var userId = User.Claims.FirstOrDefault(x => x.Type == "sub")?.Value; 
+            var id = await _orderService.GetOrderByUserIdAsync(userId!);
+            return Ok(id);        
         }
     }
 }

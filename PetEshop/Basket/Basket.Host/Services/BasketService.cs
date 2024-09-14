@@ -13,14 +13,19 @@ public class BasketService : IBasketService
         _cacheService = cacheService;
     }
 
-    public async Task<GetDataResponse<ItemDto>> GetItems(string userId)
+    public async Task<GetDataResponse<ItemDto>> GetItemsAsync(string userId)
     {
         string key = $"{_key}{userId}";
+
         var result = await _cacheService.GetAsync<ICollection<ItemDto>>(key);
-        return new GetDataResponse<ItemDto>() { Data = result };
+
+        return new GetDataResponse<ItemDto>() 
+        { 
+            Data = result 
+        };
     }
 
-    public async Task<BaseResponse> AddItems(string userId, ICollection<ItemDto> data)
+    public async Task<BaseResponse> AddItemsAsync(string userId, ICollection<ItemDto> data)
     {
         try
         {

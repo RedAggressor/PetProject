@@ -1,6 +1,6 @@
 import {apiClient} from "../client"
 
-const bassPath = "http://www.alevelwebsite.com:5008/Payment";
+const bassPath = "http://www.fruitshop.com:5008/Payment";
 
 export const getPeymentOption = async (paymentModel:IPaymentRequest) => await apiClient({
     path:`${bassPath}`,

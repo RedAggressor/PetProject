@@ -1,29 +1,30 @@
 import { observer } from "mobx-react-lite"
 import { FC, ReactElement, useContext } from "react";
-import UserStore from "./userStore";
-import { AppStoreContext } from "../../App";
+import { AppContext } from "../../App";
 import UserCard from "./userCard";
 import { Box, Container, Grid } from "@mui/material";
+import UserStore from "./userStore";
+import { basketstore } from "../basket/Basket";
 
 const userStore = new UserStore();
 
 const UserCabinet: FC<any> = (): ReactElement =>{
 
-    const appStore = useContext(AppStoreContext);
+    const appStore = useContext(AppContext);
+    const basketStore = useContext(basketstore);   
+
     userStore.setUser(appStore.user);
-    const user = appStore.user;
        
     return (
         <>
-            <UserCard user={user}/>
+            <UserCard user={appStore.user}/>
             List Order
             <Container> 
-        {appStore.user?.profile.sub}       
         <Box sx={{ width: '100%', typography: 'body1' }}> 
             <Grid container spacing={3} justifyContent='center' my={4}>                
                 <>
-                    { Array.isArray(userStore.orderList) && 
-                           userStore.orderList                     
+                    { Array.isArray(userStore.getOrderList()) && 
+                           userStore.getOrderList()                     
                     }              
                 </>                
             </Grid>

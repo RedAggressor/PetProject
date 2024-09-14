@@ -56,6 +56,7 @@ builder.Services.AddTransient<IJsonSerializer, JsonSerializer>();
 builder.Services.AddTransient<IRedisCacheConnectionService, RedisCacheConnectionService>();
 builder.Services.AddTransient<ICacheService, CacheService>();
 builder.Services.AddTransient<IBasketService, BasketService>();
+builder.Services.AddTransient<ICookieService, CookieService>();
 
 builder.Services.AddCors(options =>
 {
@@ -82,12 +83,6 @@ app.UseRouting();
 app.UseCors("CorsPolicy");
 
 app.UseAuthentication();
-
-app.Use(async (context, next) => {
-    Console.WriteLine($"/IsAuthenticated:{context?.User?.Identity?.IsAuthenticated} / {context!.Request.Headers["Authorization"]} / context.User.Identities: {context.User.Identities} / context.User.Identity: {context.User.Identity} ");
-    await next();
-}); // delete after test
-
 app.UseAuthorization();
 
 

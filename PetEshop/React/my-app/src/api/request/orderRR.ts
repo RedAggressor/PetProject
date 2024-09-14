@@ -1,5 +1,4 @@
-export interface IOrderAddRequest{
-    "userId": string,
+export interface IOrderAddRequest{    
     "items": {"count": number, "itemId": number} [ ]
   }
 
@@ -97,20 +96,12 @@ export interface IOrderByUserIdResponce{
       "availableStock": number
    }
 
-   export interface IOrderItem{
-    "id": number,
-    "count": number,
-    "item": { 
-      "id": number,
-      "name": string,
-      "description": string,
-      "price": number,
-      "pictureUrl": string,
-      "type": {
-        "id": number,
-        "type": string
-      },
-      "availableStock": number
-    }
+   export interface IOrderItem{   
+      "orderId": string,
+      "orderItems": 
+        {         
+          "count": number,
+          "itemId": number          
+        }[]      
    }
   

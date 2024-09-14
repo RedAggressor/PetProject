@@ -24,7 +24,20 @@ namespace Catalog.Host.Services
             _mapper = mapper;
         }
 
-        public async Task<AddResponse<int>> AddOrderAsync(string UserId, ICollection<OrderItemDto> orderItem)
+        public async Task<AddResponse<string>> AddOrderAsync(string UserId)
+        {
+            return await ExecuteSafeAsync(async () =>
+            {
+                var id = await _orderRepository.AddOrderAsync(UserId);
+
+                return new AddResponse<string>()
+                {
+                    Id = id.ToString()
+                };
+            });
+        }
+
+        public async Task<AddResponse<string>> AddItemToOrder(string orderId, ICollection<AddOrderItemDto> orderItem)
         {
             return await ExecuteSafeAsync(async () =>
             {
@@ -36,35 +49,50 @@ namespace Catalog.Host.Services
                     Count = o.Count,
                 }));
 
-                var id = await _orderRepository.AddOrderAsync(UserId, orderItemEntity);
-
-                return new AddResponse<int>()
+                if (int.TryParse(orderId, out int resultId))
                 {
-                    Id = id,
+                    var id = await _orderRepository.AddItemToOrderAsync(resultId, orderItemEntity);
+
+                    return new AddResponse<string>()
+                    {
+                        Id = id.ToString(),
+                    };
+                }
+
+                return new AddResponse<string>()
+                {
+                    ErrorMessage = "Id can`t conver to int"
                 };
             });
         }
 
-        public async Task<OrderResponse> GetOrderByIdAsync(int idOrder)
+        public async Task<OrderResponse> GetOrderByIdAsync(string idOrder)
         {
-            return await ExecuteSafeAsync(async () =>
+            return await ExecuteSafeAsync((async () =>
             {
-                var entity = await _orderRepository.GetOrderByIdAsync(idOrder);
+                if (int.TryParse(idOrder, out int resultId))
+                {
+                    var entity = await _orderRepository.GetOrderByIdAsync(resultId);
+
+                    return new OrderResponse()
+                    {
+                        Order = new OrderDto()
+                        {
+                            Id = entity.Id,
+                            OrderItems = entity.OrderItems.Select(o => new OrderItemDto()
+                            {
+                                Id = o.Id,
+                                Count = o.Count                                
+                            }).ToList()
+                        }
+                    };
+                }
 
                 return new OrderResponse()
                 {
-                    Order = new OrderDto()
-                    {
-                        Id = entity.Id,
-                        OrderItems = entity.OrderItems.Select(o => new OrderItemDto()
-                        {
-                            Id = o.Id,
-                            Count = o.Count,
-                            Item = _mapper.Map<ItemDto>(o.Item)
-                        }).ToList()
-                    }
-                };                    
-            });
+                    ErrorMessage = "orderId is not string or something go wrong!"
+                };
+            }));
         }
 
         public async Task<DataResponse<OrderDto>> GetOrderByUserIdAsync(string userId)
@@ -77,7 +105,7 @@ namespace Catalog.Host.Services
                 {
                     Data = listEntity.Select(s => new OrderDto()
                     {
-                        Id = s.Id,                        
+                        Id = s.Id,
                         OrderItems = s.OrderItems.Select(o => new OrderItemDto()
                         {
                             Id = o.Id,

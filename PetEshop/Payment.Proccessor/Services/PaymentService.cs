@@ -34,7 +34,7 @@ namespace Payment.Proccessor.Services
         private async Task<string> GetData(JsonModel jsonModel)
         {
             string jsonString = JsonSerializer.Serialize(jsonModel);
-            return Base64Encode(jsonString);
+            return await Task.FromResult(Base64Encode(jsonString));
         }
 
         private string Base64Encode(string data)

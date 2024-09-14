@@ -1,14 +1,17 @@
-import { FC, useContext } from "react";
-import { Card, CardActionArea, CardContent, CardMedia, Typography } from "@mui/material";
+import { Button, Card, CardActionArea, CardContent, CardMedia, Grid, Typography } from "@mui/material";
 import { IItemForBasket } from "../../api/responce/IItemForBasket";
-import { basketContext } from "../../App";
 
-const BasketCard: FC< {item : IItemForBasket} & { index: number }> = ({ item, index }) => {
+interface BasketCardProps {
+    item: IItemForBasket;
+    index: number;
+    remove: (index: number) => void;
+    add: (item: IItemForBasket) => void;
+  }
 
-    const basketStore = useContext(basketContext);
+const BasketCard : React.FC<BasketCardProps> = ({ item, index, remove, add }) => {
     
     return (
-        <Card sx={{maxWidth: 250}}>
+        <Card sx={{maxWidth: 400}}>
             <CardActionArea>
                 <CardMedia
                     component='img'
@@ -31,8 +34,10 @@ const BasketCard: FC< {item : IItemForBasket} & { index: number }> = ({ item, in
                     </Typography>
                 </CardContent>                               
             </CardActionArea>
-            <button onClick={() => basketStore.basket.removeItem(index)}>Delete from Basket</button>
-            <button onClick={() => basketStore.basket.addItemBasket(item)}>Add to Basket</button>
+            <Grid>
+            <Button variant="contained" color="success" onClick={() => remove(index)}>Delete from Basket</Button>           
+            <Button variant="contained" color="success" onClick={() => add(item)}>Add More</Button>            
+            </Grid>
         </Card>
     );
 }

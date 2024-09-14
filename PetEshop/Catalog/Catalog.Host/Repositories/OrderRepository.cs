@@ -16,27 +16,34 @@ namespace Catalog.Host.Repositories
             _dbContext = dbContextWrapper.DbContext;
         }
 
-        public async Task<int> AddOrderAsync(string UserId, List<OrderItemEntity> orderItemList)
+        public async Task<int> AddOrderAsync(string UserId)
         {
             return await ExecutSafeAsync(async () =>
             {
                 var order = await _dbContext.Orders
                     .AddAsync(new OrderEntity()
-                    {
-                        UserId = UserId
-                    });
-
-                await _dbContext.OrderItems.AddRangeAsync(orderItemList.Select(s => new OrderItemEntity()
                 {
-                    Count = s.Count,
-                    OrderId = order.Entity.Id,
-                    ItemId = s.ItemId
-                }));
+                    UserId = UserId
+                });               
 
                 await _dbContext.SaveChangesAsync();
 
                 return order.Entity.Id!;
             });
+        }
+
+        public async Task<int> AddItemToOrderAsync(int orderId, List<OrderItemEntity> orderItemList)
+        {
+            await _dbContext.OrderItems.AddRangeAsync(orderItemList.Select(s=> new OrderItemEntity() 
+            { 
+                 Count= s.Count,
+                 OrderId = orderId,
+                 ItemId = s.ItemId
+            }));
+
+            await _dbContext.SaveChangesAsync();
+
+            return orderId;
         }
 
         public async Task<OrderEntity> GetOrderByIdAsync(int id)

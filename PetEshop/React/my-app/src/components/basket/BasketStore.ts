@@ -1,174 +1,183 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import { IItemForBasket} from "../../api/responce/IItemForBasket";
+import { IItemForBasket } from "../../api/responce/IItemForBasket";
 import * as apiBasket from "../../api/moduls/basket";
-import { IBasketAdd } from "../../api/request/basketRequest";
 import * as apiOrder from "../../api/moduls/order"
-import { IOrderAddRequest } from "../../api/request/orderRR";
+import { IOrderItem } from "../../api/request/orderRR";
 
 class BasketStore {
-    amount:number = 0;
+    amount: number = 0;
     items: IItemForBasket[] = [];
-    totalPrice:number = 0;
+    totalPrice: number = 0;
     error = "";
-    clickButton:boolean = false;
-    state = "";
-    userId: string = "";
+    userId: string | undefined = "";
+    orderId = "";
+    
+    responseGet: {
+        "data": IItemForBasket[],
+        "errorMessage": string | null,
+        "respCode": number
+    } = { data: [], errorMessage: null, respCode: 0 };
 
-    itemsOrder: {
+    responseAdd: {
+        "id": string,
+        "errorMessage": string | null,
+        "respCode": number
+    } = { id: '', errorMessage: null, respCode: 0 };   
+
+    itemsForOrder: {
         count: number,
         itemId: number
     }[] = [];
 
-    order: IOrderAddRequest = {
-        userId: "",
-        items:[]
+    order:IOrderItem = {
+        orderId: this.getOrderId(),
+        orderItems: []
     }
 
-    requestAdd: IBasketAdd = {
-        userId: "",
-        items: []
-    };
-
     constructor() {
-        makeAutoObservable(this);
+        makeAutoObservable(this, { responseGet: false, responseAdd: false });
         runInAction(async () => await this.prefetchData())
     }
 
-    async clearItems(){
-        this.items = [];
-        this.setRequestAdd();
+    async clearItems() {
         try{
-            const responce = await apiBasket.addItems(this.requestAdd);
-            //if(responce.respCode === 1){
-                console.log('items clear >>>>', this.items )
-                console.log('responce items>>>>>', responce )
-                this.prefetchData();
-            //}            
-        }
-        catch (error) {
+            this.setItems([]);
+
+            this.responseAdd = (this.userId !== undefined && this.userId !== '') ? 
+                await apiBasket.addItems({items: this.getItems()}) :  
+                await apiBasket.addItemsNoJwt({items: this.getItems()});            
+                await this.prefetchData();
+                
+            if (this.responseAdd.respCode === 1) {
+                
+            }
+        } catch (error){
             console.log(error);
         }        
     }
 
-    getItemId(){
-        if(this.items.length > 0){
-            console.log('items>>>>>>>>>>>>>>>',this.items)
-            this.itemsOrder = [];
-            this.items.map((item) => {                
-                this.itemsOrder.push({ 
+    setOrderId(orderId:string){
+        this.orderId = orderId;
+    }
+
+    getOrderId(){
+        return this.orderId;
+    }
+
+    setItems(items: IItemForBasket[]) {
+        this.items = items;
+    }
+
+    getItems() {
+        return this.items;
+    }
+
+    setOrderItemToOrder() {
+        if (this.items.length > 0) {
+            this.order.orderItems = [];
+            this.order.orderId = this.getOrderId();
+            this.items.map((item) => {
+                this.order.orderItems.push({
                     count: 1,
                     itemId: item.id
                 })
             });
         }
-        else{
-            console.log('basket is empty >>>>>', this.items )
-        }        
+        else {
+            console.log('basket is empty >>>>>', this.items)
+        }
     }
 
-    createOrder(){
-        if(this.userId !== undefined && this.userId !== ''){
-            this.order.userId = this.userId;            
-        }
-        else{
-            console.log('user id not valide in order');
-        }
-        if(this.itemsOrder !== null){
-            this.getItemId();
-            this.order.items.push(...this.itemsOrder);
-        }
-        else{
-            console.log('items for order is null');
-        }        
+    getItemForOrder(){
+        return this.itemsForOrder;
     }
 
-    async orderAdd(){
+    async createOrder() {
         try{
-            this.createOrder();
-            console.log('oder >>>', this.order);
-            const response = await apiOrder.addOrder(this.order);
-            //if(response.respCode === 1){
-                console.log('responce >>>', response);
-                this.clearItems();
-            //}
-        }
-        catch(eror){
-            console.log(eror)
+            if (this.userId !== undefined && this.userId !== '') {
+                this.responseAdd = await apiOrder.addOrder();
+                if(this.responseAdd.respCode === 1) {
+                    this.setOrderId(this.responseAdd.id);
+                } else {
+                    console.log("order id not create or somethink go wrong!");
+                }           
+            }
+        } catch(error){
+            console.log(this.error);
         }        
     }
 
-    getUserId(){
+    async addItemToOrder() {
+        try {
+            this.setOrderItemToOrder();
+            this.responseAdd = await apiOrder.addItemsToOrder(this.order);
+            if (this.responseAdd.respCode === 1) {                
+                this.clearItems();
+            }
+        }
+        catch (eror) {
+            console.log(eror)
+        }
+    }
+
+    getUserId() {
         return this.userId;
     }
 
-    setUserId(userId:string){
-                
+    setUserId(userId: string | undefined) {
         this.userId = userId;
     }
-
+    
     prefetchData = async () => {
-        try{
+        try {
 
-            if(this.userId !== undefined && this.userId !== ''){
-                const responce = await apiBasket.getItems(this.getUserId());
-                //if(responce.data !== null && responce.respCode === 1){
-                    this.items = responce.data ?? [];
-                    this.setAmount();
-                    this.setPrice();                    
-                //}                
+            this.responseGet = (this.userId !== undefined && this.userId !== '') ?
+                await apiBasket.getItems() :            
+                await apiBasket.getItemNoJwt();            
+
+            if (this.responseGet.respCode === 1) {
+                this.setItems(this.responseGet.data ?? []);
+                this.setAmount();
+                this.setPrice();
+            }else {
+                console.log("bad response from prefetch basket");
             }
-            else {
-                console.log("error user id from basket")
-            }                 
         }
         catch (error) {
-            console.assert(error)            
+            console.assert(error)
         }
     }
 
-    async addItemBasket(item: IItemForBasket) {
-        try{
-            //if(this.userId !== undefined && this.userId !== '')
-            //{   
-                this.pushItem(item); 
+    async addItemToBasket(item: IItemForBasket) {
+        try {
+            this.pushItem(item);
+            this.setAmount();
+            this.setPrice();
 
+            this.responseAdd = (this.userId !== undefined && this.userId !== '') ?
+                await apiBasket.addItems({items: this.getItems()}) :
+                await apiBasket.addItemsNoJwt({items: this.getItems()});
+
+            if (this.responseAdd.respCode === 1) {
+                await this.prefetchData();
+            }
+            else {
+                this.items.pop();
                 this.setAmount();
-
                 this.setPrice();
-                       
-                this.setRequestAdd();
-
-                const response = await apiBasket.addItems(this.requestAdd);
-
-                if(response.respCode === 1){                   
-
-                    await this.prefetchData();
-                }
-                //else {
-                    //this.items.pop();
-                    //this.setAmount();
-                    //this.setPrice();
-                    //console.log("pop")
-                       
-                this.setRequestAdd();
-                //}                 
-            } 
-            //else {
-             //  alert('registrate account or sing in')
-            //}                   
-        //}
-        catch (error){
+            }
+        }
+        catch (error) {
             console.log(error);
         }
     }
 
-    pushItem(item: IItemForBasket){
-        if(this.items !== null){
+    pushItem(item: IItemForBasket) {
+        if (this.items != null) {
             this.items.push(item);
-        }else{
+        } else {
             console.log(" item === null!");
         }
-        
     }
 
     removeItem = async (id: number) => {
@@ -176,53 +185,44 @@ class BasketStore {
             this.items.splice(id, 1);
             this.setAmount();
             this.setPrice();
-            this.setRequestAdd();
 
-            const response = await apiBasket.addItems(this.requestAdd);
-            //if(response.respCode === 1){
+            this.responseAdd = (this.userId !== undefined && this.userId !== '') ?
+                await apiBasket.addItems({items: this.getItems()}): 
+                await apiBasket.addItemsNoJwt({items: this.getItems()});           
+
+            if (this.responseAdd.respCode === 1) {
                 await this.prefetchData();
-            //}
-            
+            }
+
         }
-        catch (error){
+        catch (error) {
             console.log(error)
         }
     }
 
-    setAmount(){
+    setAmount() {
         this.amount = this.items.length;
     }
 
-    getAmount(){
+    getAmount() {
         return this.amount;
     }
 
-    setPrice(){
+    setPrice() {
         this.totalPrice = this.items.map(item => item.price).reduce((acc, curr) => acc + curr, 0);
     }
 
-    getPrice(){
+    getPrice() {
         return this.totalPrice;
     }
 
-    setError(error:string){
+    setError(error: string) {
         this.error = error;
     }
 
     getError() {
         return this.error;
     }
-
-    setRequestAdd(){
-        if(this.userId !== undefined)  {
-            this.requestAdd.userId = this.userId;
-            this.requestAdd.items = this.items;
-            console.log(this.items, this.userId);
-        }
-        else{
-            console.log("userId is undefined")
-        }        
-    }    
 }
 
 export default BasketStore;

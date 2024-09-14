@@ -9,9 +9,9 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:5003
-      - Authorization__Authority=http://www.alevelwebsite.com:5002
-      - Redis__Host=www.alevelwebsite.com:6380
-      - PathBase=http://www.alevelwebsite.com:5003
+      - Authorization__Authority=http://www.fruitshop.com:5002
+      - Redis__Host=www.fruitshop.com:6380
+      - PathBase=http://www.fruitshop.com:5003
     depends_on:
       - redis
     ports:
@@ -24,9 +24,9 @@ services:
     environment:
        - ASPNETCORE_ENVIRONMENT=Development
        - ASPNETCORE_URLS=http://+:5000
-       - ConnectionString=server=www.alevelwebsite.com;port=5433;database=catalog;uid=postgres;password=postgres;
-       - Authorization__Authority=http://www.alevelwebsite.com:5002
-       - PathBase=http://www.alevelwebsite.com:5000
+       - ConnectionString=server=www.fruitshop.com;port=5433;database=catalog;uid=postgres;password=postgres;
+       - Authorization__Authority=http://www.fruitshop.com:5002
+       - PathBase=http://www.fruitshop.com:5000
     depends_on:
       - postgres
     ports:
@@ -39,11 +39,11 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:5002
-      - MvcUrl=http://www.alevelwebsite.com
-      - ReactClientUrl=http://www.alevelwebsite.com:3000
-      - CatalogApi=http://www.alevelwebsite.com:5000
-      - BasketApi=http://www.alevelwebsite.com:5003
-      - PaymentApi=http://www.alevelwebsite.com:5008
+      - MvcUrl=http://www.fruitshop.com
+      - ReactClientUrl=http://localhost:3000
+      - CatalogApi=http://www.fruitshop.com:5000
+      - BasketApi=http://www.fruitshop.com:5003
+      - PaymentApi=http://www.fruitshop.com:5008
     ports:
       - 5002:5002  
   pgadmin4:
@@ -76,8 +76,8 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:5008
-      - Authorization__Authority=http://www.alevelwebsite.com:5002      
-      - PathBase=http://www.alevelwebsite.com:5008   
+      - Authorization__Authority=http://www.fruitshop.com:5002      
+      - PathBase=http://www.fruitshop.com:5008   
     ports:
       - 5008:5008 
   nginx-react:    
@@ -91,7 +91,7 @@ services:
     image: nginx:latest
     container_name: lde.nginx.images
     volumes:
-      - ./Proxy/gateway/nginx/conf.d/nginx_image.conf:/etc/nginx/conf.d/default.conf
+      - ./Proxy/gateway/nginx/conf.d:/etc/nginx/conf.d
       - ./Proxy/assets:/var/www/assets
     ports:
       - 80:80 

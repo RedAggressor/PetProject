@@ -1,5 +1,5 @@
 import { FC, ReactElement, useContext, useState } from "react";
-import { AppStoreContext } from "../../App";
+import { AppContext } from "../../App";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Avatar from "@mui/material/Avatar";
@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 
 const Acount: FC<any> = (amount:number): ReactElement => {
 
-  const appStore = useContext(AppStoreContext);
+  const appStore = useContext(AppContext);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const navigateCabinet = useNavigate(); 
@@ -80,21 +80,18 @@ const Acount: FC<any> = (amount:number): ReactElement => {
             transformOrigin={{ horizontal: 'right', vertical: 'top' }}
             anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
           >         
-          <MenuItem onClick={() => {navigateCabinet('/usercabinet'); handleClose();}}>
-            
-            <ListItemIcon>                
-              
+          <MenuItem onClick={() => {navigateCabinet('/usercabinet'); handleClose();}}>            
+            <ListItemIcon> 
             </ListItemIcon>
             Cabinet
           </MenuItem>
-            <MenuItem onClick={() => {handleClose();}}>
-            
+            <MenuItem onClick={() => {handleClose();}}>            
               <ListItemIcon>                
                 <Mail />
               </ListItemIcon>
               Mail
             </MenuItem>
-            <MenuItem onClick={() => {handleClose(); appStore.logOut()}}>
+            <MenuItem onClick={async () => {handleClose(); await appStore.logOut();}}>
               <ListItemIcon>
                 <Logout fontSize="small" />
               </ListItemIcon>

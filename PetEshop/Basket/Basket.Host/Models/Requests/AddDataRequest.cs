@@ -1,8 +1,7 @@
 ﻿namespace Basket.Host.Models.Requests
 {
-    public class AddRequest
+    public class AddDataRequest
     {
-        public string UserId { get; set; } = null!;
         public ICollection<ItemDto> Items { get; set; } = null!;
     }
 }

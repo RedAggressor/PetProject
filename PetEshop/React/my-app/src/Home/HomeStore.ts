@@ -75,15 +75,32 @@ class HomeStore {
         this.totalPages = Math.ceil(this.count / this.pageSize);
     }
 
+    getTotalPage(){
+        return this.totalPages;
+    }
+
     setItems(items: IItemResponse[]){
         this.items = items;
+    }
+
+    getItems(){
+        return this.items;
     }
 
     setCount(count:number){
         this.count = count;
     }
+
+    getCount(){
+        return this.count;
+    }
+
     setListType(listType: ITypeResponce []){
         this.listType = listType;        
+    }
+
+    getListType(){
+        return this.listType;
     }
 
     setRequest(){
