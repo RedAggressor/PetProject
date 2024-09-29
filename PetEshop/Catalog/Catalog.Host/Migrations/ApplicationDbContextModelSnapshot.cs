@@ -77,8 +77,12 @@ namespace Catalog.Host.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "order_hilo");
 
-                    b.Property<int>("UserId")
+                    b.Property<int>("Status")
                         .HasColumnType("integer");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 

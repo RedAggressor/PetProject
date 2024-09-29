@@ -1,9 +1,12 @@
-﻿namespace Catalog.Host.Models.Dtos;
+﻿using Catalog.Host.Models.enums;
 
-    public class OrderDto
-    {
-        public int Id { get; set; }
-        public string UserId { get; set; } = null!;
-        public ICollection<OrderItemDto> OrderItems { get; set; } = new List<OrderItemDto>();
-    }
+namespace Catalog.Host.Models.Dtos;
+
+public class OrderDto
+{
+    public int Id { get; set; }
+    public string UserId { get; set; } = null!;
+    public StatusType Status { get; set; } = StatusType.Empty;
+    public ICollection<OrderItemDto> OrderItems { get; set; } = new List<OrderItemDto>();
+}
 

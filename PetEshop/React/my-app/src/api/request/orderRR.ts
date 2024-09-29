@@ -1,7 +1,3 @@
-export interface IOrderAddRequest{    
-    "items": {"count": number, "itemId": number} [ ]
-  }
-
 export interface IOrderAddResponse{    
     "errorMessage": string,
     "respCode": number,
@@ -17,6 +13,7 @@ export interface IOrdergetByIdResponce{
           {
             "id": number,
             "count": number,
+            "itemId":number,
             "item": {              
               "id": number,
               "name": string,
@@ -39,10 +36,13 @@ export interface IOrderByUserIdResponce{
     "data": [
       {        
         "id": number,
+        "userId": string,
+        "status": number,
         "orderItems": [
           {
             "id": number,
             "count": number,
+            "itemId":number,
             "item": {
               "id": number,
               "name": string,
@@ -61,13 +61,15 @@ export interface IOrderByUserIdResponce{
     ]
   }
 
-  export interface IOrderList{    
-              
+  export interface IOrderList{   
         "id": number,
+        "userId": string,
+        "status": number,
         "orderItems": [
           {
             "id": number,
             "count": number,
+            "itemId":number,
             "item": {
               "id": number,
               "name": string,
@@ -97,11 +99,11 @@ export interface IOrderByUserIdResponce{
    }
 
    export interface IOrderItem{   
-      "orderId": string,
+      "orderId": string,      
       "orderItems": 
         {         
           "count": number,
           "itemId": number          
-        }[]      
+        }[]            
    }
   

@@ -46,7 +46,7 @@ namespace Catalog.Host.Services
                 orderItem.ToList().ForEach(o => orderItemEntity.Add(new OrderItemEntity()
                 {
                     ItemId = o.ItemId,
-                    Count = o.Count,
+                    Count = o.Count                     
                 }));
 
                 if (int.TryParse(orderId, out int resultId))
@@ -70,28 +70,31 @@ namespace Catalog.Host.Services
         {
             return await ExecuteSafeAsync((async () =>
             {
-                if (int.TryParse(idOrder, out int resultId))
+                if (!int.TryParse(idOrder, out int resultId))
                 {
-                    var entity = await _orderRepository.GetOrderByIdAsync(resultId);
-
                     return new OrderResponse()
                     {
-                        Order = new OrderDto()
-                        {
-                            Id = entity.Id,
-                            OrderItems = entity.OrderItems.Select(o => new OrderItemDto()
-                            {
-                                Id = o.Id,
-                                Count = o.Count                                
-                            }).ToList()
-                        }
+                        ErrorMessage = "orderId is not string or something go wrong!"
                     };
                 }
+                var entity = await _orderRepository.GetOrderByIdAsync(resultId);
 
                 return new OrderResponse()
                 {
-                    ErrorMessage = "orderId is not string or something go wrong!"
+                    Order = new OrderDto()
+                    {
+                        Id = entity.Id,
+                        OrderItems = entity.OrderItems.Select(o => new OrderItemDto()
+                        {
+                            Id = o.Id,
+                            ItemId = o.ItemId,
+                            Count = o.Count,
+                            Item = _mapper.Map<ItemDto>(o.Item)
+                        }).ToList(),
+                        Status = entity.Status,
+                    }
                 };
+               
             }));
         }
 
@@ -110,9 +113,11 @@ namespace Catalog.Host.Services
                         {
                             Id = o.Id,
                             Count = o.Count,
+                            ItemId = o.ItemId,
                             Item = _mapper.Map<ItemDto>(o.Item)
 
-                        }).ToList()
+                        }).ToList(),
+                        Status = s.Status
                     }),
                 };
             });

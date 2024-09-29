@@ -7,9 +7,9 @@ import { routes } from "../routes";
 import { NavLink, useNavigate } from "react-router-dom";
 import { AppContext } from "../App";
 import {observer} from "mobx-react-lite";
-import Acount from "../components/acount/account";
-import BasketElement from "../components/basket/basketElement";
-import { basketstore } from "../components/basket/Basket";
+import Acount from "../UserAccount/components/account";
+import BasketElement from "../Basket/components/basketElement";
+import { basketstore } from "../Basket/Basket";
 
 
 const Navbar: FC = (): ReactElement => {

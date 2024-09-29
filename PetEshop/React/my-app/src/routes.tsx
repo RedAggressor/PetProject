@@ -1,10 +1,10 @@
 import { FC } from "react";
-import Items from "./Items/Items";
+import Items from "./Item/Items";
 import Home from "./Home/Home";
-import Basket from "./components/basket/Basket"
-import Callback from "./components/redirect/callback";
-import UserCabinet from "./components/acount/userCabinet";
-import SuccusfullPay from "./components/redirect/succesfullpay";
+import Basket from "./Basket/Basket"
+import Callback from "./Redirect/callback";
+import UserCabinet from "./UserAccount/userCabinet";
+import SuccusfullPay from "./Redirect/succesfullpay";
 
 interface IRoute{
     key: string,

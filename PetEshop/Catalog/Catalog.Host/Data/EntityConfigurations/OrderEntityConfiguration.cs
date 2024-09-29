@@ -10,9 +10,14 @@ namespace Catalog.Host.Data.EntityConfigurations
 
             builder.HasKey(k => k.Id);
 
-            builder.Property(p => p.Id).UseHiLo("order_hilo");
+            builder.Property(p => p.Status)
+                .IsRequired();
 
-            builder.Property(p => p.UserId).IsRequired();
+            builder.Property(p => p.Id)
+                .UseHiLo("order_hilo");
+
+            builder.Property(p => p.UserId)
+                .IsRequired();
         }
     }
 }

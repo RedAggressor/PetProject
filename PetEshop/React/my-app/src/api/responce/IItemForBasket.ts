@@ -7,5 +7,6 @@ export interface IItemForBasket{
     "pictureUrl": string,
     "typeId": number,
     "typeName":string,
-    "availableStock": number  
+    "availableStock": number,
+    "weight":number
 };

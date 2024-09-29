@@ -16,5 +16,5 @@ namespace Payment.Proccessor.Models
         public string Description { get; set; } = null!;
         [JsonPropertyName("order_id")]
         public string OrderId { get; set; } = null!;
-}
+    }
 }

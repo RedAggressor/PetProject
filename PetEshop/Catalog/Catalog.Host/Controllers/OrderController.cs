@@ -21,7 +21,6 @@ namespace Catalog.Host.Controllers
         }
 
         [HttpPost]
-        [ValidateRequestBody]
         [ProducesResponseType(typeof(AddResponse<string>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> AddOrder()
         {
@@ -40,10 +39,7 @@ namespace Catalog.Host.Controllers
             return Ok(id);
         }
 
-
-
-        [HttpPost]
-        [ValidateRequestBody]
+        [HttpPost]        
         [ProducesResponseType(typeof(OrderResponse), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetOrderById(string orderId)
         {
@@ -56,8 +52,8 @@ namespace Catalog.Host.Controllers
         public async Task<IActionResult> GetOrderByUserId()
         {
             var userId = User.Claims.FirstOrDefault(x => x.Type == "sub")?.Value; 
-            var id = await _orderService.GetOrderByUserIdAsync(userId!);
-            return Ok(id);        
+            var order = await _orderService.GetOrderByUserIdAsync(userId!);
+            return Ok(order);        
         }
     }
 }

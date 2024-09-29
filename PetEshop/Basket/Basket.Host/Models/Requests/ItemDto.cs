@@ -10,5 +10,6 @@
         public int TypeId { get; set; }
         public string TypeName { get; set; } = null!;
         public int AvailableStock { get; set; }
+        public int Weight { get; set; }
     }
 }

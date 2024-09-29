@@ -1,8 +1,8 @@
-import { Box, CardContent, Container, Grid, Pagination, Tab, Typography} from "@mui/material";
-import { FC, ReactElement, useContext, useEffect, useState } from "react";
+import { Box, Container, Grid, Pagination, Tab} from "@mui/material";
+import { FC, ReactElement, useState } from "react";
 import {observer} from "mobx-react-lite";
 import HomeStore from "./HomeStore";
-import ItemCard from "./card/itemCard";
+import ItemCard from "./components/itemCard";
 import TabList from "@mui/lab/TabList";
 import TabContext from "@mui/lab/TabContext";
 import TabPanel from "@mui/lab/TabPanel";
@@ -60,8 +60,7 @@ const handleChange = (event: React.SyntheticEvent, newValue: string) => {
                     </TabPanel>
                     {homeStore.listType.map((tab) => (
                         <TabPanel key={tab.id} value={`${tab.id}`}>
-                            <Container>
-                                <Typography>{homeStore.getCount()}</Typography>
+                            <Container>                                
                                 <Box sx={{ width: '100%', typography: 'body1' }}>
                                     <Grid container spacing={3} justifyContent='center' my={4}>
                                         <>

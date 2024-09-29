@@ -21,5 +21,5 @@ export const addOrder = async () => await apiClient({
 export const addItemsToOrder = async (order:IOrderItem) => await apiClient({
     path:`${bassPath}AddItemToOrder`,
     options:{method:'POST'},
-    data:{order}
+    data:order
 })

@@ -40,7 +40,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:5002
       - MvcUrl=http://www.fruitshop.com
-      - ReactClientUrl=http://localhost:3000
+      - ReactClientUrl=http://www.fruitshop.com:3000
       - CatalogApi=http://www.fruitshop.com:5000
       - BasketApi=http://www.fruitshop.com:5003
       - PaymentApi=http://www.fruitshop.com:5008

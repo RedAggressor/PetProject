@@ -12,10 +12,7 @@ const handlResponce = async (response: Response) => {
 export const apiClient = async ({path, options, data}: apiClientProps) => {
 
   const token = AuthStore.getToken();
-  //if(!token) {
-   //throw new Error("No access token availeble");
-  //}
-
+  
 const requestOptions = {
   ...options,
   headers: {    
