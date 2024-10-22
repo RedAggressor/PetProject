@@ -1,8 +1,7 @@
 ﻿namespace Payment.Proccessor.Models
 {
-    public class DataResponse
+    public class DataResponse<T> : BaseResponse
     {
-        public string Data { get; set; } = null!;
-        public string Signature { get; set; } = null!;
+        public T? Data { get; set; }
     }
 }

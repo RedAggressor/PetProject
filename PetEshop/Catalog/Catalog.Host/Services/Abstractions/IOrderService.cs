@@ -9,5 +9,6 @@ namespace Catalog.Host.Services.Abstractions
         Task<AddResponse<string>> AddItemToOrder(string orderId, ICollection<AddOrderItemDto> orderItem);
         Task<OrderResponse> GetOrderByIdAsync(string idOrder);        
         Task<DataResponse<OrderDto>> GetOrderByUserIdAsync(string userId);
+        Task<BaseResponse> UpdateOrderSatusAync(string orderId, string orderStatus);
     }
 }

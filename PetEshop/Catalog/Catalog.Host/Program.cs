@@ -73,8 +73,8 @@ builder.Services.AddScoped<IDbContextWrapper<ApplicationDbContext>, DbContextWra
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(
-        "CorsPolicy",
-        builder => builder
+         "CorsPolicy",
+         builder => builder
             .SetIsOriginAllowed((host) => true)
             .AllowAnyMethod()
             .AllowAnyHeader()

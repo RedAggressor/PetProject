@@ -1,9 +1,11 @@
-﻿using Payment.Proccessor.Models;
+﻿using LiqPay.SDK.Dto;
+using Payment.Proccessor.Models;
 
 namespace Payment.Proccessor.Services.Abstractions
 {
     public interface IPaymentService
     {
-        Task<DataResponse> GetDataSignature(JsonRequest jsonModel);
+        Task<BaseResponse> SetStatusAsync(string data, string signature);
+        Task<DataResponse<string>> GetPaymentForm(PaymentData jsonData);
     }
 }

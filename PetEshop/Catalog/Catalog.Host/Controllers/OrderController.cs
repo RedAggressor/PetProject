@@ -55,5 +55,13 @@ namespace Catalog.Host.Controllers
             var order = await _orderService.GetOrderByUserIdAsync(userId!);
             return Ok(order);        
         }
+
+        [HttpPost]
+        [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> UpdateStatusOrder(UpdateOrderStatusDto updateOrder)
+        {
+            var result = await _orderService.UpdateOrderSatusAync(updateOrder.OrderId, updateOrder.OrderStatus);
+            return Ok(result);
+        }
     }
 }

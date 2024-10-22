@@ -1,7 +1,6 @@
 ﻿using Catalog.Host.Data;
 using Catalog.Host.Data.Entities;
 using Catalog.Host.Models.Dtos;
-using Catalog.Host.Models.Requests;
 using Catalog.Host.Models.Response;
 using Catalog.Host.Repositories.Abstractions;
 using Catalog.Host.Services.Abstractions;
@@ -22,6 +21,24 @@ namespace Catalog.Host.Services
         {
             _orderRepository = orderRepository;
             _mapper = mapper;
+        }
+
+        public async Task<BaseResponse> UpdateOrderSatusAync(string orderId, string orderStatus)
+        {
+            return await ExecuteSafeAsync(async () =>
+            {
+                if (int.TryParse(orderId, out int orderIntId))
+                {
+                    var result = await _orderRepository.updateOrderStatusAsync(orderIntId, orderStatus);
+
+                    return new BaseResponse();
+                }
+
+                return new BaseResponse()
+                {
+                     ErrorMessage = "id can`t conver to int"
+                };
+            });
         }
 
         public async Task<AddResponse<string>> AddOrderAsync(string UserId)
@@ -91,7 +108,8 @@ namespace Catalog.Host.Services
                             Count = o.Count,
                             Item = _mapper.Map<ItemDto>(o.Item)
                         }).ToList(),
-                        Status = entity.Status,
+                        Status = entity.Status.ToString(),
+                        PayStatus = entity.PayStatus.ToString()
                     }
                 };
                
@@ -117,7 +135,8 @@ namespace Catalog.Host.Services
                             Item = _mapper.Map<ItemDto>(o.Item)
 
                         }).ToList(),
-                        Status = s.Status
+                        Status = s.Status.ToString(),
+                        PayStatus = s.PayStatus.ToString(),
                     }),
                 };
             });

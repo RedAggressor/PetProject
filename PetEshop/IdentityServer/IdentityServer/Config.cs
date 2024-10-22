@@ -1,6 +1,7 @@
 ﻿using IdentityServer4.Models;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
+using static System.Net.WebRequestMethods;
 
 namespace IdentityServer
 {
@@ -19,14 +20,14 @@ namespace IdentityServer
         {
             return new ApiResource[]
             {
-                new ApiResource("localhost:3000")
+                new ApiResource("www.liqpay.ua")
                 {
                     Scopes = new List<Scope>
                     {
                         new Scope("react")
                     }
                 },
-                new ApiResource("www.fruitshop.com:3000")
+                new ApiResource("www.fruitshop.com")
                 {
                     Scopes = new List<Scope>
                     {
@@ -57,9 +58,9 @@ namespace IdentityServer
                     RequireClientSecret = false,
                     RedirectUris = { $"{configuration["ReactClientUrl"]}/callback" },
                     PostLogoutRedirectUris = { $"{configuration["ReactClientUrl"]}/" },
-                    AllowedCorsOrigins = { configuration["ReactClientUrl"] },
+                    AllowedCorsOrigins = { configuration["ReactClientUrl"], "https://www.liqpay.ua" },
                     AllowedScopes = { "openid", "profile", "react", "mvc", "catalog.catalogbff", "catalog.catalogitem"},                    
-                    AllowAccessTokensViaBrowser = true
+                    AllowAccessTokensViaBrowser = true                   
                     
                 },
                 //new Client

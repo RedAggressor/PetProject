@@ -17,6 +17,29 @@ namespace Catalog.Host.Repositories
             _dbContext = dbContextWrapper.DbContext;
         }
 
+        public async Task<BaseResponse> updateOrderStatusAsync(int orderId, string statusOrder)
+        {
+            return await ExecutSafeAsync(async () =>
+            {                
+
+                if(Enum.TryParse(statusOrder, out PayStatusType payStatus))
+                {
+                    var order = await _dbContext.Orders.FirstOrDefaultAsync(f => f.Id == orderId);
+
+                    order!.PayStatus = payStatus;
+
+                    await _dbContext.SaveChangesAsync();
+
+                    return new BaseResponse();
+                }
+
+                return new BaseResponse() 
+                { 
+                    ErrorMessage = "Pay status not correct"
+                };
+            });
+        }
+
         public async Task<int> AddOrderAsync(string UserId)
         {
             return await ExecutSafeAsync(async () =>
@@ -109,7 +132,6 @@ namespace Catalog.Host.Repositories
 
         private async Task<StatusType> UpdateOrderStatus(int orderId, StatusType status)
         {
-
             var order = await _dbContext.Orders.FirstOrDefaultAsync(f => f.Id == orderId);
 
             order!.Status = status;
@@ -117,7 +139,6 @@ namespace Catalog.Host.Repositories
             await _dbContext.SaveChangesAsync();
 
             return status;
-
         }
 
         private async Task<OrderEntity?> GetExistEmptyOrderByUserIdAsync(string userId)

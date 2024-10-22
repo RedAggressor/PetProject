@@ -1,16 +1,21 @@
-import {apiClient} from "../client"
+import {apiClient, apiClientFormUrlEncoded} from "../client"
 
-const bassPath = "http://www.fruitshop.com:5008/Payment";
+const bassPath = "http://www.fruitshop.com:5008/api/v1/Payment/";
+const liqpayPath = "https://www.liqpay.ua/api/request";
 
-export const getPeymentOption = async (paymentModel:IPaymentRequest) => await apiClient({
-    path:`${bassPath}`,
+export const getPeymentLink = async (paymentModel:IPaymentRequest) => await apiClient({
+    path:`${bassPath}GetPaymentLink`,
     options: {method:'POST'},
     data: paymentModel    
 })
 
-export interface IPaymentRequest{
-    "version" : number, 
-    "action" : string,
+export const getOrderStatus = async (orderStatusModel: IOrderStatusRequest) => await apiClient({
+    path:`${bassPath}GetOrderStatus`,
+    options: {method:'POST'},
+    data: orderStatusModel
+})
+
+export interface IPaymentRequest{    
     "amount": number, 
     "currency" : string,
     "description" : string,
@@ -19,5 +24,10 @@ export interface IPaymentRequest{
 
 export interface IPaymentResponse{
     "data":string,
-    "signature":string
+    "errorMessage": null,
+    "respCode": number
+}
+
+export interface IOrderStatusRequest{    
+    "orderid": string
 }

@@ -1,5 +1,9 @@
+using Infrastructure.Configuration;
 using Infrastructure.Extensions;
 using Infrastructure.Filters;
+using Infrastructure.Services;
+using Infrastructure.Services.Interfaces;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Payment.Proccessor.Services;
 using Payment.Proccessor.Services.Abstractions;
@@ -35,7 +39,8 @@ builder.Services.AddSwaggerGen(options =>
                 TokenUrl = new Uri($"{authority}/connect/token"),
                 Scopes = new Dictionary<string, string>()
                 {
-                    { "react", "website" }
+                    //{ "react", "website" },
+                    //{ "mvc", "react" }
                 }
             }
         }
@@ -48,14 +53,17 @@ builder.AddConfiguration();
 
 builder.Services.AddAuthorization(configuration);
 
+builder.Services.AddHttpClient();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddTransient<IPaymentService, PaymentService>();
-
+builder.Services.AddTransient<IHttpClientService, HttpClientService>();
+builder.Services.AddTransient<IPaymentConnectionService, PaymentConnectionService>();
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(
-        "CorsPolicy",
-        builder => builder
+         "CorsPolicy",
+         builder => builder
             .SetIsOriginAllowed((host) => true)
             .AllowAnyMethod()
             .AllowAnyHeader()

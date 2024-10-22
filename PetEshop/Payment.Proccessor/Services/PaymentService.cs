@@ -1,64 +1,89 @@
 ﻿using Payment.Proccessor.Models;
 using Payment.Proccessor.Services.Abstractions;
-using System.Security.Cryptography;
-using System.Text;
-using System.Text.Json;
+using LiqPay.SDK;
+using LiqPay.SDK.Dto;
+using LiqPay.SDK.Dto.Enums;
 
 namespace Payment.Proccessor.Services
 {
     public class PaymentService : IPaymentService
     {
-        public async Task<DataResponse> GetDataSignature(JsonRequest jsonModel)
+        private readonly IPaymentConnectionService _paymentConnectionService;
+        private readonly IDecodingService _decodingService;
+
+
+
+        public PaymentService(
+            IPaymentConnectionService paymentConnectionService,
+            IDecodingService decodingService)
         {
-            var dataResponse = new DataResponse();
-            dataResponse.Data = await GetData(GetPaymentKey(jsonModel));
-            var privateKey = new JsonModel().PrivateKey;
-            dataResponse.Signature = GenerateSignature(privateKey, dataResponse.Data);
-            return dataResponse;
+            _paymentConnectionService = paymentConnectionService;
+            _decodingService = decodingService;
         }
 
-        private JsonModel GetPaymentKey(JsonRequest json)
+        public async Task<BaseResponse> SetStatusAsync(string data, string signature)
         {
-            return new JsonModel()
+            try
             {
-                Action = json.Action,
-                Amount = json.Amount,
-                Currency = json.Currency,
-                Description = json.Description,
-                OrderId = json.OrderId,
-                Version = json.Version,
-            };
+                var jsonModelResponse = await _decodingService.GetJsomFromData(data, signature);
 
-        }
 
-        private async Task<string> GetData(JsonModel jsonModel)
-        {
-            string jsonString = JsonSerializer.Serialize(jsonModel);
-            return await Task.FromResult(Base64Encode(jsonString));
-        }
+                if(jsonModelResponse is LiqPayResponse liq)
+                {
+                    var status = liq.Status.ToString();
+                    var orderId = liq.OrderId.ToString();
+                    return await _paymentConnectionService.SetOrderStatusAsync(orderId, status);
+                }
 
-        private string Base64Encode(string data)
-        {
-            byte[] bytes = Encoding.UTF8.GetBytes(data);
-            return Convert.ToBase64String(bytes);
-        }
-
-        private byte[] Sha1(string input)
-        {
-            byte[] tmpSource = Encoding.UTF8.GetBytes(input);
-            using (var sha1 = new SHA1CryptoServiceProvider())
-            {
-                return sha1.ComputeHash(tmpSource);
+                return new BaseResponse()
+                {
+                    ErrorMessage = "somthing go wrong may be it`s signature"
+                };
             }
-
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return new DataResponse<string>
+                {
+                    Data = null,
+                    ErrorMessage = ex.Message
+                };
+            }
         }
 
-        private string GenerateSignature(string privateKey, string data)
+        public async Task<DataResponse<string>> GetPaymentForm(PaymentData jsonData)
         {
-            string signString = $"{privateKey}{data}{privateKey}";
-            string signature = Convert.ToBase64String(Sha1(signString));
-            return signature;
-        }
+            try
+            {
+                var liqPayClient = new LiqPayClient(Keys.MyPublicKey, Keys.MyPrivateKey);
+                var request = new LiqPayRequest()
+                {
+                    Action = LiqPayRequestAction.Pay,
+                    Version = 3,
+                    Amount = jsonData.Amount,
+                    Currency = jsonData.Currency,
+                    Description = jsonData.Description,
+                    OrderId = jsonData.OrderId,
+                    Sandbox = "1",
+                    ServerUrl = "https://28d6-62-122-70-171.ngrok-free.app/api/v1/Payment/GetOrderStatus",
+                    ResultUrl = "http://www.fruitshop.com:3000/succusfullpay",                     
+                };
 
+                var form = liqPayClient.CNBForm(request);
+                return await Task.FromResult(new DataResponse<string>()
+                { 
+                    Data = form
+                });
+            }
+            catch (Exception ex) 
+            {
+                Console.WriteLine(ex.Message);
+                return await Task.FromResult(new DataResponse<string>() 
+                {
+                    Data = null,
+                    ErrorMessage = ex.Message
+                });
+            }
+        }
     }
 }

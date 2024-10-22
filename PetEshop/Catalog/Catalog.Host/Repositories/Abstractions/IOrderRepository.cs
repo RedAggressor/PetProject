@@ -8,5 +8,6 @@ namespace Catalog.Host.Repositories.Abstractions
         Task<int> AddItemToOrderAsync(int orderId, List<OrderItemEntity> orderItemList);
         Task<OrderEntity> GetOrderByIdAsync(int id);
         Task<ICollection<OrderEntity>> GetOrderByUserIdAsync(string UserId);
+        Task<BaseResponse> updateOrderStatusAsync(int orderId, string statusOrder);
     }
 };

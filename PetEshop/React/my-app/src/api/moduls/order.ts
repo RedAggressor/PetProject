@@ -23,3 +23,9 @@ export const addItemsToOrder = async (order:IOrderItem) => await apiClient({
     options:{method:'POST'},
     data:order
 })
+
+export const updateStatusOrder = async ( data : {orderId:string, orderStatus:string}) =>await apiClient({
+    path:`${bassPath}UpdateStatusOrder`,
+    options:{method:`POST`},
+    data: data
+})

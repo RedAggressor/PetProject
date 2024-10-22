@@ -37,7 +37,8 @@ export interface IOrderByUserIdResponce{
       {        
         "id": number,
         "userId": string,
-        "status": number,
+        "status": string,
+        "payStatus": string,
         "orderItems": [
           {
             "id": number,
@@ -64,7 +65,8 @@ export interface IOrderByUserIdResponce{
   export interface IOrderList{   
         "id": number,
         "userId": string,
-        "status": number,
+        "status": string,
+        "payStatus": string,
         "orderItems": [
           {
             "id": number,

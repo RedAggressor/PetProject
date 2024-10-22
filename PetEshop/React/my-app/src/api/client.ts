@@ -44,6 +44,21 @@ const resp = await fetch(`${path}`, requestOptions).then((responce) => handlResp
 return resp;
 };
 
+export const apiClientFormUrlEncoded = async ({path, method, data}: apiClientNoJwtProps) => {
+
+  const requestOptions : RequestInit = {   
+    method: method,
+    headers: {          
+        'Content-Type': 'application/x-www-form-urlencoded'      
+    },
+    body: !!data ? JSON.stringify(data) : undefined
+  };
+  
+  const resp = await fetch(`${path}`, requestOptions).then((responce) => handlResponce(responce));
+  
+  return resp;
+  };
+
   interface apiClientProps {
     path:string,
     options: RequestInit,
